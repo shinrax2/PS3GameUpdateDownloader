@@ -1,0 +1,11 @@
+PS3GameUpdateDownloader
+meant to assist in emulator use
+
+how to use
+
+pip install -r requirements.txt
+python3 main.py GAMEID
+
+how to build exe for windows
+pip install pyinstaller
+build.bat
