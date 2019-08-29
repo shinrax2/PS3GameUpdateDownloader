@@ -7,8 +7,6 @@ pip install -r requirements.txt
 python3 PS3GUD.py GAMEID
 
 how to build exe for windows
-edit build.bat to include your path to upx
-check https://github.com/upx/upx/releases/ to download upx
 
 pip install pyinstaller
 build.bat
