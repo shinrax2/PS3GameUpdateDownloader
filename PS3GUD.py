@@ -11,6 +11,7 @@ import os
 import hashlib
 import requests
 import sys
+import shutil
 
 def download_file(url, local_filename):
     with requests.get(url, stream=True) as r:
@@ -20,6 +21,21 @@ def download_file(url, local_filename):
                 if chunk:
                     f.write(chunk)
 
+def sha1File(fname):
+	#copy file
+	f2 = fname+"~"
+	shutil.copy(fname, f2)
+	with open(f2, "ab") as f:
+		#remove last 32 bytes
+		f.seek(-32, os.SEEK_END)
+		f.truncate()
+	fsha = hashlib.sha1()
+	with open(f2, "rb") as f:
+		for line in iter(lambda: f.read(fsha.block_size), b''):
+			fsha.update(line)
+	os.remove(f2)
+	return fsha.hexdigest()
+	
 pars = argparse.ArgumentParser(description="Downloads Updates for PS3 Games with given ID")
 pars.add_argument("gameid", metavar="gameid", type=str, nargs=1, help="ID of a PS3 Game")
 
@@ -27,7 +43,7 @@ args = pars.parse_args()
 if args.gameid[0] and args.gameid[0] != "" and type(args.gameid[0]) == str:
 	#config
 	dldir = "./downloadedPKGs/" #target dir for downloaded updates !!!END WITH TRAILING SLASH!!!
-	verify = False #verify checksums of downloaded updates DOESNT WORK ATM
+	verify = True #verify checksums of downloaded updates
 	checkIfAlreadyDownloaded = True #check if file already exists and size matches
 	
 	#load title db
@@ -126,14 +142,11 @@ if args.gameid[0] and args.gameid[0] != "" and type(args.gameid[0]) == str:
 			if skip == False:
 				download_file(url, fname)
 			if verify == True:
-				fsha = hashlib.sha1()
-				with open(fname, "rb") as f:
-					for line in iter(lambda: f.read(65536), b''):
-						fsha.update(line)
-				if sha1 == fsha.hexdigest():
+				if sha1 == sha1File(fname):
 					print('"'+fname+'" successfully verified')
 				else:
-					print('verification of "'+fname+'" failed')
+					print('verification of "'+fname+'" failed\ndeleting file')
+					os.remove(fname)
 			if verify == False:
 				print("not verifying file!")
 			i += 1
