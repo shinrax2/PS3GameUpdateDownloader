@@ -28,6 +28,7 @@ if args.gameid[0] and args.gameid[0] != "" and type(args.gameid[0]) == str:
 	#config
 	dldir = "./downloadedPKGs/" #target dir for downloaded updates !!!END WITH TRAILING SLASH!!!
 	verify = False #verify checksums of downloaded updates DOESNT WORK ATM
+	checkIfAlreadyDownloaded = True #check if file already exists and size matches
 	
 	#load title db
 	with open("titledb.txt", "r", encoding="utf8") as f:
@@ -63,7 +64,7 @@ if args.gameid[0] and args.gameid[0] != "" and type(args.gameid[0]) == str:
 	
 	data = resp.read()
 	info = data.decode('utf-8')
-	#check file length for ids like BCAS20074
+	#check file length for titles like BCAS20074
 	if len(info) == 0:
 		print("meta file for this gameid contains no info")
 		sys.exit(0)
@@ -111,8 +112,17 @@ if args.gameid[0] and args.gameid[0] != "" and type(args.gameid[0]) == str:
 			print("starting download "+str(i)+" of "+str(len(dllist)))
 			url = updates[dl]["url"]
 			sha1 = updates[dl]["sha1"]
+			size = updates[dl]["size"]
 			fname = dldir+os.path.basename(url)
-			download_file(url, fname)
+			skip = False
+			if checkIfAlreadyDownloaded == True:
+				#check if file already exists
+				if os.path.exists(fname) and os.path.isfile(fname):
+					if os.path.getsize(fname) == size:
+						print("file '"+os.path.basename(url)+"' was already downloaded! skipping it!")
+						skip = True
+			if skip == False:
+				download_file(url, fname)
 			if verify == True:
 				fsha = hashlib.sha1()
 				with open(fname, "rb") as f:
