@@ -113,12 +113,14 @@ if args.gameid[0] and args.gameid[0] != "" and type(args.gameid[0]) == str:
 			url = updates[dl]["url"]
 			sha1 = updates[dl]["sha1"]
 			size = updates[dl]["size"]
-			fname = dldir+os.path.basename(url)
+			fname = dldir+"/"+gameid+"/"+os.path.basename(url)
+			if os.path.exists(dldir+"/"+gameid+"/") == False and os.path.isfile(dldir+"/"+gameid+"/") == False:
+				os.mkdir(dldir+"/"+gameid+"/")
 			skip = False
 			if checkIfAlreadyDownloaded == True:
 				#check if file already exists
 				if os.path.exists(fname) and os.path.isfile(fname):
-					if os.path.getsize(fname) == size:
+					if int(os.path.getsize(fname)) == int(size):
 						print("file '"+os.path.basename(url)+"' was already downloaded! skipping it!")
 						skip = True
 			if skip == False:
