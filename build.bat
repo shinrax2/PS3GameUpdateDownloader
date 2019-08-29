@@ -1,4 +1,5 @@
 @echo off
-pyinstaller PS3GameUpdateDownloader.py
-copy titledb.txt dist\PS3GameUpdateDownloader\titledb.txt
-mkdir dist\PS3GameUpdateDownloader\downloadedPKGs
+SET upx-dir=""
+pyinstaller --upx-dir %upx-dir% PS3GUD.py
+copy titledb.txt dist\PS3GUD\titledb.txt
+mkdir dist\PS3GUD\downloadedPKGs
