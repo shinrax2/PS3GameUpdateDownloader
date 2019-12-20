@@ -3,156 +3,201 @@
 #
 # PS3GameUpdateDownloader by shinrax2
 
-import argparse
+#built-in
 import urllib.request
 import ssl
 import xml.etree.ElementTree as ET
 import os
 import hashlib
-import requests
 import sys
 import shutil
 
-def download_file(url, local_filename):
-    with requests.get(url, stream=True) as r:
-        r.raise_for_status()
-        with open(local_filename, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=8192): 
-                if chunk:
-                    f.write(chunk)
+#pip
+import requests
 
-def sha1File(fname):
-	#copy file
-	f2 = fname+"~"
-	shutil.copy(fname, f2)
-	with open(f2, "ab") as f:
-		#remove last 32 bytes
-		f.seek(-32, os.SEEK_END)
-		f.truncate()
-	fsha = hashlib.sha1()
-	with open(f2, "rb") as f:
-		for line in iter(lambda: f.read(fsha.block_size), b''):
-			fsha.update(line)
-	os.remove(f2)
-	return fsha.hexdigest()
-	
-pars = argparse.ArgumentParser(description="Downloads Updates for PS3 Games with given ID")
-pars.add_argument("gameid", metavar="gameid", type=str, nargs=1, help="ID of a PS3 Game")
+#local files
+import utils
 
-args = pars.parse_args()
-if args.gameid[0] and args.gameid[0] != "" and type(args.gameid[0]) == str:
-	#config
-	dldir = "./downloadedPKGs/" #target dir for downloaded updates !!!END WITH TRAILING SLASH!!!
-	verify = True #verify checksums of downloaded updates
-	checkIfAlreadyDownloaded = True #check if file already exists and size matches
+class PS3GUD():
+	def __init__(self):
+		self.logger = utils.Logger("log.txt")
+		self.Updates = {}
+		self.DlList = []
+		
+	def setConfig(self, dldir="./downloadedPKGs/", verify=True, checkIfAlreadyDownloaded=True):
+		if os.path.exists(dldir) == False:
+			os.mkdir(dldir)
+		self.dldir = dldir
+		self.verify = verify
+		self.checkIfAlreadyDownloaded = checkIfAlreadyDownloaded
 	
-	#load title db
-	with open("titledb.txt", "r", encoding="utf8") as f:
-		data = []
-		for line in f:
-			item = {}
-			item["id"], item["name"] = line.split("\t\t")
-			if item["name"].endswith("\n"):
-				item["name"] = item["name"][:-1]
-			data.append(item)
-	titledb = data
-	#check given id
-	check = False
-	for item in titledb:
-		if args.gameid[0] == item["id"]:
-			check = True
-			gameid = args.gameid[0]
-			print("Game is: "+item["name"])
-			break
-	if check == False:
-		print("given gameid is not valid")
-		sys.exit(0)
+	def loadTitleDb(self, titledb = "titledb.txt"):
+		with open(titledb, "r", encoding="utf8") as f:
+			data = []
+			for line in f:
+				item = {}
+				item["id"], item["name"] = line.split("\t\t")
+				if item["name"].endswith("\n"):
+					item["name"] = item["name"][:-1]
+				data.append(item)
+		self.titledb = data
+		self.logger.log("title db loaded from: "+titledb)
+		
+	def checkForUpdates(self, titleid):
+		#return codes:
+		#0 = titleid invalid
+		#1 = no meta found
+		#2 = meta empty
 	
-	#check for updates
-	updates = []
-	ssl._create_default_https_context = ssl._create_unverified_context # needed for sonys self signed cert
-	url = "https://a0.ww.np.dl.playstation.net/tpl/np/"+gameid+"/"+gameid+"-ver.xml"
-	try:
-		resp = urllib.request.urlopen(url)
-	except urllib.error.HTTPError:
-		print("meta file for this gameid is not available")
-		sys.exit(0)
+		#check given id
+		check = False
+		for item in self.titledb:
+			if titleid == item["id"]:
+				check = True
+				self.titleid = titleid
+				self.logger.log("Game is: "+item["name"]+"\t titleid: "+item["id"])
+				break
+		if check == False:
+			self.logger.log("given gameid is not valid", "e")
+			return(0)
+		
+		#check for updates
+		updates = []
+		ssl._create_default_https_context = ssl._create_unverified_context # needed for sonys self signed cert
+		url = "https://a0.ww.np.dl.playstation.net/tpl/np/"+self.titleid+"/"+self.titleid+"-ver.xml"
+		try:
+			resp = urllib.request.urlopen(url)
+		except urllib.error.HTTPError:
+			self.logger.log("meta file for this gameid is not available", "w")
+			return(1)
+		
+		data = resp.read()
+		info = data.decode('utf-8')
+		#check file length for titles like BCAS20074
+		if len(info) == 0:
+			self.logger.log("meta file for this gameid contains no info", "w")
+			return(2)
+		root = ET.fromstring(info)
+		if root.attrib["titleid"] == self.titleid:
+			for tag in root:
+				for package in tag:
+					pack = {}
+					attr = package.attrib
+					pack["version"] = attr["version"]
+					pack["size"] = attr["size"]
+					pack["sha1"] = attr["sha1sum"]
+					pack["url"] = attr["url"]
+					pack["sysver"] = attr["ps3_system_ver"]
+					updates.append(pack)
+		self.Updates[titleid] = updates
 	
-	data = resp.read()
-	info = data.decode('utf-8')
-	#check file length for titles like BCAS20074
-	if len(info) == 0:
-		print("meta file for this gameid contains no info")
-		sys.exit(0)
-	root = ET.fromstring(info)
-	if root.attrib["titleid"] == gameid:
-		for tag in root:
-			for package in tag:
-				pack = {}
-				attr = package.attrib
-				pack["version"] = attr["version"]
-				pack["size"] = attr["size"]
-				pack["sha1"] = attr["sha1sum"]
-				pack["url"] = attr["url"]
-				pack["sysver"] = attr["ps3_system_ver"]
-				updates.append(pack)
-	#ask user which to download
-	if len(updates)>0:
-		i = 1
-		dllist = []
-		print("updates found!\n")
-		for pack in updates:
-			print("package: "+str(i))
-			print("version: "+pack["version"])
-			print("size: "+str(format(float(pack["size"])/1024/1024, '.2f'))+"MB")
-			print("requires ps3 firmware version: "+pack["sysver"]+"\n")
-			i += 1
-		while True:
-			re = input("which package you want to download? enter package number or all: ")
-			if re.isdigit() == True:
-				if int(re) < len(updates) and int(re) > 0:
-					re = int(re) - 1
-					dllist.append(re)
+	def askWhichToDownload(self):
+		if len(self.Updates[self.titleid])>0:
+			i = 1
+			dllist = []
+			print("updates found!\n")
+			for pack in self.Updates[self.titleid]:
+				print("package: "+str(i))
+				print("version: "+pack["version"])
+				print("size: "+str(format(float(pack["size"])/1024/1024, '.2f'))+"MB")
+				print("requires ps3 firmware version: "+pack["sysver"]+"\n")
+				i += 1
+			while True:
+				re = input("which package you want to download? enter package number or all: ")
+				if re.isdigit() == True:
+					if int(re) < (len(self.Updates[self.titleid])+1) and int(re) > 0:
+						re = int(re) - 1
+						self.DlList.append(self.Updates[self.titleid][re])
+						break
+					else:
+						print("please enter a correct number or all")
+				elif re == "all":
+					for ii in range(0, len(self.Updates[self.titleid])):
+						self.DlList.append(self.Updates[self.titleid][ii])
 					break
 				else:
 					print("please enter a correct number or all")
-			elif re == "all":
-				for ii in range(0, len(updates)):
-					dllist.append(ii)
-				break
-			else:
-				print("please enter a correct number or all")
-		print("starting download of package(s)")
+	
+	def downloadFiles(self):
+		self.logger.log("starting download of package(s)")
 		i = 1
-		for dl in dllist:
-			print("starting download "+str(i)+" of "+str(len(dllist)))
-			url = updates[dl]["url"]
-			sha1 = updates[dl]["sha1"]
-			size = updates[dl]["size"]
-			fname = dldir+"/"+gameid+"/"+os.path.basename(url)
-			if os.path.exists(dldir+"/"+gameid+"/") == False and os.path.isfile(dldir+"/"+gameid+"/") == False:
-				os.mkdir(dldir+"/"+gameid+"/")
+		for dl in self.DlList:
+			self.logger.log("starting download "+str(i)+" of "+str(len(self.DlList)))
+			url = dl["url"]
+			sha1 = dl["sha1"]
+			size = dl["size"]
+			fname = self.dldir+"/"+self.titleid+"/"+os.path.basename(url)
+			if os.path.exists(self.dldir+"/"+self.titleid+"/") == False and os.path.isfile(self.dldir+"/"+self.titleid+"/") == False:
+				os.mkdir(self.dldir+"/"+self.titleid+"/")
 			skip = False
-			if checkIfAlreadyDownloaded == True:
+			if self.checkIfAlreadyDownloaded == True:
 				#check if file already exists
 				if os.path.exists(fname) and os.path.isfile(fname):
 					if int(os.path.getsize(fname)) == int(size):
-						print("file '"+os.path.basename(url)+"' was already downloaded! skipping it!")
-						skip = True
+						if self.verify == False:
+							self.logger.log("file '"+os.path.basename(url)+"' was already downloaded! skipping it! no verify!")
+							skip = True
+						else:
+							if sha1 == self._sha1File(fname):
+								self.logger.log("file '"+os.path.basename(url)+"' was already downloaded! skipping it! sha1 verified!")
+								skip = True
 			if skip == False:
-				download_file(url, fname)
-			if verify == True:
-				if sha1 == sha1File(fname):
-					print('"'+fname+'" successfully verified')
+				self._download_file(url, fname)
+			if self.verify == True:
+				if sha1 == self._sha1File(fname):
+					self.logger.log('"'+fname+'" successfully verified')
 				else:
-					print('verification of "'+fname+'" failed\ndeleting file')
+					self.logger.log('verification of "'+fname+'" failed\ndeleting file')
 					os.remove(fname)
-			if verify == False:
-				print("not verifying file!")
+			if self.verify == False:
+				self.logger.log("not verifying file!")
 			i += 1
+			
+			self.logger.log("finished downloading "+str(len(self.DlList))+" files!")
+	
+	def _download_file(self, url, local_filename):
+		with requests.get(url, stream=True) as r:
+			r.raise_for_status()
+			with open(local_filename, 'wb') as f:
+				for chunk in r.iter_content(chunk_size=8192): 
+					if chunk:
+						f.write(chunk)
+
+	def _sha1File(self, fname):
+		#copy file
+		f2 = fname+"~"
+		shutil.copy(fname, f2)
+		with open(f2, "ab") as f:
+			#remove last 32 bytes
+			f.seek(-32, os.SEEK_END)
+			f.truncate()
+		fsha = hashlib.sha1()
+		with open(f2, "rb") as f:
+			for line in iter(lambda: f.read(fsha.block_size), b''):
+				fsha.update(line)
+		os.remove(f2)
+		return fsha.hexdigest()
+	
+	def __del__(self):
+		del self.logger
 		
-		print("finished downloading "+str(len(dllist))+" files!")
-	else:
-		print("no updates for this title found!")
-		
-input("please press enter to exit")
+if __name__ == "__main__":
+	import argparse
+	pars = argparse.ArgumentParser(description="Downloads Updates for PS3 Games with given ID")
+	pars.add_argument("gameid", metavar="gameid", type=str, nargs=1, help="ID of a PS3 Game")
+
+	args = pars.parse_args()
+	if args.gameid[0] and args.gameid[0] != "" and type(args.gameid[0]) == str:
+		ps3gud = PS3GUD()
+		#config
+		dldir = "./downloadedPKGs/" #target dir for downloaded updates !!!END WITH TRAILING SLASH!!!
+		verify = True #verify checksums of downloaded updates
+		checkIfAlreadyDownloaded = True #check if file already exists and size matches
+		ps3gud.setConfig(dldir, verify, checkIfAlreadyDownloaded)
+		#load title db
+		ps3gud.loadTitleDb()
+		ps3gud.checkForUpdates(args.gameid[0].upper())
+		ps3gud.askWhichToDownload()
+		ps3gud.downloadFiles()
+		del ps3gud
+	input("please press enter to exit")
