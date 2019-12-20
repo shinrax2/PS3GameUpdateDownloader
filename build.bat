@@ -1,3 +1,3 @@
 @echo off
-pyinstaller PS3GUD.py
-copy titledb.txt dist\PS3GUD\titledb.txt
+pyinstaller -wF main.py
+copy titledb.txt dist\titledb.txt

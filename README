@@ -4,9 +4,10 @@ meant to assist in emulator use
 how to use
 
 pip install -r requirements.txt
-python3 PS3GUD.py GAMEID
+python3 PS3GUD.py 
 
 how to build exe for windows
 
+pip install -r requirements.txt
 pip install pyinstaller
 build.bat
