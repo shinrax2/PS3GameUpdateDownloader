@@ -1,11 +1,19 @@
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+#
+# PS3GameUpdateDownloader by shinrax2
+
+#pip packages
 import PySimpleGUI as sg
+#local files
 import PS3GUD
+import utils
 
 def updatePackToTable(update):
     i = 1
     data = []
     for pack in update:
-        row = [i, pack["version"], str(format(float(pack["size"])/1024/1024, '.2f'))+"MB", pack["sysver"]]
+        row = [i, pack["version"], utils.formatSize(pack["size"]), pack["sysver"]]
         i+=1
         data.append(row)
     return data
@@ -46,7 +54,7 @@ while True:
             data = updatePackToTable(ps3.getUpdates())
             lay2 = [
                     [sg.Text(ps3.getTitleNameFromId()+":")],
-                    [sg.Table(values=data,headings=["Num","Version","Filesize in MB","PS3 FW Version"])],
+                    [sg.Table(values=data,headings=["Num","Version","Filesize","PS3 FW Version"])],
                     [sg.DropDown(choices, size=(3,8), key="drop"),sg.Button("OK"),sg.Exit()]
                    ]
             win2 = sg.Window("Select Updates", lay2)
@@ -60,17 +68,17 @@ while True:
                     break
                 if ev2 == "OK":
                     drop = val2["drop"]
-                    if drop > 0 and drop < (len(ps3.getUpdates())+1):
-                        drop = int(drop)-1
-                        ps3.DlList.append(ps3.getUpdates()[drop])
+                    if drop == "all":
+                        drop = "all"
+                        for pack in ps3.getUpdates():
+                            ps3.DlList.append(pack)
                         win2.Close()
                         win2_act = False
                         window.UnHide()
                         break
-                    elif drop == "all":
-                        drop = "all"
-                        for pack in ps3.getUpdates():
-                            ps3.DlList.append(pack)
+                    elif drop > 0 and drop < (len(ps3.getUpdates())+1):
+                        drop = int(drop)-1
+                        ps3.DlList.append(ps3.getUpdates()[drop])
                         win2.Close()
                         win2_act = False
                         window.UnHide()

@@ -25,12 +25,13 @@ class PS3GUD():
         self.DlList = []
         self.titleid = ""
         
-    def setConfig(self, dldir="./downloadedPKGs/", verify=True, checkIfAlreadyDownloaded=True):
+    def setConfig(self, dldir="./downloadedPKGs", verify=True, checkIfAlreadyDownloaded=True, storageThreshold=95):
         if os.path.exists(dldir) == False:
             os.mkdir(dldir)
         self.dldir = dldir
         self.verify = verify
         self.checkIfAlreadyDownloaded = checkIfAlreadyDownloaded
+        self.storageThreshold = storageThreshold
     
     def loadTitleDb(self, titledb = "titledb.txt"):
         with open(titledb, "r", encoding="utf8") as f:
@@ -54,12 +55,7 @@ class PS3GUD():
     def getUpdates(self):
         return self.Updates[self.titleid]
     
-    def checkForUpdates(self, titleid):
-        #return codes:
-        #0 = titleid invalid
-        #1 = no meta found
-        #2 = meta empty
-    
+    def checkForUpdates(self, titleid):    
         #check given id
         check = False
         for item in self.titledb:
@@ -70,7 +66,8 @@ class PS3GUD():
                 break
         if check == False:
             self.logger.log("given gameid is not valid", "e")
-            return(0)
+            self.titleid = ""
+            return
         
         #check for updates
         updates = []
@@ -79,15 +76,17 @@ class PS3GUD():
         try:
             resp = urllib.request.urlopen(url)
         except urllib.error.HTTPError:
-            self.logger.log("meta file for this gameid is not available", "w")
-            return(1)
+            self.logger.log("meta file for this gameid is not available", "e")
+            self.titleid = ""
+            return
         
         data = resp.read()
         info = data.decode('utf-8')
         #check file length for titles like BCAS20074
         if len(info) == 0:
-            self.logger.log("meta file for this gameid contains no info", "w")
-            return(2)
+            self.logger.log("meta file for this gameid contains no info", "e")
+            self.titleid = ""
+            return
         root = ET.fromstring(info)
         if root.attrib["titleid"] == self.titleid:
             for tag in root:
@@ -110,7 +109,7 @@ class PS3GUD():
             for pack in self.Updates[self.titleid]:
                 print("package: "+str(i))
                 print("version: "+pack["version"])
-                print("size: "+str(format(float(pack["size"])/1024/1024, '.2f'))+"MB")
+                print("size: "+utils.formatSize(pack["size"]))
                 print("requires ps3 firmware version: "+pack["sysver"]+"\n")
                 i += 1
             while True:
@@ -136,9 +135,10 @@ class PS3GUD():
             url = dl["url"]
             sha1 = dl["sha1"]
             size = dl["size"]
-            fname = self.dldir+"/"+self.titleid+"/"+os.path.basename(url)
-            if os.path.exists(self.dldir+"/"+self.titleid+"/") == False and os.path.isfile(self.dldir+"/"+self.titleid+"/") == False:
-                os.mkdir(self.dldir+"/"+self.titleid+"/")
+            fdir = self.dldir+"/"+utils.filterIllegalCharsFilename(self.getTitleNameFromId())+"["+self.titleid+"]/"
+            fname = fdir+utils.filterIllegalCharsFilename(os.path.basename(url))
+            if os.path.exists(fdir) == False and os.path.isfile(fdir) == False:
+                os.mkdir(fdir)
             skip = False
             if self.checkIfAlreadyDownloaded == True:
                 #check if file already exists
@@ -153,7 +153,7 @@ class PS3GUD():
                                 skip = True
             if skip == False:
                 self.logger.log("starting download "+str(i)+" of "+str(len(self.DlList)))
-                self._download_file(url, fname)
+                self._download_file(url, fname, size)
             if self.verify == True:
                 if sha1 == self._sha1File(fname):
                     self.logger.log('"'+fname+'" successfully verified')
@@ -167,13 +167,20 @@ class PS3GUD():
         self.logger.log("finished downloading "+str(len(self.DlList))+" files!")
         self.DlList = []
     
-    def _download_file(self, url, local_filename):
-        with requests.get(url, stream=True) as r:
-            r.raise_for_status()
-            with open(local_filename, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192): 
-                    if chunk:
-                        f.write(chunk)
+    def _download_file(self, url, local_filename, size):
+        total, used, free = shutil.disk_usage(os.path.dirname(local_filename))
+        if used / total * 100 <= self.storageThreshold:
+            if free > int(size):
+                with requests.get(url, stream=True) as r:
+                    r.raise_for_status()
+                    with open(local_filename, 'wb') as f:
+                        for chunk in r.iter_content(chunk_size=8192): 
+                            if chunk:
+                                f.write(chunk)
+            else:
+                self.logger.log("not enought free disk space!", "e")
+        else:
+            self.logger.log("free disk space is below "+str(100-self.storageThreshold)+"%", "w")
 
     def _sha1File(self, fname):
         #copy file
@@ -202,7 +209,7 @@ if __name__ == "__main__":
     if args.gameid[0] and args.gameid[0] != "" and type(args.gameid[0]) == str:
         ps3gud = PS3GUD()
         #config
-        dldir = "./downloadedPKGs/" #target dir for downloaded updates !!!END WITH TRAILING SLASH!!!
+        dldir = "./downloadedPKGs" #target dir for downloaded updates !!!END WITHOUT TRAILING SLASH!!!
         verify = True #verify checksums of downloaded updates
         checkIfAlreadyDownloaded = True #check if file already exists and size matches
         ps3gud.setConfig(dldir, verify, checkIfAlreadyDownloaded)
