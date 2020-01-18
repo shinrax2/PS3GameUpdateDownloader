@@ -58,6 +58,7 @@ class PS3GUD():
     def checkForUpdates(self, titleid):    
         #check given id
         check = False
+        titleid = titleid.upper()
         for item in self.titledb:
             if titleid == item["id"]:
                 check = True
@@ -215,7 +216,7 @@ if __name__ == "__main__":
         ps3gud.setConfig(dldir, verify, checkIfAlreadyDownloaded)
         #load title db
         ps3gud.loadTitleDb()
-        ps3gud.checkForUpdates(args.gameid[0].upper())
+        ps3gud.checkForUpdates(args.gameid[0])
         ps3gud.askWhichToDownload()
         ps3gud.downloadFiles()
         del ps3gud
