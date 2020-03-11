@@ -21,7 +21,7 @@ sg.change_look_and_feel("DarkAmber")
 
 layout1 = [
         [sg.Text("Enter TitleID")],
-        [sg.Input(key="titleid"),sg.Button("Enter")],
+        [sg.Input(key="titleid"),sg.Button("Enter"),sg.Button("Config")],
         [sg.Output(size=(80,20), key="Out")],
         [sg.Exit()]
         ]
@@ -29,13 +29,34 @@ layout1 = [
 window = sg.Window("PS3 Game Update Downloader", layout1)
 win2_act = False
 ps3 = PS3GUD.PS3GUD(window)
-ps3.setConfig()
+ps3.loadConfig()
 ps3.loadTitleDb()
 
 while True:
     event, values = window.read()        
     if event in (None, 'Exit'):      
         break
+    if event == "Config":
+        window.hide()
+        layoutConfig = [
+                            [sg.Text("Download directory:"), sg.In(ps3.getConfig("dldir"), key="dldir"), sg.FolderBrowse(target="dldir")],
+                            [sg.Text("Verify files:"), sg.Checkbox("", default=ps3.getConfig("verify"), key="verify")],
+                            [sg.Text("Check if file was already downloaded:"),sg.Checkbox("", default=ps3.getConfig("checkIfAlreadyDownloaded"), key="checkIfAlreadyDownloaded")],
+                            [sg.Text("Storage threshold (in %)"), sg.Spin([i for i in range(1, 100)], initial_value=ps3.getConfig("storageThreshold"), key="storageThreshold")],
+                            [sg.Button("Cancel"),sg.Button("Save")]
+                        ]
+        winConfig = sg.Window("Configuration", layoutConfig)
+        while True:
+            evConfig, valConfig = winConfig.Read()
+            if evConfig == "Cancel":
+                winConfig.Close()
+                window.UnHide()
+                break
+            elif evConfig == "Save":
+                ps3.setConfig(valConfig["dldir"], valConfig["verify"], valConfig["checkIfAlreadyDownloaded"], valConfig["storageThreshold"])
+                winConfig.Close()
+                window.UnHide()
+                break
     if event == "Enter":
         tryDl = True
         ps3.checkForUpdates(values["titleid"])
@@ -66,7 +87,7 @@ while True:
                     window.UnHide()
                     tryDl = False
                     break
-                if ev2 == "OK":
+                elif ev2 == "OK" and val2["drop"] != "":
                     drop = val2["drop"]
                     if drop == "all":
                         drop = "all"

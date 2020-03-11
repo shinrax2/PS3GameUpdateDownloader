@@ -105,3 +105,4 @@ venv.bak/
 
 /downloadedPKGs
 log.txt
+config.json

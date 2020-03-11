@@ -11,8 +11,9 @@ import os
 import hashlib
 import sys
 import shutil
+import json
 
-#pip
+#pip packages
 import requests
 
 #local files
@@ -21,17 +22,55 @@ import utils
 class PS3GUD():
     def __init__(self, window=None):
         self.logger = utils.Logger("log.txt", window)
+        self.configFile = "./config.json"
         self.Updates = {}
         self.DlList = []
         self.titleid = ""
-        
-    def setConfig(self, dldir="./downloadedPKGs", verify=True, checkIfAlreadyDownloaded=True, storageThreshold=95):
-        if os.path.exists(dldir) == False:
-            os.mkdir(dldir)
+    
+    def loadConfig(self):
+        if os.path.exists(self.configFile) and os.path.isfile(self.configFile):
+            self.logger.log("loaded config file!")
+            with open(self.configFile, "r", encoding="utf8") as f:
+                cf = json.loads(f.read())
+            self.dldir = cf["dldir"]
+            if cf["verify"] == 1:
+                self.verify = True
+            elif cf["verify"] == 0:
+                self.verify = False
+            
+            if cf["checkIfAlreadyDownloaded"] == 1:
+                self.checkIfAlreadyDownloaded = True
+            elif cf["checkIfAlreadyDownloaded"] == 0:
+                self.checkIfAlreadyDownloaded = False
+            self.storageThreshold = cf["storageThreshold"]
+        else:
+            self.logger.log("no config file found! using defaults!")
+            self.dldir = "./downloadedPKGs"
+            self.verify = True
+            self.checkIfAlreadyDownloaded = True
+            self.storageThreshold = 95
+    
+    def setConfig(self, dldir, verify, checkIfAlreadyDownloaded, storageThreshold):
         self.dldir = dldir
         self.verify = verify
         self.checkIfAlreadyDownloaded = checkIfAlreadyDownloaded
         self.storageThreshold = storageThreshold
+        if verify == True:
+            verify = 1
+        elif verify == False:
+            verify = 0
+        if checkIfAlreadyDownloaded == True:
+            checkIfAlreadyDownloaded = 1
+        elif checkIfAlreadyDownloaded == False:
+            checkIfAlreadyDownloaded = 0
+        
+        j = { "dldir":dldir, "verify":verify, "checkIfAlreadyDownloaded":checkIfAlreadyDownloaded, "storageThreshold":storageThreshold }
+        with open(self.configFile, "w", encoding="utf8") as f:
+            f.write(json.dumps(j, sort_keys=True, indent=4))
+        self.logger.log("saved config file!")
+    def getConfig(self, key):
+        if getattr(self, key):
+            return getattr(self, key)
     
     def loadTitleDb(self, titledb = "titledb.txt"):
         with open(titledb, "r", encoding="utf8") as f:
@@ -103,6 +142,7 @@ class PS3GUD():
         self.Updates[titleid] = updates
     
     def askWhichToDownload(self):
+    #command line only
         if len(self.Updates[self.titleid])>0:
             i = 1
             dllist = []
