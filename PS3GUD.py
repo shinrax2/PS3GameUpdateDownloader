@@ -21,56 +21,49 @@ import utils
 
 class PS3GUD():
     def __init__(self, window=None):
-        self.logger = utils.Logger("log.txt", window)
+        if window != None:
+            self.logger = utils.Logger("log.txt", window)
+        else:
+            self.logger = utils.Logger("log.txt")
+        self.loc = DummyLoc()
         self.configFile = "./config.json"
+        self.config = {}
         self.Updates = {}
         self.DlList = []
         self.titleid = ""
     
+    def setWindow(self, window):
+        self.logger = utils.Logger("log.txt", window)
+        
+    def setLoc(self, loc):
+        self.loc = loc
+
+    def logHeader(self):
+        self.logger.log("PS3GameUpdateDownloader")
+        self.logger.log("Config File: "+self.configFile)
+        self.logger.log("Language: "+ self.loc.getLoc()+"\n\n")
     def loadConfig(self):
         if os.path.exists(self.configFile) and os.path.isfile(self.configFile):
-            self.logger.log("loaded config file!")
+            self.logger.log(self.loc.getKey("msg_configFileLoaded"))
             with open(self.configFile, "r", encoding="utf8") as f:
-                cf = json.loads(f.read())
-            self.dldir = cf["dldir"]
-            if cf["verify"] == 1:
-                self.verify = True
-            elif cf["verify"] == 0:
-                self.verify = False
-            
-            if cf["checkIfAlreadyDownloaded"] == 1:
-                self.checkIfAlreadyDownloaded = True
-            elif cf["checkIfAlreadyDownloaded"] == 0:
-                self.checkIfAlreadyDownloaded = False
-            self.storageThreshold = cf["storageThreshold"]
+                self.config = json.loads(f.read())
         else:
-            self.logger.log("no config file found! using defaults!")
-            self.dldir = "./downloadedPKGs"
-            self.verify = True
-            self.checkIfAlreadyDownloaded = True
-            self.storageThreshold = 95
+            self.logger.log(self.loc.getKey("msg_noConfigFile"))
+            self.config["dldir"] = "./downloadedPKGs"
+            self.config["verify"] = True
+            self.config["checkIfAlreadyDownloaded"] = True
+            self.config["storageThreshold"] = 95
+            self.config["currentLoc"] = "en"
     
-    def setConfig(self, dldir, verify, checkIfAlreadyDownloaded, storageThreshold):
-        self.dldir = dldir
-        self.verify = verify
-        self.checkIfAlreadyDownloaded = checkIfAlreadyDownloaded
-        self.storageThreshold = storageThreshold
-        if verify == True:
-            verify = 1
-        elif verify == False:
-            verify = 0
-        if checkIfAlreadyDownloaded == True:
-            checkIfAlreadyDownloaded = 1
-        elif checkIfAlreadyDownloaded == False:
-            checkIfAlreadyDownloaded = 0
-        
-        j = { "dldir":dldir, "verify":verify, "checkIfAlreadyDownloaded":checkIfAlreadyDownloaded, "storageThreshold":storageThreshold }
+    def setConfig(self, config):
+        self.config = config
         with open(self.configFile, "w", encoding="utf8") as f:
-            f.write(json.dumps(j, sort_keys=True, indent=4))
-        self.logger.log("saved config file!")
+            f.write(json.dumps(self.config, sort_keys=True, indent=4))
+        self.logger.log(self.loc.getKey("msg_configFileSaved"))
+        
     def getConfig(self, key):
-        if getattr(self, key):
-            return getattr(self, key)
+        if self.config[key] != None:
+            return self.config[key]
     
     def loadTitleDb(self, titledb = "titledb.txt"):
         with open(titledb, "r", encoding="utf8") as f:
@@ -82,7 +75,7 @@ class PS3GUD():
                     item["name"] = item["name"][:-1]
                 data.append(item)
         self.titledb = data
-        self.logger.log("title db loaded from: "+titledb)
+        self.logger.log(self.loc.getKey("msg_loadedTitledb", [titledb]))
         
     def getTitleNameFromId(self, titleid=None):
         if titleid == None:
@@ -102,10 +95,10 @@ class PS3GUD():
             if titleid == item["id"]:
                 check = True
                 self.titleid = titleid
-                self.logger.log("Game is: "+item["name"]+"\t titleid: "+item["id"])
+                self.logger.log(self.loc.getKey("msg_titleIDIs", [item["name"], item["id"]]))
                 break
         if check == False:
-            self.logger.log("given gameid is not valid", "e")
+            self.logger.log(self.loc.getKey("msg_titleIDNotValid"), "e")
             self.titleid = ""
             return
         
@@ -116,7 +109,7 @@ class PS3GUD():
         try:
             resp = urllib.request.urlopen(url)
         except urllib.error.HTTPError:
-            self.logger.log("meta file for this gameid is not available", "e")
+            self.logger.log(self.loc.getKey("msg_metaNotAvailable"), "e")
             self.titleid = ""
             return
         
@@ -124,7 +117,7 @@ class PS3GUD():
         info = data.decode('utf-8')
         #check file length for titles like BCAS20074
         if len(info) == 0:
-            self.logger.log("meta file for this gameid contains no info", "e")
+            self.logger.log(self.loc.getKey("msg_metaFileEmpty"), "e")
             self.titleid = ""
             return
         root = ET.fromstring(info)
@@ -141,76 +134,50 @@ class PS3GUD():
                     updates.append(pack)
         self.Updates[titleid] = updates
     
-    def askWhichToDownload(self):
-    #command line only
-        if len(self.Updates[self.titleid])>0:
-            i = 1
-            dllist = []
-            print("updates found!\n")
-            for pack in self.Updates[self.titleid]:
-                print("package: "+str(i))
-                print("version: "+pack["version"])
-                print("size: "+utils.formatSize(pack["size"]))
-                print("requires ps3 firmware version: "+pack["sysver"]+"\n")
-                i += 1
-            while True:
-                re = input("which package you want to download? enter package number or all: ")
-                if re.isdigit() == True:
-                    if int(re) < (len(self.Updates[self.titleid])+1) and int(re) > 0:
-                        re = int(re) - 1
-                        self.DlList.append(self.Updates[self.titleid][re])
-                        break
-                    else:
-                        print("please enter a correct number or all")
-                elif re == "all":
-                    for ii in range(0, len(self.Updates[self.titleid])):
-                        self.DlList.append(self.Updates[self.titleid][ii])
-                    break
-                else:
-                    print("please enter a correct number or all")
-    
     def downloadFiles(self):
-        self.logger.log("starting download of package(s)")
+        self.logger.log(self.loc.getKey("msg_startingDownloads"))
         i = 1
         for dl in self.DlList:
             url = dl["url"]
             sha1 = dl["sha1"]
             size = dl["size"]
-            fdir = self.dldir+"/"+utils.filterIllegalCharsFilename(self.getTitleNameFromId())+"["+self.titleid+"]/"
+            fdir = self.config["dldir"]+"/"+utils.filterIllegalCharsFilename(self.getTitleNameFromId())+"["+self.titleid+"]/"
             fname = fdir+utils.filterIllegalCharsFilename(os.path.basename(url))
+            if os.path.exists(self.config["dldir"]) == False and os.path.isfile(self.config["dldir"]) == False:
+                os.mkdir(self.config["dldir"])
             if os.path.exists(fdir) == False and os.path.isfile(fdir) == False:
                 os.mkdir(fdir)
             skip = False
-            if self.checkIfAlreadyDownloaded == True:
+            if self.config["checkIfAlreadyDownloaded"] == True:
                 #check if file already exists
                 if os.path.exists(fname) and os.path.isfile(fname):
                     if int(os.path.getsize(fname)) == int(size):
-                        if self.verify == False:
-                            self.logger.log("file '"+os.path.basename(url)+"' was already downloaded! skipping it! not verified!")
+                        if self.config["verify"] == False:
+                            self.logger.log(self.loc.getKey("msg_alreadyDownloadedNoVerify", [os.path.basename(url)]))
                             skip = True
                         else:
                             if sha1 == self._sha1File(fname):
-                                self.logger.log("file '"+os.path.basename(url)+"' was already downloaded! skipping it! sha1 verified!")
+                                self.logger.log(self.loc.getKey("msg_alreadyDownloadedVerify", [os.path.basename(url)]))
                                 skip = True
             if skip == False:
-                self.logger.log("starting download "+str(i)+" of "+str(len(self.DlList)))
+                self.logger.log(self.loc.getKey("msg_startSingleDownload", [i, len(self.DlList)]))
                 self._download_file(url, fname, size)
-            if self.verify == True:
+            if self.config["verify"] == True:
                 if sha1 == self._sha1File(fname):
-                    self.logger.log('"'+fname+'" successfully verified')
+                    self.logger.log(self.loc.getKey("msg_verifySuccess", [fname]))
                 else:
-                    self.logger.log('verification of "'+fname+'" failed\ndeleting file')
+                    self.logger.log(self.loc.getKey("msg_verifyFailure", [fname]))
                     os.remove(fname)
-            if self.verify == False:
-                self.logger.log("not verifying file!")
+            if self.config["verify"] == False:
+                self.logger.log(self.loc.getKey("msg_noVerify"))
             i += 1
             
-        self.logger.log("finished downloading "+str(len(self.DlList))+" files!")
+        self.logger.log(self.loc.getKey("msg_finishedDownload", [len(self.DlList)]))
         self.DlList = []
     
     def _download_file(self, url, local_filename, size):
         total, used, free = shutil.disk_usage(os.path.dirname(local_filename))
-        if used / total * 100 <= self.storageThreshold:
+        if used / total * 100 <= self.config["storageThreshold"]:
             if free > int(size):
                 with requests.get(url, stream=True) as r:
                     r.raise_for_status()
@@ -219,9 +186,9 @@ class PS3GUD():
                             if chunk:
                                 f.write(chunk)
             else:
-                self.logger.log("not enought free disk space!", "e")
+                self.logger.log(self.loc.getKey("msg_notEnoughDiskSpace"), "e")
         else:
-            self.logger.log("free disk space is below "+str(100-self.storageThreshold)+"%", "w")
+            self.logger.log(self.loc.getKey("msg_spaceBelowThreshold", [100-self.storageThreshold]), "w")
 
     def _sha1File(self, fname):
         #copy file
@@ -240,24 +207,7 @@ class PS3GUD():
     
     def __del__(self):
         del self.logger
-        
-if __name__ == "__main__":
-    import argparse
-    pars = argparse.ArgumentParser(description="Downloads Updates for PS3 Games with given ID")
-    pars.add_argument("gameid", metavar="gameid", type=str, nargs=1, help="ID of a PS3 Game")
 
-    args = pars.parse_args()
-    if args.gameid[0] and args.gameid[0] != "" and type(args.gameid[0]) == str:
-        ps3gud = PS3GUD()
-        #config
-        dldir = "./downloadedPKGs" #target dir for downloaded updates !!!END WITHOUT TRAILING SLASH!!!
-        verify = True #verify checksums of downloaded updates
-        checkIfAlreadyDownloaded = True #check if file already exists and size matches
-        ps3gud.setConfig(dldir, verify, checkIfAlreadyDownloaded)
-        #load title db
-        ps3gud.loadTitleDb()
-        ps3gud.checkForUpdates(args.gameid[0])
-        ps3gud.askWhichToDownload()
-        ps3gud.downloadFiles()
-        del ps3gud
-    input("please press enter to exit")
+class DummyLoc():
+    def getKey(self, key):
+        return "ERROR \""+key+"\""

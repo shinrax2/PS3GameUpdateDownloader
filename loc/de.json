@@ -1,0 +1,48 @@
+{
+    "language_name": "Deutsch",
+    "language_short": "de",
+    
+    
+    "window_main_title": "PS3 Game Update Downloader",
+    "window_main_titleid_label": "TitleID Eingeben",
+    "window_main_enter_btn": "Suchen",
+    "window_main_config_btn": "Konfiguration",
+    "window_main_exit_btn": "Verlassen",
+    
+    "window_config_title": "Konfiguration",
+    "window_config_dldir_label": "Downloadverzeichnis:",
+    "window_config_verify_label": "Dateien überprüfen:",
+    "window_config_checkIfAlreadyDownloaded_label": "Prüfen, ob Dateien bereits heruntergeladen wurden:",
+    "window_config_storageThreshold_label": "Speichergrenze (in %):",
+    "window_config_currentLoc_label": "Sprache:",
+    "window_config_cancel_btn": "Abbrechen",
+    "window_config_save_btn": "Speichern",
+    
+    "window_select_title": "Updates auswählen",
+    "window_select_table_num": "Num",
+    "window_select_table_ver": "Version",
+    "window_select_table_size": "Dateigröße",
+    "window_select_table_sysver": "PS3 FW Version",
+    "window_select_all_text": "Alle",
+    "window_select_download_btn": "Herunterladen",
+    "window_select_cancel_btn": "Abbrechen",
+    
+    "msg_configFileLoaded": "Konfigurationsdatei geladen!",
+    "msg_noConfigFile": "Keine Konfigurationsdatei gefunden! Benutze Vorgaben!",
+    "msg_configFileSaved": "Konfigurationsdatei gespeichert!",
+    "msg_loadedTitledb": "TitleDB \"{0}\" geladen",
+    "msg_titleIDIs": "Spiel: {0}\t TitleID: {1}",
+    "msg_titleIDNotValid": "TitleID ist falsch!",
+    "msg_metaNotAvailable": "Die Metadatei für diese TitleID ist nicht verfügbar!",
+    "msg_metaFileEmpty": "Die Metadatei für diese TitleID enthält keine Informationen!",
+    "msg_startingDownloads": "Starte Download der Updates",
+    "msg_alreadyDownloadedNoVerify": "Datei \"{0}\" wurde bereits heruntergeladen! Überspringen! Nicht überprüft!",
+    "msg_alreadyDownloadedVerify": "Datei \"{0}\" wurde bereits heruntergeladen! Überspringen! SHA-1 überprüft!",
+    "msg_startSingleDownload": "Starte Download {0} von {1}",
+    "msg_verifySuccess": "Überprüfung von \"{0}\" war erfolgreich!",
+    "msg_verifyFailure": "Überprüfung von \"{0}\" ist gescheitert!\tDatei wird gelöscht!",
+    "msg_noVerify": "Datei \"{0}\" wurde nicht überprüft!",
+    "msg_finishedDownload": "{0} Dateien wurden heruntergeladen!",
+    "msg_notEnoughDiskSpace": "Nicht genügend Speicherplatz!",
+    "msg_spaceBelowThreshold": "Freier Speicherplatz unter {0}%"
+}

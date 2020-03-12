@@ -1,0 +1,48 @@
+{
+    "language_name": "English",
+    "language_short": "en",
+    
+    
+    "window_main_title": "PS3 Game Update Downloader",
+    "window_main_titleid_label": "Enter TitleID",
+    "window_main_enter_btn": "Enter",
+    "window_main_config_btn": "Configuration",
+    "window_main_exit_btn": "Exit",
+    
+    "window_config_title": "Configuration",
+    "window_config_dldir_label": "Download directory:",
+    "window_config_verify_label": "Verify files:",
+    "window_config_checkIfAlreadyDownloaded_label": "Check if file was already downloaded:",
+    "window_config_storageThreshold_label": "Storage threshold (in %):",
+    "window_config_currentLoc_label": "Language:",
+    "window_config_cancel_btn": "Cancel",
+    "window_config_save_btn": "Save",
+    
+    "window_select_title": "Select Updates",
+    "window_select_table_num": "Num",
+    "window_select_table_ver": "Version",
+    "window_select_table_size": "Filesize",
+    "window_select_table_sysver": "PS3 FW Version",
+    "window_select_all_text": "All",
+    "window_select_download_btn": "Download",
+    "window_select_cancel_btn": "Cancel",
+    
+    "msg_configFileLoaded": "Loaded configuration file!",
+    "msg_noConfigFile": "No configuration file found! Using defaults!",
+    "msg_configFileSaved": "Saved configuration file!",
+    "msg_loadedTitledb": "Loaded TitleDB \"{0}\"",
+    "msg_titleIDIs": "Game is: {0}\t TitleID: {1}",
+    "msg_titleIDNotValid": "TitleID is invalid!",
+    "msg_metaNotAvailable": "Meta file for this TitleID is not available!",
+    "msg_metaFileEmpty": "Meta file for this TitleID contains no info!",
+    "msg_startingDownloads": "Starting download of updates",
+    "msg_alreadyDownloadedNoVerify": "File \"{0}\" was already downloaded! Skipping it! Not verified!",
+    "msg_alreadyDownloadedVerify": "File \"{0}\" was already downloaded! Skipping it! SHA-1 Verified!",
+    "msg_startSingleDownload": "Starting download {0} of {1}",
+    "msg_verifySuccess": "Verification of \"{0}\" was successful!",
+    "msg_verifyFailure": "Verification of \"{0}\" has failed!\tDeleting file!",
+    "msg_noVerify": "File \"{0}\" was not verified!",
+    "msg_finishedDownload": "Finished downloading {0} files!",
+    "msg_notEnoughDiskSpace": "Not enough free disk space!",
+    "msg_spaceBelowThreshold": "Free disk space is below {0}%"
+}
