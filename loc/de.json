@@ -1,4 +1,5 @@
 {
+    "loc_version": "v005",
     "language_name": "Deutsch",
     "language_short": "de",
     
@@ -13,6 +14,7 @@
     "window_config_dldir_label": "Downloadverzeichnis:",
     "window_config_verify_label": "Dateien überprüfen:",
     "window_config_checkIfAlreadyDownloaded_label": "Prüfen, ob Dateien bereits heruntergeladen wurden:",
+    "window_config_checkForNewRelease_label": "Neue Version beim Starten suchen:",
     "window_config_storageThreshold_label": "Speichergrenze (in %):",
     "window_config_currentLoc_label": "Sprache:",
     "window_config_cancel_btn": "Abbrechen",
@@ -26,6 +28,12 @@
     "window_select_all_text": "Alle",
     "window_select_download_btn": "Herunterladen",
     "window_select_cancel_btn": "Abbrechen",
+    
+    "window_relNotify_title": "Neue Version gefunden!",
+    "window_relNotify_label": "Aktuelle Version: {0}\nNeue Version: {1}",
+    "window_relNotify_web_btn": "Öffne Website im Browser",
+    "window_relNotify_dl_btn": "Mit Browser herunterladen",
+    "window_relNotify_close_btn": "Schließen",
     
     "msg_configFileLoaded": "Konfigurationsdatei geladen!",
     "msg_noConfigFile": "Keine Konfigurationsdatei gefunden! Benutze Vorgaben!",
@@ -44,5 +52,8 @@
     "msg_noVerify": "Datei \"{0}\" wurde nicht überprüft!",
     "msg_finishedDownload": "{0} Dateien wurden heruntergeladen!",
     "msg_notEnoughDiskSpace": "Nicht genügend Speicherplatz!",
-    "msg_spaceBelowThreshold": "Freier Speicherplatz unter {0}%"
+    "msg_spaceBelowThreshold": "Freier Speicherplatz unter {0}%",
+    "msg_relCheckError": "Konnte nicht nach neuer Version suchen!",
+    "msg_alreadyUpToDate": "Bereits neuste Version!",
+    "msg_foundNewRelease": "Neue Version \"{0}\" gefunden"
 }

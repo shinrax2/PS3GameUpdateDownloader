@@ -1,4 +1,5 @@
 {
+    "loc_version": "v005",
     "language_name": "English",
     "language_short": "en",
     
@@ -13,6 +14,7 @@
     "window_config_dldir_label": "Download directory:",
     "window_config_verify_label": "Verify files:",
     "window_config_checkIfAlreadyDownloaded_label": "Check if file was already downloaded:",
+    "window_config_checkForNewRelease_label": "Check for a new release at startup:",
     "window_config_storageThreshold_label": "Storage threshold (in %):",
     "window_config_currentLoc_label": "Language:",
     "window_config_cancel_btn": "Cancel",
@@ -26,6 +28,12 @@
     "window_select_all_text": "All",
     "window_select_download_btn": "Download",
     "window_select_cancel_btn": "Cancel",
+    
+    "window_relNotify_title": "New release found!",
+    "window_relNotify_label": "Current version: {0}\nNew version: {1}",
+    "window_relNotify_web_btn": "Open website in browser",
+    "window_relNotify_dl_btn": "Download with browser",
+    "window_relNotify_close_btn": "Close",
     
     "msg_configFileLoaded": "Loaded configuration file!",
     "msg_noConfigFile": "No configuration file found! Using defaults!",
@@ -44,5 +52,8 @@
     "msg_noVerify": "File \"{0}\" was not verified!",
     "msg_finishedDownload": "Finished downloading {0} files!",
     "msg_notEnoughDiskSpace": "Not enough free disk space!",
-    "msg_spaceBelowThreshold": "Free disk space is below {0}%"
+    "msg_spaceBelowThreshold": "Free disk space is below {0}%",
+    "msg_relCheckError": "Couldn't check for new release!",
+    "msg_alreadyUpToDate": "Already on the newest release!",
+    "msg_foundNewRelease": "Found new Release \"{0}\""
 }

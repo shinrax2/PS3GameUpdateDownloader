@@ -3,6 +3,8 @@
 #
 # PS3GameUpdateDownloader by shinrax2
 
+#builtin
+import webbrowser
 #pip packages
 import PySimpleGUI as sg
 #local files
@@ -17,6 +19,8 @@ def updatePackToTable(update):
         i+=1
         data.append(row)
     return data
+
+rel = utils.UpdaterGithubRelease("release.json")
 ps3 = PS3GUD.PS3GUD()
 ps3.loadConfig()
 loc = utils.Loc()
@@ -34,11 +38,45 @@ layout1 = [
 window = sg.Window(loc.getKey("window_main_title"), layout1)
 ps3.setWindow(window)
 win2_act = False
-ps3.logHeader()
+relCheck = False
+ps3.logHeader(rel.getVersion())
 ps3.loadTitleDb()
-
+if ps3.getConfig("checkForNewRelease"):
+    relCheck = True
 while True:
-    event, values = window.read()        
+    if relCheck:
+        data = rel.checkForNewRelease()
+        if data == False:
+            ps3.logger.log(loc.getKey("msg_relCheckError"))
+            relCheck = False
+        elif data == 1:
+            ps3.logger.log(loc.getKey("msg_alreadyUpToDate"))
+            relCheck = False
+        else:
+            ps3.logger.log(loc.getKey("msg_foundNewRelease", [data["version"]]))
+            relCheck = False
+            layoutRelNotify = [
+                                [sg.Text(loc.getKey("window_relNotify_label", [rel.getVersion(), data["version"]]))],
+                                [sg.Button(loc.getKey("window_relNotify_web_btn"), key="web"), sg.Button(loc.getKey("window_relNotify_dl_btn"), key="dl"), sg.Button(loc.getKey("window_relNotify_close_btn"), key="close")]
+                            ]
+            winRelNotify = sg.Window(loc.getKey("window_relNotify_title"), layoutRelNotify)
+            while True:
+                evRel, valRel = winRelNotify.read()
+                if evRel == "close":
+                    winRelNotify.close()
+                    break
+                if evRel in (None, "Exit"):
+                    winRelNotify.close()
+                    break
+                if evRel == "web":
+                    webbrowser.open_new(data["releaseUrlWeb"])
+                    winRelNotify.close()
+                    break
+                if evRel == "dl":
+                    webbrowser.open_new(data["releaseUrlDl"])
+                    winRelNotify.close()
+                    break
+    event, values = window.read()
     if event == "Exit":
         break
     if event in (None, "Exit"):
@@ -54,6 +92,7 @@ while True:
                             [sg.Text(loc.getKey("window_config_dldir_label")), sg.In(ps3.getConfig("dldir"), key="dldir"), sg.FolderBrowse(target="dldir")],
                             [sg.Text(loc.getKey("window_config_verify_label")), sg.Checkbox("", default=ps3.getConfig("verify"), key="verify")],
                             [sg.Text(loc.getKey("window_config_checkIfAlreadyDownloaded_label")),sg.Checkbox("", default=ps3.getConfig("checkIfAlreadyDownloaded"), key="checkIfAlreadyDownloaded")],
+                            [sg.Text(loc.getKey("window_config_checkForNewRelease_label")), sg.Checkbox("", default=ps3.getConfig("checkForNewRelease"), key="checkForNewRelease")],
                             [sg.Text(loc.getKey("window_config_storageThreshold_label")), sg.Spin([i for i in range(1, 100)], initial_value=ps3.getConfig("storageThreshold"), key="storageThreshold")],
                             [sg.Text(loc.getKey("window_config_currentLoc_label")), sg.DropDown(locChoices, size=(8, 15), key="currentLoc")],
                             [sg.Button(loc.getKey("window_config_cancel_btn"), key="Cancel"),sg.Button(loc.getKey("window_config_save_btn"), key="Save")]
@@ -65,11 +104,11 @@ while True:
                 winConfig.Close()
                 window.UnHide()
                 break
-            elif evConfig in (None, "Exit"):
+            if evConfig in (None, "Exit"):
                 winConfig.Close()
                 window.UnHide()
                 break
-            elif evConfig == "Save" and valConfig["currentLoc"] != "":
+            if evConfig == "Save" and valConfig["currentLoc"] != "":
                 cL = valConfig["currentLoc"]
                 for l in ll:
                     if cL == l["language_name"]:
@@ -110,13 +149,13 @@ while True:
                     window.UnHide()
                     tryDl = False
                     break
-                elif ev2 == "Cancel":
+                if ev2 == "Cancel":
                     win2.Close()
                     win2_act = False
                     window.UnHide()
                     tryDl = False
                     break
-                elif ev2 == "OK" and val2["drop"] != "":
+                if ev2 == "OK" and val2["drop"] != "":
                     drop = val2["drop"]
                     if drop == loc.getKey("window_select_all_text"):
                         drop = loc.getKey("window_select_all_text")

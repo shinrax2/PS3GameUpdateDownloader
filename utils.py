@@ -8,6 +8,7 @@ import datetime
 import os
 import platform
 import json
+import urllib.request
 
 class Logger():
     def __init__(self, logfile, window=None):
@@ -82,6 +83,34 @@ class Loc():
         except KeyError:
             return "ERROR \""+key+"\""
 
+class UpdaterGithubRelease():
+    def __init__(self, releaseFile):
+        self.rF = releaseFile
+        self.release = {}
+        with open(self.rF, "r", encoding="utf8") as f:
+            self.release = json.loads(f.read())
+            
+    def getVersion(self):
+        return self.release["version"]
+        
+    def checkForNewRelease(self):
+        try:
+            resp = urllib.request.urlopen(self.release["releaseUrl"])
+            data = resp.read()
+            data.decode("utf-8")
+            resp = json.loads(data)
+        except urllib.error.HTTPError:
+            return False
+        if int(self.release["version"][1:]) < int(resp["tag_name"][1:]):
+            rel = {}
+            rel["version"] = resp["tag_name"]
+            rel["releaseUrlWeb"] = "https://github.com/shinrax2/PS3GameUpdateDownloader/releases/latest"
+            rel["releaseUrlDl"] = resp["assets"][0]["browser_download_url"]
+            return rel
+        else:
+            return 1
+            
+    
 def formatSize(size):
     if int(size) > 1024-1 and int(size) < 1024*1024 : #KB
         return str(format(float(size)/1024, '.2f'))+"KB"

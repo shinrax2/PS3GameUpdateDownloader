@@ -31,6 +31,14 @@ class PS3GUD():
         self.Updates = {}
         self.DlList = []
         self.titleid = ""
+        
+        self.configDefaults = {}
+        self.configDefaults["dldir"] = "./downloadedPKGs"
+        self.configDefaults["verify"] = True
+        self.configDefaults["checkIfAlreadyDownloaded"] = True
+        self.configDefaults["storageThreshold"] = 95
+        self.configDefaults["currentLoc"] = "en"
+        self.configDefaults["checkForNewRelease"] = True
     
     def setWindow(self, window):
         self.logger = utils.Logger("log.txt", window)
@@ -38,8 +46,8 @@ class PS3GUD():
     def setLoc(self, loc):
         self.loc = loc
 
-    def logHeader(self):
-        self.logger.log("PS3GameUpdateDownloader")
+    def logHeader(self, version):
+        self.logger.log("PS3GameUpdateDownloader "+version)
         self.logger.log("Config File: "+self.configFile)
         self.logger.log("Language: "+ self.loc.getLoc()+"\n\n")
     def loadConfig(self):
@@ -49,11 +57,7 @@ class PS3GUD():
                 self.config = json.loads(f.read())
         else:
             self.logger.log(self.loc.getKey("msg_noConfigFile"))
-            self.config["dldir"] = "./downloadedPKGs"
-            self.config["verify"] = True
-            self.config["checkIfAlreadyDownloaded"] = True
-            self.config["storageThreshold"] = 95
-            self.config["currentLoc"] = "en"
+            self.config = self.configDefaults
     
     def setConfig(self, config):
         self.config = config
@@ -62,8 +66,10 @@ class PS3GUD():
         self.logger.log(self.loc.getKey("msg_configFileSaved"))
         
     def getConfig(self, key):
-        if self.config[key] != None:
+        try:
             return self.config[key]
+        except KeyError:
+            return self.configDefaults[key]
     
     def loadTitleDb(self, titledb = "titledb.txt"):
         with open(titledb, "r", encoding="utf8") as f:
