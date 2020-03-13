@@ -136,7 +136,7 @@ while True:
             choices.append(loc.getKey("window_select_all_text"))
             data = updatePackToTable(ps3.getUpdates())
             lay2 = [
-                    [sg.Text(loc.getKey("window_select_text_label", [ps3.getTitleNameFromId(), ps3.titleid])],
+                    [sg.Text(loc.getKey("window_select_text_label", [ps3.getTitleNameFromId(), ps3.titleid]))],
                     [sg.Table(values=data,headings=[loc.getKey("window_select_table_num"), loc.getKey("window_select_table_ver"), loc.getKey("window_select_table_size"), loc.getKey("window_select_table_sysver")])],
                     [sg.OptionMenu(choices, size=(3,8), key="drop", default_value=loc.getKey("window_select_all_text")),sg.Button(loc.getKey("window_select_download_btn"), key="OK"),sg.Button(loc.getKey("window_select_cancel_btn"), key="Cancel")]
                    ]
