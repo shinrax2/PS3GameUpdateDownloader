@@ -94,7 +94,7 @@ while True:
                             [sg.Text(loc.getKey("window_config_checkIfAlreadyDownloaded_label")),sg.Checkbox("", default=ps3.getConfig("checkIfAlreadyDownloaded"), key="checkIfAlreadyDownloaded")],
                             [sg.Text(loc.getKey("window_config_checkForNewRelease_label")), sg.Checkbox("", default=ps3.getConfig("checkForNewRelease"), key="checkForNewRelease")],
                             [sg.Text(loc.getKey("window_config_storageThreshold_label")), sg.Spin([i for i in range(1, 100)], initial_value=ps3.getConfig("storageThreshold"), key="storageThreshold")],
-                            [sg.Text(loc.getKey("window_config_currentLoc_label")), sg.DropDown(locChoices, size=(8, 15), key="currentLoc")],
+                            [sg.Text(loc.getKey("window_config_currentLoc_label")), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=loc.getKey("language_short"))],
                             [sg.Button(loc.getKey("window_config_cancel_btn"), key="Cancel"),sg.Button(loc.getKey("window_config_save_btn"), key="Save")]
                         ]
         winConfig = sg.Window(loc.getKey("window_config_title"), layoutConfig)
@@ -136,9 +136,9 @@ while True:
             choices.append(loc.getKey("window_select_all_text"))
             data = updatePackToTable(ps3.getUpdates())
             lay2 = [
-                    [sg.Text(ps3.getTitleNameFromId()+":")],
+                    [sg.Text(loc.getKey("window_select_text_label", [ps3.getTitleNameFromId(), ps3.titleid])],
                     [sg.Table(values=data,headings=[loc.getKey("window_select_table_num"), loc.getKey("window_select_table_ver"), loc.getKey("window_select_table_size"), loc.getKey("window_select_table_sysver")])],
-                    [sg.DropDown(choices, size=(3,8), key="drop"),sg.Button(loc.getKey("window_select_download_btn"), key="OK"),sg.Button(loc.getKey("window_select_cancel_btn"), key="Cancel")]
+                    [sg.OptionMenu(choices, size=(3,8), key="drop", default_value=loc.getKey("window_select_all_text")),sg.Button(loc.getKey("window_select_download_btn"), key="OK"),sg.Button(loc.getKey("window_select_cancel_btn"), key="Cancel")]
                    ]
             win2 = sg.Window(loc.getKey("window_select_title"), lay2)
             while True:

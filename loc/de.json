@@ -1,5 +1,5 @@
 {
-    "loc_version": "v005",
+    "loc_version": "v006",
     "language_name": "Deutsch",
     "language_short": "de",
     
@@ -21,6 +21,7 @@
     "window_config_save_btn": "Speichern",
     
     "window_select_title": "Updates auswählen",
+    "window_select_text_label": "Spiel: {0}\tTitleID: {1}",
     "window_select_table_num": "Num",
     "window_select_table_ver": "Version",
     "window_select_table_size": "Dateigröße",
