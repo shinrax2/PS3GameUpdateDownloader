@@ -175,7 +175,7 @@ class PS3GUD():
                     self.logger.log(self.loc.getKey("msg_verifyFailure", [fname]))
                     os.remove(fname)
             if self.config["verify"] == False:
-                self.logger.log(self.loc.getKey("msg_noVerify"))
+                self.logger.log(self.loc.getKey("msg_noVerify", [fname]))
             i += 1
             
         self.logger.log(self.loc.getKey("msg_finishedDownload", [len(self.DlList)]))
