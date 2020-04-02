@@ -102,6 +102,9 @@ class UpdaterGithubRelease():
     def getVersion(self):
         return self.release["version"]
         
+    def getChangelog(self):
+        return self.resp["body"]
+        
     def checkForNewRelease(self):
         try:
             resp = urllib.request.urlopen(urllib.parse.urljoin(urllib.parse.urljoin(urllib.parse.urljoin("https://api.github.com/repos/" ,self.release["author"]+"/"), self.release["repo"]+"/"), "releases/latest"))

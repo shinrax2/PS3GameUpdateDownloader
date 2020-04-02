@@ -31,7 +31,8 @@
     "window_select_cancel_btn": "Cancel",
     
     "window_relNotify_title": "New release found!",
-    "window_relNotify_label": "Current version: {0}\nNew version: {1}",
+    "window_relNotify_version_label": "Current version: {0}\nNew version: {1}",
+    "window_relNotify_changelog_label": "Changelog:",
     "window_relNotify_web_btn": "Open website in browser",
     "window_relNotify_dl_btn": "Download and install update",
     "window_relNotify_close_btn": "Close",
