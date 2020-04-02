@@ -23,9 +23,7 @@ def updatePackToTable(update):
         data.append(row)
     return data
     
-suffix = ""
-if platform.system() == "Windows":
-    suffix = ".exe"
+suffix = utils.getExecutableSuffix()
 if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)):
     os.remove(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) 
 

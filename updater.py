@@ -22,7 +22,5 @@ if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) and 
     resp = rel.checkForNewRelease()
     if type(resp) == dict:
         rel.downloadNewRelease(data["dir"])
-        suffix = ""
-        if platform.system() == "Windows":
-            suffix = ".exe"
+        suffix = utils.getExecutableSuffix()
         subprocess.Popen(os.path.join(data["dir"], "ps3gud"+suffix))

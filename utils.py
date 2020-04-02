@@ -105,6 +105,13 @@ class UpdaterGithubRelease():
     def getChangelog(self):
         return self.resp["body"]
         
+    def getRightAssetNum(self):
+        num = 0
+        for asset in self.resp["assets"]:
+            if asset["browser_download_url"].endswith(getArchiveSuffix()+".zip"):
+                return num
+            num += 1
+    
     def checkForNewRelease(self):
         try:
             resp = urllib.request.urlopen(urllib.parse.urljoin(urllib.parse.urljoin(urllib.parse.urljoin("https://api.github.com/repos/" ,self.release["author"]+"/"), self.release["repo"]+"/"), "releases/latest"))
@@ -117,7 +124,7 @@ class UpdaterGithubRelease():
             rel = {}
             rel["version"] = self.resp["tag_name"]
             rel["releaseUrlWeb"] = urllib.parse.urljoin(urllib.parse.urljoin(urllib.parse.urljoin("https://github.com/" ,self.release["author"]+"/"), self.release["repo"]+"/"), "releases/latest")
-            rel["releaseUrlDl"] = self.resp["assets"][0]["browser_download_url"]
+            rel["releaseUrlDl"] = self.resp["assets"][self.getRightAssetNum()]["browser_download_url"]
             return rel
         else:
             return 1
@@ -176,9 +183,7 @@ class UpdaterGithubRelease():
         data = {"dir": os.getcwd()}
         with open(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json"), "w", encoding="utf8") as f:
             f.write(json.dumps(data, sort_keys=True, indent=4))
-        suffix = ""
-        if platform.system() == "Windows":
-            suffix = ".exe"
+        suffix = getExecutableSuffix()
         shutil.copy2(os.path.join(os.getcwd(), "PS3GUDup"+suffix), os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix))
         subprocess.Popen(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix))
         sys.exit()
@@ -225,3 +230,24 @@ def rmDirContents(folder_path):
             os.unlink(file_object_path)
         else:
             shutil.rmtree(file_object_path)
+
+def getExecutableSuffix():
+    if platform.system() == "Windows":
+        return ".exe"
+    elif platform.system() == "Darwin":
+        return ".app" #?
+    else:
+        return ""
+
+def getArchiveSuffix():
+    if platform.system() == "Windows":
+        suffix = "win"
+    elif platform.system() == "Darwin":
+        suffix = "darwin"
+    elif platform.system() == "Linux":
+        suffix = "linux"
+    if platform.architecture()[0] == "32bit":
+        suffix += "32"
+    elif platform.architecture()[0] == "64bit":
+        suffix += "64"
+    return suffix
