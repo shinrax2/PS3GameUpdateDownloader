@@ -33,7 +33,7 @@
     "window_relNotify_title": "Neue Version gefunden!",
     "window_relNotify_label": "Aktuelle Version: {0}\nNeue Version: {1}",
     "window_relNotify_web_btn": "Öffne Website im Browser",
-    "window_relNotify_dl_btn": "Mit Browser herunterladen",
+    "window_relNotify_dl_btn": "Update herunterladen und installieren",
     "window_relNotify_close_btn": "Schließen",
     
     "msg_configFileLoaded": "Konfigurationsdatei geladen!",

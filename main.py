@@ -5,6 +5,9 @@
 
 #builtin
 import webbrowser
+import tempfile
+import platform
+import os
 #pip packages
 import PySimpleGUI as sg
 #local files
@@ -19,6 +22,12 @@ def updatePackToTable(update):
         i+=1
         data.append(row)
     return data
+    
+suffix = ""
+if platform.system() == "Windows":
+    suffix = ".exe"
+if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)):
+    os.remove(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) 
 
 rel = utils.UpdaterGithubRelease("release.json")
 ps3 = PS3GUD.PS3GUD()
@@ -73,7 +82,7 @@ while True:
                     winRelNotify.close()
                     break
                 if evRel == "dl":
-                    webbrowser.open_new(data["releaseUrlDl"])
+                    rel.startUpdater()
                     winRelNotify.close()
                     break
     event, values = window.read()
