@@ -15,6 +15,7 @@ import shutil
 import zipfile
 import subprocess
 import sys
+import distutils.core
 #pip packages
 import requests
 
@@ -129,18 +130,32 @@ class UpdaterGithubRelease():
         else:
             return 1
             
-    def downloadNewRelease(self, cwd):
+    def downloadNewRelease(self, cwd, text, bar, window):
         tdir = tempfile.gettempdir()
         url = self.resp["assets"][0]["browser_download_url"]
-        #cwd = os.getcwd()
         local_filename = os.path.join(tdir, os.path.basename(url))
+        chunk_size=8192
+        count = 0
+        already_loaded = 0
         with requests.get(url, stream=True) as r:
             r.raise_for_status()
+            size = int(r.headers["content-length"])
             with open(local_filename, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192): 
+                for chunk in r.iter_content(chunk_size): 
                     if chunk:
                         f.write(chunk)
+                        count += 1
+                        already_loaded = count * chunk_size
+                        if already_loaded / size > 1:
+                            already_loaded = size
+                        label = "Downloading update: "+formatSize(already_loaded)+"/"+formatSize(size)
+                        percentage = already_loaded / size * 100
+                        text.Update(label)
+                        bar.UpdateBar(percentage)
+                        window.Refresh()
         if int(os.path.getsize(local_filename)) == int(self.resp["assets"][0]["size"]):
+            text.Update("backing up stuff")
+            window.Refresh()
             #backup config and downloadedPKGs
             if os.path.exists(os.path.join(cwd, "config.json")) and os.path.isfile(os.path.join(cwd, "config.json")):
                 shutil.copy2(os.path.join(cwd, "config.json"), os.path.join(tdir, "config.json"))
@@ -152,22 +167,23 @@ class UpdaterGithubRelease():
             tzipdir = os.path.join(tdir, "PS3GUDUpdate")
             if os.path.exists(tzipdir) == False and os.path.isfile(tzipdir) == False:
                 os.mkdir(tzipdir)
-            copysrc = ""
+            text.Update("Extracting update")
+            window.Refresh()
             with zipfile.ZipFile(local_filename, "r") as zipf:
                 zipf.extractall(tzipdir)
             if len(os.listdir(tzipdir)) == 1:
                     if os.path.isdir(os.path.join(tzipdir, os.listdir(tzipdir)[0])):
                         copysrc = os.path.join(tzipdir, os.listdir(tzipdir)[0])
+                    else:
+                        copysrc = tzipdir
             else:
                 copysrc = tzipdir
-            for item in os.listdir(copysrc):
-                if os.path.isfile(os.path.join(copysrc, item)):
-                    shutil.copy(os.path.join(copysrc, item), cwd)
-                elif os.path.isdir(os.path.join(copysrc, item)):
-                    os.mkdir(os.path.join(cwd, item))
-                    for item2 in os.listdir(os.path.join(copysrc, item)):
-                        shutil.copy(os.path.join(os.path.join(copysrc, item), item2), os.path.join(cwd, item))
+            text.Update("Installing update")
+            window.Refresh()
+            distutils.dir_util.copy_tree(copysrc, cwd)
                         
+            text.Update("Restoring backedup stuff and cleaning up")
+            window.Refresh()
             #restore config and downloadedPKGs
             if os.path.exists(os.path.join(tdir, "config.json")) and os.path.isfile(os.path.join(tdir, "config.json")):
                 shutil.copy2(os.path.join(tdir, "config.json"), os.path.join(cwd, "config.json"))
@@ -230,7 +246,7 @@ def rmDirContents(folder_path):
             os.unlink(file_object_path)
         else:
             shutil.rmtree(file_object_path)
-
+            
 def getExecutableSuffix():
     if platform.system() == "Windows":
         return ".exe"
