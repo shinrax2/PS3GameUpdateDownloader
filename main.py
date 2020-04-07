@@ -26,6 +26,9 @@ def updatePackToTable(update):
 suffix = utils.getExecutableSuffix()
 if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)):
     os.remove(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) 
+if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")):
+    os.remove(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) 
+
 
 rel = utils.UpdaterGithubRelease("release.json")
 ps3 = PS3GUD.PS3GUD()
