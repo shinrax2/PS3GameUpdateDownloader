@@ -142,7 +142,7 @@ class PS3GUD():
                     updates.append(pack)
         self.Updates[titleid] = updates
     
-    def downloadFiles(self):
+    def downloadFiles(self, window):
         self.logger.log(self.loc.getKey("msg_startingDownloads"))
         i = 1
         for dl in self.DlList:
@@ -169,7 +169,7 @@ class PS3GUD():
                                 skip = True
             if skip == False:
                 self.logger.log(self.loc.getKey("msg_startSingleDownload", [i, len(self.DlList)]))
-                self._download_file(url, fname, size)
+                self._download_file(url, fname, size, window, i)
             if self.config["verify"] == True:
                 if sha1 == self._sha1File(fname):
                     self.logger.log(self.loc.getKey("msg_verifySuccess", [fname]))
@@ -183,16 +183,30 @@ class PS3GUD():
         self.logger.log(self.loc.getKey("msg_finishedDownload", [len(self.DlList)]))
         self.DlList = []
     
-    def _download_file(self, url, local_filename, size):
+    def _download_file(self, url, local_filename, size, window, num):
+        text = window["window_main_progress_label"]
+        bar = window["window_main_progress_bar"]
+        size = int(size)
+        chunk_size=8192
+        count = 0
+        already_loaded = 0
         total, used, free = shutil.disk_usage(os.path.dirname(local_filename))
         if used / total * 100 <= self.config["storageThreshold"]:
             if free > int(size):
                 with requests.get(url, stream=True) as r:
                     r.raise_for_status()
                     with open(local_filename, 'wb') as f:
-                        for chunk in r.iter_content(chunk_size=8192): 
+                        for chunk in r.iter_content(chunk_size=chunk_size): 
                             if chunk:
                                 f.write(chunk)
+                                count += 1
+                                already_loaded = count * chunk_size
+                                if already_loaded / size > 1:
+                                    already_loaded = size
+                                percentage = already_loaded / size * 100
+                                text.Update(self.loc.getKey("window_main_progress_label", [num, utils.formatSize(already_loaded), utils.formatSize(size)]))
+                                bar.UpdateBar(percentage)
+                                window.Refresh()
             else:
                 self.logger.log(self.loc.getKey("msg_notEnoughDiskSpace"), "e")
         else:

@@ -7,6 +7,7 @@
     "window_main_title": "PS3 Game Update Downloader",
     "window_main_titleid_label": "TitleID Eingeben",
     "window_main_enter_btn": "Suchen",
+    "window_main_progress_label": "Lade Datei {0} herunter: {1}/{2}",
     "window_main_config_btn": "Konfiguration",
     "window_main_exit_btn": "Verlassen",
     

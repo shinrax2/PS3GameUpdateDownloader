@@ -130,7 +130,9 @@ class UpdaterGithubRelease():
         else:
             return 1
             
-    def downloadNewRelease(self, cwd, text, bar, window):
+    def downloadNewRelease(self, cwd, window):
+        text = window["updater_text"]
+        bar = window["updater_progressbar"]
         tdir = tempfile.gettempdir()
         url = self.resp["assets"][0]["browser_download_url"]
         local_filename = os.path.join(tdir, os.path.basename(url))
@@ -141,7 +143,7 @@ class UpdaterGithubRelease():
             r.raise_for_status()
             size = int(r.headers["content-length"])
             with open(local_filename, 'wb') as f:
-                for chunk in r.iter_content(chunk_size): 
+                for chunk in r.iter_content(chunk_size=chunk_size): 
                     if chunk:
                         f.write(chunk)
                         count += 1

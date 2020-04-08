@@ -41,6 +41,8 @@ sg.change_look_and_feel("DarkAmber")
 layout1 = [
         [sg.Text(loc.getKey("window_main_titleid_label"))],
         [sg.Input(key="titleid"),sg.Button(loc.getKey("window_main_enter_btn"), key="Enter"),sg.Button(loc.getKey("window_main_config_btn") ,key="Config")],
+        [sg.Text("", size=(20, 2), key="window_main_progress_label")],
+        [sg.ProgressBar(100, orientation="h", size=(52.85, 20), key="window_main_progress_bar")],
         [sg.Output(size=(80,20), key="Out")],
         [sg.Button(loc.getKey("window_main_exit_btn"), key="Exit")]
         ]
@@ -185,5 +187,7 @@ while True:
                         window.UnHide()
                         break
         if tryDl == True:
-            ps3.downloadFiles()
+            ps3.downloadFiles(window)
+            window["window_main_progress_label"].Update("")
+            window["window_main_progress_bar"].UpdateBar(0)
 window.close()

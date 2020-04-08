@@ -34,7 +34,7 @@ if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) and 
     resp = rel.checkForNewRelease()
     if type(resp) == dict:
         text.Update("Found new release!")
-        rel.downloadNewRelease(data["dir"], text, bar, window)
+        rel.downloadNewRelease(data["dir"], window)
         suffix = utils.getExecutableSuffix()
         subprocess.Popen(os.path.join(data["dir"], "ps3gud"+suffix))
     window.close()

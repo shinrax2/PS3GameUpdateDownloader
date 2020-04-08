@@ -6,7 +6,8 @@
     
     "window_main_title": "PS3 Game Update Downloader",
     "window_main_titleid_label": "Enter TitleID",
-    "window_main_enter_btn": "Enter",
+    "window_main_enter_btn": "Search",
+    "window_main_progress_label": "Downloading file {0}: {1}/{2}",
     "window_main_config_btn": "Configuration",
     "window_main_exit_btn": "Exit",
     
