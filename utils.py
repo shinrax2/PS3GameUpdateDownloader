@@ -156,13 +156,15 @@ class UpdaterGithubRelease():
                         bar.UpdateBar(percentage)
                         window.Refresh()
         if int(os.path.getsize(local_filename)) == int(self.resp["assets"][0]["size"]):
-            text.Update("backing up stuff")
+            text.Update("Backing up stuff")
             window.Refresh()
             #backup config and downloadedPKGs
             if os.path.exists(os.path.join(cwd, "config.json")) and os.path.isfile(os.path.join(cwd, "config.json")):
                 shutil.copy2(os.path.join(cwd, "config.json"), os.path.join(tdir, "config.json"))
-            if os.path.exists(os.path.join(cwd, "./downloadedPKGs")) and os.path.isdir(os.path.join(cwd, "./downloadedPKGs")):
-                shutil.copy2(os.path.join(cwd, "./downloadedPKGs"), os.path.join(tdir, "./downloadedPKGs"))
+            if os.path.exists(os.path.join(tdir, "downloadedPKGs")) and os.path.isdir(os.path.join(tdir, "downloadedPKGs")):
+                shutil.rmtree(os.path.join(tdir, "downloadedPKGs"))
+            if os.path.exists(os.path.join(cwd, "downloadedPKGs")) and os.path.isdir(os.path.join(cwd, "downloadedPKGs")):
+                shutil.copytree(os.path.join(cwd, "downloadedPKGs"), os.path.join(tdir, "downloadedPKGs"))
                 
             rmDirContents(cwd)
             
@@ -190,9 +192,9 @@ class UpdaterGithubRelease():
             if os.path.exists(os.path.join(tdir, "config.json")) and os.path.isfile(os.path.join(tdir, "config.json")):
                 shutil.copy2(os.path.join(tdir, "config.json"), os.path.join(cwd, "config.json"))
                 os.remove(os.path.join(tdir, "config.json"))
-            if os.path.exists(os.path.join(tdir, "./downloadedPKGs")) and os.path.isdir(os.path.join(tdir, "./downloadedPKGs")):
-                shutil.copy2(os.path.join(tdir, "./downloadedPKGs"), os.path.join(cwd, "./downloadedPKGs"))
-                shutil.rmtree(os.path.join(tdir, "./downloadedPKGs"))
+            if os.path.exists(os.path.join(tdir, "downloadedPKGs")) and os.path.isdir(os.path.join(tdir, "downloadedPKGs")):
+                shutil.copytree(os.path.join(tdir, "downloadedPKGs"), os.path.join(cwd, "downloadedPKGs"))
+                shutil.rmtree(os.path.join(tdir, "downloadedPKGs"))
             os.remove(local_filename)
             os.remove(os.path.join(tdir, "PS3GUDUpdate.json"))
             shutil.rmtree(tzipdir)
