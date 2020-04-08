@@ -5,6 +5,7 @@
 
 #built-in
 import urllib.request
+import urllib.parse
 import ssl
 import xml.etree.ElementTree as ET
 import os
@@ -112,7 +113,7 @@ class PS3GUD():
         #check for updates
         updates = []
         ssl._create_default_https_context = ssl._create_unverified_context # needed for sonys self signed cert
-        url = "https://a0.ww.np.dl.playstation.net/tpl/np/"+self.titleid+"/"+self.titleid+"-ver.xml"
+        url = urllib.parse.urljoin(urllib.parse.urljoin("https://a0.ww.np.dl.playstation.net/tpl/np/", self.titleid+"/"), self.titleid+"-ver.xml")
         try:
             resp = urllib.request.urlopen(url)
         except urllib.error.HTTPError:
@@ -148,8 +149,8 @@ class PS3GUD():
             url = dl["url"]
             sha1 = dl["sha1"]
             size = dl["size"]
-            fdir = self.config["dldir"]+"/"+utils.filterIllegalCharsFilename(self.getTitleNameFromId())+"["+self.titleid+"]/"
-            fname = fdir+utils.filterIllegalCharsFilename(os.path.basename(url))
+            fdir = os.path.join(self.config["dldir"]+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId())+"["+self.titleid+"]/")
+            fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
             if os.path.exists(self.config["dldir"]) == False and os.path.isfile(self.config["dldir"]) == False:
                 os.mkdir(self.config["dldir"])
             if os.path.exists(fdir) == False and os.path.isfile(fdir) == False:
