@@ -177,7 +177,7 @@ while True:
                         win2_act = False
                         window.UnHide()
                         break
-                    elif drop > 0 and drop < (len(ps3.getUpdates())+1):
+                    elif int(drop) > 0 and int(drop) < (len(ps3.getUpdates())+1):
                         drop = int(drop)-1
                         ps3.DlList.append(ps3.getUpdates()[drop])
                         win2.Close()
