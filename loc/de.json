@@ -58,5 +58,6 @@
     "msg_spaceBelowThreshold": "Freier Speicherplatz unter {0}%",
     "msg_relCheckError": "Konnte nicht nach neuer Version suchen!",
     "msg_alreadyUpToDate": "Bereits neuste Version!",
-    "msg_foundNewRelease": "Neue Version \"{0}\" gefunden"
+    "msg_foundNewRelease": "Neue Version \"{0}\" gefunden",
+    "msg_NoReleaseArchiveForPlatformOrArch": "Konnte kein Release für deine Plattform oder Architektur finden. Plattform: \"{0}\" Architektur: \"{1}\" Kompiliert: \"{2}\""
 }

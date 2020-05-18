@@ -10,6 +10,7 @@ import os
 import platform
 import json
 import subprocess
+import shlex
 #local files
 import utils
 #pip packages
@@ -24,17 +25,24 @@ if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) and 
     layout = [
                 [sg.Text("Checking for updates", size=(20, 2), key="updater_text")],
                 [sg.ProgressBar(100, orientation="h", size=(20, 20), key="updater_progressbar")]
-            ]
-    window = sg.Window("PS3GUDup", layout)
+    ]
+    window = sg.Window("PS3GUD Updater", layout)
     window.finalize()
     window.Refresh()
     text = window["updater_text"]
     bar = window["updater_progressbar"]
     rel = utils.UpdaterGithubRelease(os.path.join(data["dir"], "release.json"))
     resp = rel.checkForNewRelease()
-    if type(resp) == dict:
+    if isinstance(resp, dict):
         text.Update("Found new release!")
         rel.downloadNewRelease(data["dir"], window)
         suffix = utils.getExecutableSuffix()
-        subprocess.Popen(os.path.join(data["dir"], "ps3gud"+suffix))
+        if utils.isAppFrozen():
+            file = os.path.join(data["dir"], "PS3GUD"+suffix)
+        else:
+            if platform.system() == "Windows":
+                file = "py "+os.path.join(data["dir"], "main"+suffix)
+            if platform.system() == "Linux":
+                file = shlex.split("python3 "+os.path.join(data["dir"], "main"+suffix))
+        subprocess.Popen(file)
     window.close()

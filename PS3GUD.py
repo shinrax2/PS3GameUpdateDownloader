@@ -52,6 +52,7 @@ class PS3GUD():
         self.logger.log("Config File: "+self.configFile)
         self.logger.log("Language: "+ self.loc.getLoc()+"\n\n")
         self.logger.log("Current working directory: "+os.getcwd())
+        self.logger.log("Compiled: "+str(utils.isAppFrozen()))
     def loadConfig(self):
         if os.path.exists(self.configFile) and os.path.isfile(self.configFile):
             self.logger.log(self.loc.getKey("msg_configFileLoaded"))

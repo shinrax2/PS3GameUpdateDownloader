@@ -23,13 +23,17 @@ def updatePackToTable(update):
         data.append(row)
     return data
     
+#remove leftover files from updating
 suffix = utils.getExecutableSuffix()
 if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)):
     os.remove(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) 
 if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")):
     os.remove(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) 
+if utils.isAppFrozen() == False:
+    if os.path.exists(os.path.join(tempfile.gettempdir(), "utils.py")) and os.path.isfile(os.path.join(tempfile.gettempdir(), "utils.py")):
+        os.remove(os.path.join(tempfile.gettempdir(), "utils.py"))
 
-
+#setup main classes
 rel = utils.UpdaterGithubRelease("release.json")
 ps3 = PS3GUD.PS3GUD()
 ps3.loadConfig()
@@ -38,14 +42,14 @@ loc.setLoc(ps3.getConfig("currentLoc"))
 ps3.setLoc(loc)
 sg.change_look_and_feel("DarkAmber")
 
-layout1 = [
+layout1 = [ #layout for main window
         [sg.Text(loc.getKey("window_main_titleid_label"))],
         [sg.Input(key="titleid"),sg.Button(loc.getKey("window_main_enter_btn"), key="Enter"),sg.Button(loc.getKey("window_main_config_btn") ,key="Config")],
         [sg.Text("", size=(20, 2), key="window_main_progress_label")],
         [sg.ProgressBar(100, orientation="h", size=(52.85, 20), key="window_main_progress_bar")],
         [sg.Output(size=(80,20), key="Out")],
         [sg.Button(loc.getKey("window_main_exit_btn"), key="Exit")]
-        ]
+]
 
 window = sg.Window(loc.getKey("window_main_title"), layout1)
 ps3.setWindow(window)
@@ -63,6 +67,9 @@ while True:
             relCheck = False
         elif data == 1:
             ps3.logger.log(loc.getKey("msg_alreadyUpToDate"))
+            relCheck = False
+        elif data == 2:
+            ps3.logger.log(loc.getKey("msg_NoReleaseArchiveForPlatformOrArch", [platform.system(), platform.architecture()[0], utils.isAppFrozen()]))
             relCheck = False
         else:
             ps3.logger.log(loc.getKey("msg_foundNewRelease", [data["version"]]))

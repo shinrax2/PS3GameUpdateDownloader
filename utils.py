@@ -16,6 +16,7 @@ import zipfile
 import subprocess
 import sys
 import distutils.core
+import shlex
 #pip packages
 import requests
 
@@ -112,6 +113,7 @@ class UpdaterGithubRelease():
             if asset["browser_download_url"].endswith(getArchiveSuffix()+".zip"):
                 return num
             num += 1
+        return -1
     
     def checkForNewRelease(self):
         try:
@@ -122,10 +124,14 @@ class UpdaterGithubRelease():
         except urllib.error.HTTPError:
             return False
         if self.release["version"] < self.resp["tag_name"]:
-            rel = {}
-            rel["version"] = self.resp["tag_name"]
-            rel["releaseUrlWeb"] = urllib.parse.urljoin(urllib.parse.urljoin(urllib.parse.urljoin("https://github.com/" ,self.release["author"]+"/"), self.release["repo"]+"/"), "releases/latest")
-            rel["releaseUrlDl"] = self.resp["assets"][self.getRightAssetNum()]["browser_download_url"]
+            assetnum = self.getRightAssetNum()
+            if assetnum > -1:
+                rel = {}
+                rel["version"] = self.resp["tag_name"]
+                rel["releaseUrlWeb"] = urllib.parse.urljoin(urllib.parse.urljoin(urllib.parse.urljoin("https://github.com/" ,self.release["author"]+"/"), self.release["repo"]+"/"), "releases/latest")
+                rel["releaseUrlDl"] = self.resp["assets"][assetnum]["browser_download_url"]
+            else:
+                return 2
             return rel
         else:
             return 1
@@ -200,12 +206,29 @@ class UpdaterGithubRelease():
             shutil.rmtree(tzipdir)
             
     def startUpdater(self):
+        suffix = getExecutableSuffix()
+        if isAppFrozen():
+            file = "PS3GUDup"+suffix
+        else:
+            file = "updater"+suffix
+        
+        #write current install dir to tempfile
         data = {"dir": os.getcwd()}
         with open(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json"), "w", encoding="utf8") as f:
             f.write(json.dumps(data, sort_keys=True, indent=4))
-        suffix = getExecutableSuffix()
-        shutil.copy2(os.path.join(os.getcwd(), "PS3GUDup"+suffix), os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix))
-        subprocess.Popen(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix))
+        #copy updater
+        shutil.copy2(os.path.join(os.getcwd(), file), os.path.join(tempfile.gettempdir(), file))
+        if isAppFrozen() == False:
+            #copy depency if app not compiled
+            shutil.copy2(os.path.join(os.getcwd(), "utils.py"), os.path.join(tempfile.gettempdir(), "utils.py"))
+        
+        if isAppFrozen() == False:
+            if platform.system() == "Windows":
+                subprocess.Popen("py "+os.path.join(tempfile.gettempdir(), file))
+            if platform.system() == "Linux":
+                subprocess.Popen(shlex.split("python3 "+os.path.join(tempfile.gettempdir(), file)))
+        else:
+                subprocess.Popen(os.path.join(tempfile.gettempdir(), file))
         sys.exit()
         
 
@@ -226,6 +249,8 @@ def massReplace(find, replace, stri):
     return out
     
 def massFormat(stri, args):
+    #basically str.format() that takes a list of arguments
+    #!!very hacky, please tell me if you know a better way!!
     call = "stri.format( "
     for a in args:
         call = call+"'"+str(a)+"', "
@@ -251,23 +276,35 @@ def rmDirContents(folder_path):
         else:
             shutil.rmtree(file_object_path)
             
-def getExecutableSuffix():
-    if platform.system() == "Windows":
-        return ".exe"
-    elif platform.system() == "Darwin":
-        return ".app" #?
+def isAppFrozen():
+    #check if app was compiled with pyinstaller
+    if getattr(sys, "frozen", False):
+        state = True
     else:
-        return ""
+        state = False
+    return state
+    
+def getExecutableSuffix():
+    #get right suffix for starting updater, etc.
+    suffix = ""
+    if isAppFrozen():
+        if platform.system() == "Windows":
+            suffix = ".exe"
+    else:
+        suffix = ".py"
+    return suffix
 
 def getArchiveSuffix():
-    if platform.system() == "Windows":
-        suffix = "win"
-    elif platform.system() == "Darwin":
-        suffix = "darwin"
-    elif platform.system() == "Linux":
-        suffix = "linux"
-    if platform.architecture()[0] == "32bit":
-        suffix += "32"
-    elif platform.architecture()[0] == "64bit":
-        suffix += "64"
+    #get right archive for downloading new updates
+    if isAppFrozen():
+        if platform.system() == "Windows":
+            suffix = "win"
+        elif platform.system() == "Linux":
+            suffix = "linux"
+        if platform.architecture()[0] == "32bit":
+            suffix += "32"
+        elif platform.architecture()[0] == "64bit":
+            suffix += "64"
+    else:
+        suffix = "source"
     return suffix
