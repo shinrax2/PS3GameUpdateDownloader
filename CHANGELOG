@@ -1,0 +1,31 @@
+! important change
++ new feature
+- bugfix
+
+future release (aka current master):
++! automatic download and installation of updates
++ progress bar for downloads
+- improved responsiveness of the window while downloading
+
+v005:
++ add notification for new releases
++ add translation support (english & german sofar)
+
+v004:
+- improved file size formatting
++ added check for free space before download
+- improved naming of outputted directories
+- fixed a crash when selecting no update in the download window
++ added configuration via gui
+
+v003:
++ added logging
++! added GUI via pysimplegui
+
+v002:
+- fixed sha1 verification of downloads
++ sort downloads into folders by gameid
++ added check if file was already downloaded
+
+v001:
+initial release
