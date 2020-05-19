@@ -3,9 +3,13 @@
 - bugfix
 
 future release (aka current master branch):
+
+v006:
 +! automatic download and installation of updates
 +  progress bar for downloads
++  added simple download queue
 -  improved responsiveness of the window while downloading
+-  fix downloading of game updates for certain games with " or ' in their names
 
 v005:
 +  add notification for new releases
