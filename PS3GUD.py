@@ -14,11 +14,13 @@ import sys
 import shutil
 import json
 
+#local files
+import utils
+
 #pip packages
 import requests
 
-#local files
-import utils
+
 
 class PS3GUD():
     def __init__(self, window=None):
@@ -74,15 +76,16 @@ class PS3GUD():
         except KeyError:
             return self.configDefaults[key]
     
-    def loadTitleDb(self, titledb = "titledb.txt"):
+    def loadTitleDb(self, titledb = "titledb.json"):
         with open(titledb, "r", encoding="utf8") as f:
-            data = []
-            for line in f:
-                item = {}
-                item["id"], item["name"] = line.split("\t\t")
-                if item["name"].endswith("\n"):
-                    item["name"] = item["name"][:-1]
-                data.append(item)
+            #data = []
+            #for line in f:
+            #    item = {}
+            #    item["id"], item["name"] = line.split("\t\t")
+            #    if item["name"].endswith("\n"):
+            #        item["name"] = item["name"][:-1]
+            #    data.append(item)
+            data = json.loads(f.read())
         self.titledb = data
         self.logger.log(self.loc.getKey("msg_loadedTitledb", [titledb]))
         
