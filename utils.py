@@ -3,6 +3,7 @@
 #
 # PS3GameUpdateDownloader by shinrax2
 
+
 #built-in
 import datetime
 import os
@@ -17,6 +18,7 @@ import subprocess
 import sys
 import distutils.core
 import shlex
+
 #pip packages
 import requests
 
@@ -253,7 +255,7 @@ def massFormat(stri, args):
     #!!very hacky, please tell me if you know a better way!!
     call = "stri.format( "
     for a in args:
-        call = call+"'"+str(a)+"', "
+        call = call+"'"+massReplace(["\"", "'"], "", str(a))+"', "
     if call.endswith(","):
         call = call[:-1]+")"
     else:
