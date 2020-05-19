@@ -8,7 +8,6 @@ import sys
 import shutil
 import os
 import platform
-import PyInstaller.__main__
 
 parser = argparse.ArgumentParser(description="buildscript for PS3GameUpdateDownloader")
 parser.add_argument("-s", action="store_true", help="building a source version")
@@ -48,6 +47,7 @@ if args.c == True and args.d == True:
     action = "compiledebug"
 
 if action == "sourcerelease":
+    #release running from source
     if os.path.exists(builddir):
         #delete old build
         shutil.rmtree(builddir)
@@ -65,6 +65,7 @@ if action == "sourcerelease":
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
    
 if action == "sourcedebug":
+    #debug running from source
     builddir += "Debug"
     if os.path.exists(builddir):
         #delete old build
@@ -83,6 +84,9 @@ if action == "sourcedebug":
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
     
 if action == "compilerelease":
+    #compiled release
+    import PyInstaller.__main__
+    
     #delete old build
     if os.path.exists(builddir):
         shutil.rmtree(builddir)
@@ -112,6 +116,8 @@ if action == "compilerelease":
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
 
 if action == "compiledebug":
+    #compiled debug
+    import PyInstaller.__main__
     builddir += "Debug"
     #delete old build
     if os.path.exists(builddir):
