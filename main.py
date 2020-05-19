@@ -8,11 +8,13 @@ import webbrowser
 import tempfile
 import platform
 import os
-#pip packages
-import PySimpleGUI as sg
+
 #local files
 import PS3GUD
 import utils
+
+#pip packages
+import PySimpleGUI as sg
 
 def updatePackToTable(update):
     i = 1
@@ -51,7 +53,7 @@ layout1 = [ #layout for main window
         [sg.Button(loc.getKey("window_main_exit_btn"), key="Exit")]
 ]
 
-window = sg.Window(loc.getKey("window_main_title"), layout1)
+window = sg.Window(loc.getKey("window_main_title")+" "+rel.getVersion(), layout1)
 ps3.setWindow(window)
 win2_act = False
 relCheck = False
