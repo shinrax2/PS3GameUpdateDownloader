@@ -80,8 +80,8 @@ while True:
                                 [sg.Text(loc.getKey("window_relNotify_version_label", [rel.getVersion(), data["version"]]))],
                                 [sg.Text(loc.getKey("window_relNotify_changelog_label"))],
                                 [sg.Column([[sg.Text(rel.getChangelog())]]), sg.Slider(range=(1, len(rel.getChangelog().split("\n"))), default_value=1, orientation="v", size=(8, 10))],
-                                [sg.Button(loc.getKey("window_relNotify_web_btn"), key="web"), sg.Button(loc.getKey("window_relNotify_dl_btn"), key="dl"), sg.Button(loc.getKey("window_relNotify_close_btn"), key="close")]
-                            ]
+                                [sg.Button(loc.getKey("window_relNotify_dl_btn"), key="dl"), sg.Button(loc.getKey("window_relNotify_web_btn"), key="web"), sg.Button(loc.getKey("window_relNotify_close_btn"), key="close")]
+            ]
             winRelNotify = sg.Window(loc.getKey("window_relNotify_title"), layoutRelNotify)
             while True:
                 evRel, valRel = winRelNotify.read()
