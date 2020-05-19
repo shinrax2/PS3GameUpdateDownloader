@@ -78,13 +78,6 @@ class PS3GUD():
     
     def loadTitleDb(self, titledb = "titledb.json"):
         with open(titledb, "r", encoding="utf8") as f:
-            #data = []
-            #for line in f:
-            #    item = {}
-            #    item["id"], item["name"] = line.split("\t\t")
-            #    if item["name"].endswith("\n"):
-            #        item["name"] = item["name"][:-1]
-            #    data.append(item)
             data = json.loads(f.read())
         self.titledb = data
         self.logger.log(self.loc.getKey("msg_loadedTitledb", [titledb]))
