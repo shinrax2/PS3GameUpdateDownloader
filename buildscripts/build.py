@@ -51,9 +51,9 @@ if action == "sourcerelease":
     if os.path.exists(builddir):
         #delete old build
         shutil.rmtree(builddir)
-        os.mkdir(builddir)
+        os.makedirs(builddir)
     else:
-        os.mkdir(builddir)
+        os.makedirs(builddir)
    #copy scripts
     shutil.copy2("main.py", os.path.join(builddir, "main.py"))
     shutil.copy2("utils.py", os.path.join(builddir, "utils.py"))
@@ -70,9 +70,9 @@ if action == "sourcedebug":
     if os.path.exists(builddir):
         #delete old build
         shutil.rmtree(builddir)
-        os.mkdir(builddir)
+        os.makedirs(builddir)
     else:
-        os.mkdir(builddir)
+        os.makedirs(builddir)
     #copy scripts
     shutil.copy2("main.py", os.path.join(builddir, "main.py"))
     shutil.copy2("utils.py", os.path.join(builddir, "utils.py"))
@@ -90,9 +90,9 @@ if action == "compilerelease":
     #delete old build
     if os.path.exists(builddir):
         shutil.rmtree(builddir)
-        os.mkdir(builddir)
+        os.makedirs(builddir)
     else:
-        os.mkdir(builddir)
+        os.makedirs(builddir)
     #build main executable
     PyInstaller.__main__.run([
         "--name=ps3gud",
@@ -122,9 +122,9 @@ if action == "compiledebug":
     #delete old build
     if os.path.exists(builddir):
         shutil.rmtree(builddir)
-        os.mkdir(builddir)
+        os.makedirs(builddir)
     else:
-        os.mkdir(builddir)
+        os.makedirs(builddir)
     #build main executable
     PyInstaller.__main__.run([
         "--name=ps3gud",
