@@ -131,6 +131,7 @@ class PS3GUD():
                 for package in tag:
                     pack = {}
                     attr = package.attrib
+                    pack["gameid"] = self.titleid
                     pack["version"] = attr["version"]
                     pack["size"] = attr["size"]
                     pack["sha1"] = attr["sha1sum"]
@@ -146,7 +147,8 @@ class PS3GUD():
             url = dl["url"]
             sha1 = dl["sha1"]
             size = dl["size"]
-            fdir = os.path.join(self.config["dldir"]+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId())+"["+self.titleid+"]/")
+            id = dl["gameid"]
+            fdir = os.path.join(self.config["dldir"]+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+"["+id+"]/")
             fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
             if os.path.exists(self.config["dldir"]) == False and os.path.isfile(self.config["dldir"]) == False:
                 os.mkdir(self.config["dldir"])

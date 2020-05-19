@@ -25,6 +25,18 @@ def updatePackToTable(update):
         data.append(row)
     return data
     
+def queueToTable(queue, ps3):
+    i = 1
+    data = []
+    if len(queue) > 0:
+        for pack in queue:
+            row = [i, ps3.getTitleNameFromId(pack["gameid"]), pack["version"], utils.formatSize(pack["size"])]
+            i += 1
+            data.append(row)
+    else:
+        data.append(["", "", "", ""])
+    return data
+    
 #remove leftover files from updating
 suffix = utils.getExecutableSuffix()
 if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)):
@@ -46,7 +58,7 @@ sg.change_look_and_feel("DarkAmber")
 
 layout1 = [ #layout for main window
         [sg.Text(loc.getKey("window_main_titleid_label"))],
-        [sg.Input(key="titleid"),sg.Button(loc.getKey("window_main_enter_btn"), key="Enter"),sg.Button(loc.getKey("window_main_config_btn") ,key="Config")],
+        [sg.Input(key="titleid"),sg.Button(loc.getKey("window_main_enter_btn"), key="Enter"), sg.Button(loc.getKey("window_main_config_btn") ,key="Config"), sg.Button(loc.getKey("window_main_queue_btn"), key="Queue")],
         [sg.Text("", size=(20, 2), key="window_main_progress_label")],
         [sg.ProgressBar(100, orientation="h", size=(52.85, 20), key="window_main_progress_bar")],
         [sg.Output(size=(80,20), key="Out")],
@@ -57,6 +69,7 @@ window = sg.Window(loc.getKey("window_main_title")+" "+rel.getVersion(), layout1
 ps3.setWindow(window)
 win2_act = False
 relCheck = False
+tryDl = False
 ps3.logHeader(rel.getVersion())
 ps3.loadTitleDb()
 if ps3.getConfig("checkForNewRelease"):
@@ -104,7 +117,7 @@ while True:
         break
     if event in (None, "Exit"):
         break
-    if event == "Config":
+    if event == "Config" and tryDl == False:
         window.hide()
         ll = loc.getLocs()
         locChoices = []
@@ -119,7 +132,7 @@ while True:
                             [sg.Text(loc.getKey("window_config_storageThreshold_label")), sg.Spin([i for i in range(1, 100)], initial_value=ps3.getConfig("storageThreshold"), key="storageThreshold")],
                             [sg.Text(loc.getKey("window_config_currentLoc_label")), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=loc.getKey("language_short"))],
                             [sg.Button(loc.getKey("window_config_cancel_btn"), key="Cancel"),sg.Button(loc.getKey("window_config_save_btn"), key="Save")]
-                        ]
+        ]
         winConfig = sg.Window(loc.getKey("window_config_title"), layoutConfig)
         while True:
             evConfig, valConfig = winConfig.Read()
@@ -142,7 +155,7 @@ while True:
                 winConfig.Close()
                 window.UnHide()
                 break
-    if event == "Enter":
+    if event == "Enter"  and tryDl == False:
         tryDl = True
         ps3.checkForUpdates(values["titleid"])
         try:
@@ -160,9 +173,9 @@ while True:
             data = updatePackToTable(ps3.getUpdates())
             lay2 = [
                     [sg.Text(loc.getKey("window_select_text_label", [ps3.getTitleNameFromId(), ps3.titleid]))],
-                    [sg.Table(values=data,headings=[loc.getKey("window_select_table_num"), loc.getKey("window_select_table_ver"), loc.getKey("window_select_table_size"), loc.getKey("window_select_table_sysver")])],
-                    [sg.OptionMenu(choices, size=(3,8), key="drop", default_value=loc.getKey("window_select_all_text")),sg.Button(loc.getKey("window_select_download_btn"), key="OK"),sg.Button(loc.getKey("window_select_cancel_btn"), key="Cancel")]
-                   ]
+                    [sg.Table(values=data, headings=[loc.getKey("window_select_table_num"), loc.getKey("window_select_table_ver"), loc.getKey("window_select_table_size"), loc.getKey("window_select_table_sysver")])],
+                    [sg.OptionMenu(choices, size=(3,8), key="drop", default_value=loc.getKey("window_select_all_text")),sg.Button(loc.getKey("window_select_download_btn"), key="OK"),sg.Button(loc.getKey("window_select_queue_btn"), key="Queue"), sg.Button(loc.getKey("window_select_cancel_btn"), key="Cancel")]
+            ]
             win2 = sg.Window(loc.getKey("window_select_title"), lay2)
             while True:
                 ev2, val2 = win2.Read()
@@ -180,7 +193,7 @@ while True:
                     break
                 if ev2 == "OK" and val2["drop"] != "":
                     drop = val2["drop"]
-                    if drop == loc.getKey("window_select_all_text"):
+                    if drop == loc.getKey("window_select_all_text"): #if "all" is selected
                         drop = loc.getKey("window_select_all_text")
                         for pack in ps3.getUpdates():
                             ps3.DlList.append(pack)
@@ -195,8 +208,48 @@ while True:
                         win2_act = False
                         window.UnHide()
                         break
-        if tryDl == True:
-            ps3.downloadFiles(window)
-            window["window_main_progress_label"].Update("")
-            window["window_main_progress_bar"].UpdateBar(0)
+                if ev2 == "Queue" and val2["drop"] != "":
+                    drop = val2["drop"]
+                    if drop == loc.getKey("window_select_all_text"): #if "all" is selected
+                        drop = loc.getKey("window_select_all_text")
+                        for pack in ps3.getUpdates():
+                            ps3.DlList.append(pack)
+                        win2.Close()
+                        win2_act = False
+                        window.UnHide()
+                        tryDl = False
+                        break
+                    elif int(drop) > 0 and int(drop) < (len(ps3.getUpdates())+1):
+                        drop = int(drop)-1
+                        ps3.DlList.append(ps3.getUpdates()[drop])
+                        win2.Close()
+                        win2_act = False
+                        window.UnHide()
+                        tryDl = False
+                        break
+                        
+    if event == "Queue"  and tryDl == False:
+        window.hide()
+        queueData = queueToTable(ps3.DlList, ps3)
+        layQueue = [
+                    [sg.Table(values=queueData, headings=[loc.getKey("window_queue_table_num"), loc.getKey("window_queue_table_game"), loc.getKey("window_queue_table_ver"), loc.getKey("window_queue_table_size")])],
+                    [sg.Button(loc.getKey("window_queue_download_btn"), key="Download")]
+        ]
+        windowQueue = sg.Window(loc.getKey("window_queue_title"), layQueue)
+        while True:
+            evQueue, valQueue = windowQueue.read()
+            if evQueue == "Download":
+                tryDl = True
+                windowQueue.Close()
+                window.UnHide()
+                break
+            if evQueue in (None, "Exit"):
+                windowQueue.Close()
+                window.UnHide()
+                break
+    if tryDl == True and len(ps3.DlList) > 0:
+        ps3.downloadFiles(window)
+        window["window_main_progress_label"].Update("")
+        window["window_main_progress_bar"].UpdateBar(0)
+        tryDl = False
 window.close()

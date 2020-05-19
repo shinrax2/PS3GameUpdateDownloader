@@ -10,6 +10,7 @@
     "window_main_progress_label": "Lade Datei {0} herunter: {1}/{2}",
     "window_main_config_btn": "Konfiguration",
     "window_main_exit_btn": "Verlassen",
+    "window_main_queue_btn": "Warteschlange",
     
     "window_config_title": "Konfiguration",
     "window_config_dldir_label": "Downloadverzeichnis:",
@@ -29,7 +30,8 @@
     "window_select_table_sysver": "PS3 FW Version",
     "window_select_all_text": "Alle",
     "window_select_download_btn": "Herunterladen",
-    "window_select_cancel_btn": "Abbrechen",
+    "window_select_cancel_btn": "Abbrechen",    
+    "window_select_queue_btn": "Zur Downloadwarteschlange hinzufügen",
     
     "window_relNotify_title": "Neue Version gefunden!",
     "window_relNotify_version_label": "Aktuelle Version: {0}\nNeue Version: {1}",
@@ -37,6 +39,13 @@
     "window_relNotify_web_btn": "Öffne Website im Browser",
     "window_relNotify_dl_btn": "Update herunterladen und installieren",
     "window_relNotify_close_btn": "Schließen",
+    
+    "window_queue_title": "Downloadwarteschlange",
+    "window_queue_table_num": "Num",
+    "window_queue_table_game": "Spiel",
+    "window_queue_table_ver": "Version",
+    "window_queue_table_size": "Dateigröße",
+    "window_queue_download_btn": "Herunterladen",
     
     "msg_configFileLoaded": "Konfigurationsdatei geladen!",
     "msg_noConfigFile": "Keine Konfigurationsdatei gefunden! Benutze Vorgaben!",

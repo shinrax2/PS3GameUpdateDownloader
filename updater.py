@@ -11,10 +11,13 @@ import platform
 import json
 import subprocess
 import shlex
+
 #local files
 import utils
+
 #pip packages
 import PySimpleGUI as sg
+    
 
 time.sleep(1) #wait 1 seconds to ensure main application has closed
 if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")):
