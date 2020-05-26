@@ -252,4 +252,6 @@ while True:
         window["window_main_progress_label"].Update("")
         window["window_main_progress_bar"].UpdateBar(0)
         tryDl = False
+    if tryDl == True and len(ps3.DlList) == 0:
+        tryDl = False
 window.close()
