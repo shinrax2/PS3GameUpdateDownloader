@@ -37,6 +37,10 @@ def queueToTable(queue, ps3):
         data.append(["", "", "", ""])
     return data
     
+def retranslateMainWindow(window, loc, items):
+    for key, value in items.items():
+        window[key].Update(loc.getKey(value))
+    
 #remove leftover files from updating
 suffix = utils.getExecutableSuffix()
 if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)):
@@ -57,7 +61,7 @@ ps3.setLoc(loc)
 sg.change_look_and_feel("DarkAmber")
 
 layout1 = [ #layout for main window
-        [sg.Text(loc.getKey("window_main_titleid_label"))],
+        [sg.Text(loc.getKey("window_main_titleid_label"), key="window_main_titleid_label")],
         [sg.Input(key="titleid"),sg.Button(loc.getKey("window_main_enter_btn"), key="Enter"), sg.Button(loc.getKey("window_main_config_btn") ,key="Config"), sg.Button(loc.getKey("window_main_queue_btn"), key="Queue")],
         [sg.Text("", size=(20, 2), key="window_main_progress_label")],
         [sg.ProgressBar(100, orientation="h", size=(52.85, 20), key="window_main_progress_bar")],
@@ -66,6 +70,12 @@ layout1 = [ #layout for main window
 ]
 
 window = sg.Window(loc.getKey("window_main_title")+" "+rel.getVersion(), layout1)
+translateMainItems = {}
+translateMainItems["window_main_titleid_label"] = "window_main_titleid_label"
+translateMainItems["Enter"] = "window_main_enter_btn"
+translateMainItems["Config"] = "window_main_config_btn"
+translateMainItems["Queue"] = "window_main_queue_btn"
+translateMainItems["Exit"] = "window_main_exit_btn"
 ps3.setWindow(window)
 win2_act = False
 relCheck = False
@@ -125,13 +135,13 @@ while True:
             locChoices.append(l["language_name"])
         
         layoutConfig = [
-                            [sg.Text(loc.getKey("window_config_dldir_label")), sg.In(ps3.getConfig("dldir"), key="dldir"), sg.FolderBrowse(target="dldir")],
-                            [sg.Text(loc.getKey("window_config_verify_label")), sg.Checkbox("", default=ps3.getConfig("verify"), key="verify")],
-                            [sg.Text(loc.getKey("window_config_checkIfAlreadyDownloaded_label")),sg.Checkbox("", default=ps3.getConfig("checkIfAlreadyDownloaded"), key="checkIfAlreadyDownloaded")],
-                            [sg.Text(loc.getKey("window_config_checkForNewRelease_label")), sg.Checkbox("", default=ps3.getConfig("checkForNewRelease"), key="checkForNewRelease")],
-                            [sg.Text(loc.getKey("window_config_storageThreshold_label")), sg.Spin([i for i in range(1, 100)], initial_value=ps3.getConfig("storageThreshold"), key="storageThreshold")],
-                            [sg.Text(loc.getKey("window_config_currentLoc_label")), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=loc.getKey("language_short"))],
-                            [sg.Button(loc.getKey("window_config_cancel_btn"), key="Cancel"),sg.Button(loc.getKey("window_config_save_btn"), key="Save")]
+                        [sg.Text(loc.getKey("window_config_dldir_label")), sg.In(ps3.getConfig("dldir"), key="dldir"), sg.FolderBrowse(target="dldir")],
+                        [sg.Text(loc.getKey("window_config_verify_label")), sg.Checkbox("", default=ps3.getConfig("verify"), key="verify")],
+                        [sg.Text(loc.getKey("window_config_checkIfAlreadyDownloaded_label")),sg.Checkbox("", default=ps3.getConfig("checkIfAlreadyDownloaded"), key="checkIfAlreadyDownloaded")],
+                        [sg.Text(loc.getKey("window_config_checkForNewRelease_label")), sg.Checkbox("", default=ps3.getConfig("checkForNewRelease"), key="checkForNewRelease")],
+                        [sg.Text(loc.getKey("window_config_storageThreshold_label")), sg.Spin([i for i in range(1, 100)], initial_value=ps3.getConfig("storageThreshold"), key="storageThreshold")],
+                        [sg.Text(loc.getKey("window_config_currentLoc_label")), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=loc.getKey("language_name"))],
+                        [sg.Button(loc.getKey("window_config_cancel_btn"), key="Cancel"),sg.Button(loc.getKey("window_config_save_btn"), key="Save")]
         ]
         winConfig = sg.Window(loc.getKey("window_config_title"), layoutConfig)
         while True:
@@ -152,6 +162,7 @@ while True:
                 config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThreshold": valConfig["storageThreshold"], "currentLoc": cL }
                 ps3.setConfig(config)
                 loc.setLoc(cL)
+                retranslateMainWindow(window, loc, translateMainItems)
                 winConfig.Close()
                 window.UnHide()
                 break
