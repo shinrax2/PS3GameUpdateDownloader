@@ -87,13 +87,17 @@ class Loc():
                         self.currentLoc = json.loads(f.read())
         else:
             with open(os.path.join(self.locDir, "./en.json"), "r", encoding="utf8") as f:
-                self.currentLoc = json.loads(f.read())
+                self.fallbackLoc = json.loads(f.read())
+                self.currentLoc = self.fallbackLoc
                 
     def getKey(self, key, args=[]):
         try:
             return massFormat(self.currentLoc[key], args)
         except KeyError:
-            return "ERROR \""+key+"\""
+            try:
+                return massFormat(self.fallbackLoc[key], args)
+            except KeyError:
+                return "ERROR \""+key+"\""
 
 class UpdaterGithubRelease():
     def __init__(self, releaseFile):
