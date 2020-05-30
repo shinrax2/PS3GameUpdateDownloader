@@ -56,6 +56,7 @@ if action == "sourcerelease":
     shutil.copy2("PS3GUD.py", os.path.join(builddir, "PS3GUD.py"))
     #copy data
     shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
+    shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
     shutil.copy2("release.json", os.path.join(builddir, "release.json"))
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
    
@@ -76,6 +77,7 @@ if action == "sourcedebug":
     #copy data
     shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
     shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
+    shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
     
 if action == "compilerelease":
