@@ -245,14 +245,26 @@ while True:
         window.hide()
         queueData = queueToTable(ps3.DlList.queue, ps3)
         layQueue = [
-                    [sg.Table(values=queueData, headings=[loc.getKey("window_queue_table_num"), loc.getKey("window_queue_table_game"), loc.getKey("window_queue_table_titleid"), loc.getKey("window_queue_table_ver"), loc.getKey("window_queue_table_size")], key="Table")],
+                    [sg.Table(values=queueData, headings=[loc.getKey("window_queue_table_num"), loc.getKey("window_queue_table_game"), loc.getKey("window_queue_table_titleid"), loc.getKey("window_queue_table_ver"), loc.getKey("window_queue_table_size")], key="Table", enable_events=True)],
                     [sg.Text(loc.getKey("window_queue_totalsize_label", [utils.formatSize(ps3.DlList.getTotalDownloadSize())]), key="TotalSize", size=(20, 1))],
-                    [sg.Button(loc.getKey("window_queue_moveup_btn"), key="Move Up"), sg.Button(loc.getKey("window_queue_movedown_btn"), key="Move Down"), sg.Button(loc.getKey("window_queue_remove_btn"), key="Remove")],
+                    [sg.Button(loc.getKey("window_queue_moveup_btn"), key="Move Up", disabled=True), sg.Button(loc.getKey("window_queue_movedown_btn"), key="Move Down", disabled=True), sg.Button(loc.getKey("window_queue_remove_btn"), key="Remove", disabled=True)],
                     [sg.Button(loc.getKey("window_queue_download_btn"), key="Download"), sg.Button(loc.getKey("window_queue_close_btn"), key="Close")]
         ]
         windowQueue = sg.Window(loc.getKey("window_queue_title"), layQueue)
         while True:
             evQueue, valQueue = windowQueue.read()
+            if len(valQueue["Table"]) == 0:
+                windowQueue["Move Up"].Update(disabled=True)
+                windowQueue["Move Down"].Update(disabled=True)
+                windowQueue["Remove"].Update(disabled=True)
+            if len(valQueue["Table"]) == 1:
+                windowQueue["Move Up"].Update(disabled=False)
+                windowQueue["Move Down"].Update(disabled=False)
+                windowQueue["Remove"].Update(disabled=False)
+            if len(valQueue["Table"]) > 1:
+                windowQueue["Move Up"].Update(disabled=True)
+                windowQueue["Move Down"].Update(disabled=True)
+                windowQueue["Remove"].Update(disabled=False)
             if evQueue == "Move Up":
                 if len(valQueue["Table"]) == 1:
                     ps3.DlList.moveUp(getCodeFromQueueData(queueData, valQueue["Table"][0]))
