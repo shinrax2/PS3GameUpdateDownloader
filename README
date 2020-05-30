@@ -20,22 +20,22 @@ windows:
 how to build the application:
     windows:
         py -m pip install -r requirements.txt
-        py -m pip install pyinstaller
+        py -m pip install pyinstaller (only for compiled version)
         
         For a compiled version:
-        py buildscripts/build.py -c -r 
+        py build.py -c -r 
         For a version running from source:
-        py buildscripts/build.py -s -r
+        py build.py -s -r
         
         the finished application will be found in "dist/PS3GameUpdateDownloader"
     
     linux:
         python3 -m pip install -r requirements.txt
-        python3 -m pip install pyinstaller
+        python3 -m pip install pyinstaller (only for compiled version)
         
         For a compiled version:
-        python3 buildscripts/build.py -c -r 
+        python3 build.py -c -r 
         For a version running from source:
-        python3 buildscripts/build.py -s -r
+        python3 build.py -s -r
         
         the finished application will be found in "dist/PS3GameUpdateDownloader"

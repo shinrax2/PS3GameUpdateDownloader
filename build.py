@@ -31,11 +31,6 @@ if args.c == True and args.s == True:
 if args.d == True and args.r == True:
     print("you cant pass \"-d\" and \"-r\" to the buildscript")
     sys.exit()
-    
-#check cwd
-if os.path.basename(os.getcwd()) == "buildscripts":
-    print("please run the build script from the main directory")
-    sys.exit()
 
 if args.s == True and args.r == True:
     action = "sourcerelease"
