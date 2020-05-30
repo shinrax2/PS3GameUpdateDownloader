@@ -32,7 +32,7 @@ class PS3GUD():
         self.configFile = "./config.json"
         self.config = {}
         self.Updates = {}
-        self.DlList = []
+        self.DlList = Queue()
         self.titleid = ""
         
         self.configDefaults = {}
@@ -55,6 +55,7 @@ class PS3GUD():
         self.logger.log("Language: "+ self.loc.getLoc()+"\n\n")
         self.logger.log("Current working directory: "+os.getcwd())
         self.logger.log("Compiled: "+str(utils.isAppFrozen()))
+        
     def loadConfig(self):
         if os.path.exists(self.configFile) and os.path.isfile(self.configFile):
             self.logger.log(self.loc.getKey("msg_configFileLoaded"))
@@ -143,7 +144,8 @@ class PS3GUD():
     def downloadFiles(self, window):
         self.logger.log(self.loc.getKey("msg_startingDownloads"))
         i = 1
-        for dl in self.DlList:
+        ql = len(self.DlList.queue)
+        for dl in self.DlList.queue:
             url = dl["url"]
             sha1 = dl["sha1"]
             size = dl["size"]
@@ -167,8 +169,9 @@ class PS3GUD():
                                 self.logger.log(self.loc.getKey("msg_alreadyDownloadedVerify", [os.path.basename(url)]))
                                 skip = True
             if skip == False:
-                self.logger.log(self.loc.getKey("msg_startSingleDownload", [i, len(self.DlList)]))
+                self.logger.log(self.loc.getKey("msg_startSingleDownload", [i, ql]))
                 self._download_file(url, fname, size, window, i)
+                self.DlList.removeEntry(dl["gameid"]+"-"+dl["version"])
             if self.config["verify"] == True:
                 if sha1 == self._sha1File(fname):
                     self.logger.log(self.loc.getKey("msg_verifySuccess", [fname]))
@@ -179,8 +182,7 @@ class PS3GUD():
                 self.logger.log(self.loc.getKey("msg_noVerify", [fname]))
             i += 1
             
-        self.logger.log(self.loc.getKey("msg_finishedDownload", [len(self.DlList)]))
-        self.DlList = []
+        self.logger.log(self.loc.getKey("msg_finishedDownload", [ql]))
     
     def _download_file(self, url, local_filename, size, window, num):
         text = window["window_main_progress_label"]
@@ -232,3 +234,77 @@ class PS3GUD():
 class DummyLoc():
     def getKey(self, key):
         return "ERROR \""+key+"\""
+
+class Queue():
+    def __init__(self):
+        self.queue = []
+    
+    def addEntry(self, entry):
+        self.queue.append({"num":(len(self.queue)+1), "code":entry["gameid"]+"-"+entry["version"], "gameid":entry["gameid"], "version":entry["version"], "size": entry["size"], "url": entry["url"], "sha1": entry["sha1"]})
+    
+    def removeEntry(self, code):
+        newQueue = []
+        for item in self.queue:
+            if item["code"] != code:
+                newQueue.append(item)
+        self.queue = newQueue
+        self._sortQueue()
+    
+    def _sortQueue(self):
+        newQueue = []
+        sort = {}
+        for item in self.queue:
+            sort[item["num"]] = item
+        sort = dict(sorted(sort.items()))
+        for key, value in sort.items():
+            pack = value
+            pack["num"] = key
+            newQueue.append(pack)
+        self.queue = newQueue
+        
+    def moveUp(self, code):
+        before = False
+        for item in self.queue:
+            if item["code"] == code:
+                currentNum = item["num"]
+                before = True
+            if before == False:
+                newNum = item["num"]
+                newCode = item["code"]
+        sort = {}
+        for item in self.queue:
+            sort[item["code"]] = item
+        sort[code]["num"] = newNum
+        sort[newCode]["num"] = currentNum
+        newQueue = []
+        for key, value in sort.items():
+            newQueue.append(value)
+        self.queue = newQueue
+        self._sortQueue()
+    
+    def moveDown(self, code):
+        after = False
+        for item in self.queue:
+            if after == True:
+                newNum = item["num"]
+                newCode = item["code"]
+                after = False
+            if item["code"] == code:
+                currentNum = item["num"]
+                after = True
+        sort = {}
+        for item in self.queue:
+            sort[item["code"]] = item
+        sort[code]["num"] = newNum
+        sort[newCode]["num"] = currentNum
+        newQueue = []
+        for key, value in sort.items():
+            newQueue.append(value)
+        self.queue = newQueue
+        self._sortQueue()
+        
+    def getTotalDownloadSize(self):
+        size = 0
+        for item in self.queue:
+            size += int(item["size"])
+        return int(size)

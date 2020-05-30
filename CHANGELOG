@@ -1,8 +1,12 @@
 ! important change
-+ new feature
++ new feature or minor change
 - bugfix
 
 future release (aka current master branch):
+-  fixed main window becoming malfunctional when pressing download in the queue window with an empty queue
+-  retranslate main window when changing language
++  load english string as fallback when the current localization doesnt contain the wanted string
++  added sorting and removal of entrys to the queue management
 
 v006:
 +! automatic download and installation of updates
