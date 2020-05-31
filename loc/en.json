@@ -24,14 +24,13 @@
     
     "window_select_title": "Select Updates",
     "window_select_text_label": "Game: {0}\tTitleID: {1}",
-    "window_select_table_num": "Num",
     "window_select_table_ver": "Version",
     "window_select_table_size": "Filesize",
     "window_select_table_sysver": "PS3 FW Version",
-    "window_select_all_text": "All",
     "window_select_download_btn": "Download",
     "window_select_cancel_btn": "Cancel",
     "window_select_queue_btn": "Add to download queue",
+    "window_select_help_label": "Hold Ctrl and click on the updates you want to select.",
     
     "window_relNotify_title": "New release found!",
     "window_relNotify_version_label": "Current version: {0}\nNew version: {1}",

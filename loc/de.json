@@ -24,14 +24,13 @@
     
     "window_select_title": "Updates auswählen",
     "window_select_text_label": "Spiel: {0}\tTitleID: {1}",
-    "window_select_table_num": "Num",
     "window_select_table_ver": "Version",
     "window_select_table_size": "Dateigröße",
     "window_select_table_sysver": "PS3 FW Version",
-    "window_select_all_text": "Alle",
     "window_select_download_btn": "Herunterladen",
     "window_select_cancel_btn": "Abbrechen",    
     "window_select_queue_btn": "Zur Downloadwarteschlange hinzufügen",
+    "window_select_help_label": "Halte Strg gedrückt und klicke auf die Updates, die Sie auswählen möchten.",
     
     "window_relNotify_title": "Neue Version gefunden!",
     "window_relNotify_version_label": "Aktuelle Version: {0}\nNeue Version: {1}",

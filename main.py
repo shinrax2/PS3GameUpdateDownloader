@@ -17,11 +17,9 @@ import utils
 import PySimpleGUI as sg
 
 def updatePackToTable(update):
-    i = 1
     data = []
     for pack in update:
-        row = [i, pack["version"], utils.formatSize(pack["size"]), pack["sysver"]]
-        i+=1
+        row = [pack["version"], utils.formatSize(pack["size"]), pack["sysver"]]
         data.append(row)
     return data
     
@@ -180,19 +178,22 @@ while True:
         if updlen > 0 and win2_act == False:
             window.hide()
             win2_act = True
-            choices = []
-            for x in range(1, updlen+1):
-                choices.append(x)
-            choices.append(loc.getKey("window_select_all_text"))
             data = updatePackToTable(ps3.getUpdates())
             lay2 = [
                     [sg.Text(loc.getKey("window_select_text_label", [ps3.getTitleNameFromId(), ps3.titleid]))],
-                    [sg.Table(values=data, headings=[loc.getKey("window_select_table_num"), loc.getKey("window_select_table_ver"), loc.getKey("window_select_table_size"), loc.getKey("window_select_table_sysver")])],
-                    [sg.OptionMenu(choices, size=(3,8), key="drop", default_value=loc.getKey("window_select_all_text")),sg.Button(loc.getKey("window_select_download_btn"), key="OK"),sg.Button(loc.getKey("window_select_queue_btn"), key="Queue"), sg.Button(loc.getKey("window_select_cancel_btn"), key="Cancel")]
+                    [sg.Table(values=data, headings=[loc.getKey("window_select_table_ver"), loc.getKey("window_select_table_size"), loc.getKey("window_select_table_sysver")], key="Table", enable_events=True)],
+                    [sg.Text(loc.getKey("window_select_help_label"), size=(45,2))],
+                    [sg.Button(loc.getKey("window_select_download_btn"), key="OK", disabled=True),sg.Button(loc.getKey("window_select_queue_btn"), key="Queue", disabled=True), sg.Button(loc.getKey("window_select_cancel_btn"), key="Cancel")]
             ]
             win2 = sg.Window(loc.getKey("window_select_title"), lay2)
             while True:
                 ev2, val2 = win2.Read()
+                if len(val2["Table"]) > 0:
+                    win2["OK"].Update(disabled=False)
+                    win2["Queue"].Update(disabled=False)
+                if len(val2["Table"]) == 0:
+                    win2["OK"].Update(disabled=True)
+                    win2["Queue"].Update(disabled=True)
                 if ev2 in (None, "Exit"):
                     win2.Close()
                     win2_act = False
@@ -205,36 +206,31 @@ while True:
                     window.UnHide()
                     tryDl = False
                     break
-                if ev2 == "OK" and val2["drop"] != "":
-                    drop = val2["drop"]
-                    if drop == loc.getKey("window_select_all_text"): #if "all" is selected
-                        for pack in ps3.getUpdates():
-                            ps3.DlList.addEntry(pack)
+                if ev2 == "OK" and len(val2["Table"]) > 0:
+                    if len(val2["Table"]) == 1:
+                        ps3.DlList.addEntry(ps3.getUpdates()[val2["Table"][0]])
                         win2.Close()
                         win2_act = False
                         window.UnHide()
                         break
-                    elif int(drop) > 0 and int(drop) < (len(ps3.getUpdates())+1):
-                        drop = int(drop)-1
-                        ps3.DlList.addEntry(ps3.getUpdates()[drop])
+                    if len(val2["Table"]) > 1:
+                        for row in val2["Table"]:
+                            ps3.DlList.addEntry(ps3.getUpdates()[row])
                         win2.Close()
                         win2_act = False
                         window.UnHide()
                         break
-                if ev2 == "Queue" and val2["drop"] != "":
-                    drop = val2["drop"]
-                    if drop == loc.getKey("window_select_all_text"): #if "all" is selected
-                        drop = loc.getKey("window_select_all_text")
-                        for pack in ps3.getUpdates():
-                            ps3.DlList.addEntry(pack)
+                if ev2 == "Queue" and len(val2["Table"]) > 0:
+                    if len(val2["Table"]) == 1:    
+                        ps3.DlList.addEntry(ps3.getUpdates()[val2["Table"][0]])
                         win2.Close()
                         win2_act = False
                         window.UnHide()
                         tryDl = False
                         break
-                    elif int(drop) > 0 and int(drop) < (len(ps3.getUpdates())+1):
-                        drop = int(drop)-1
-                        ps3.DlList.addEntry(ps3.getUpdates()[drop])
+                    if len(val2["Table"]) > 1:
+                        for row in val2["Table"]:
+                            ps3.DlList.addEntry(ps3.getUpdates()[row])
                         win2.Close()
                         win2_act = False
                         window.UnHide()
