@@ -7,6 +7,7 @@ future release (aka current master branch):
 -  retranslate main window when changing language
 +  load english string as fallback when the current localization doesnt contain the wanted string
 +  added sorting and removal of entrys to the queue management
++  improved select window
 
 v006:
 +! automatic download and installation of updates
