@@ -25,9 +25,9 @@ import requests
 class PS3GUD():
     def __init__(self, window=None):
         if window != None:
-            self.logger = utils.Logger("log.txt", window)
+            self.logger = utils.Logger(window)
         else:
-            self.logger = utils.Logger("log.txt")
+            self.logger = utils.Logger()
         self.loc = DummyLoc()
         self.configFile = "./config.json"
         self.config = {}
@@ -44,7 +44,7 @@ class PS3GUD():
         self.configDefaults["checkForNewRelease"] = True
     
     def setWindow(self, window):
-        self.logger = utils.Logger("log.txt", window)
+        self.logger.window = window
         
     def setLoc(self, loc):
         self.loc = loc

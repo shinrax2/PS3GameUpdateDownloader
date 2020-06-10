@@ -23,12 +23,18 @@ import shlex
 import requests
 
 class Logger():
-    def __init__(self, logfile, window=None):
+    def __init__(self, window=None):
+        logdir = "./logs"
+        now = str(datetime.datetime.now()).split(".")[0].replace(" ", "_").replace(":", "-")
+        if os.path.exists(logdir) == False:
+            os.mkdir(logdir)
+        logfile = os.path.join(logdir, "log-"+now+".txt")
         self.logfile = open(logfile, "w")
         if window != None:
             self.window = window
         else:
             self.window = None
+            
     def log(self, text,level="i"):
         if level == "i":
             level = "[INFO]"

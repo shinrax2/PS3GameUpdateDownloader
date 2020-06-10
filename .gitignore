@@ -103,6 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-/downloadedPKGs
-log.txt
+#project specific stuff
+downloadedPKGs/
+logs/
 config.json

@@ -55,10 +55,10 @@ if utils.isAppFrozen() == False:
 #setup main classes
 rel = utils.UpdaterGithubRelease("release.json")
 ps3 = PS3GUD.PS3GUD()
-ps3.loadConfig()
 loc = utils.Loc()
-loc.setLoc(ps3.getConfig("currentLoc"))
 ps3.setLoc(loc)
+ps3.loadConfig()
+loc.setLoc(ps3.getConfig("currentLoc"))
 sg.change_look_and_feel("DarkAmber")
 
 layout1 = [ #layout for main window
