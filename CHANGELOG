@@ -8,6 +8,7 @@ future release (aka current master branch):
 +  load english string as fallback when the current localization doesnt contain the wanted string
 +  added sorting and removal of entrys to the queue management
 +  improved select window
++  every run now has its own logfile
 
 v006:
 +! automatic download and installation of updates

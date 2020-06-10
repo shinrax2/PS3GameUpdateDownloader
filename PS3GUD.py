@@ -28,7 +28,6 @@ class PS3GUD():
             self.logger = utils.Logger(window)
         else:
             self.logger = utils.Logger()
-        self.loc = DummyLoc()
         self.configFile = "./config.json"
         self.config = {}
         self.Updates = {}
@@ -230,10 +229,6 @@ class PS3GUD():
     
     def __del__(self):
         del self.logger
-
-class DummyLoc():
-    def getKey(self, key):
-        return "ERROR \""+key+"\""
 
 class Queue():
     def __init__(self):
