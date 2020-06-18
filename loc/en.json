@@ -73,5 +73,6 @@
     "msg_relCheckError": "Couldn't check for new release!",
     "msg_alreadyUpToDate": "Already on the newest release!",
     "msg_foundNewRelease": "Found new Release \"{0}\"",
-    "msg_NoReleaseArchiveForPlatformOrArch": "Couldn't find a release archive for you architecture or platform. Platform: \"{0}\" Architecture: \"{1}\" Compiled: \"{2}\""
+    "msg_NoReleaseArchiveForPlatformOrArch": "Couldn't find a release archive for you architecture or platform. Platform: \"{0}\" Architecture: \"{1}\" Compiled: \"{2}\"",
+    "msg_dldirNotWriteable": "Your select directory for downloads \"{0}\" is not writeable!"
 }

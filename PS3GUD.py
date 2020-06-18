@@ -145,6 +145,7 @@ class PS3GUD():
         i = 1
         ql = len(self.DlList.queue)
         for dl in self.DlList.queue:
+            skip = False
             url = dl["url"]
             sha1 = dl["sha1"]
             size = dl["size"]
@@ -152,10 +153,18 @@ class PS3GUD():
             fdir = os.path.join(self.config["dldir"]+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+"["+id+"]/")
             fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
             if os.path.exists(self.config["dldir"]) == False and os.path.isfile(self.config["dldir"]) == False:
-                os.mkdir(self.config["dldir"])
+                try:
+                    os.mkdir(self.config["dldir"])
+                except (PermissionError, FileNotFoundError):
+                    self.logger.log(self.loc.getKey("msg_dldirNotWriteable", [self.config["dldir"]]))
+                    skip = True
             if os.path.exists(fdir) == False and os.path.isfile(fdir) == False:
-                os.mkdir(fdir)
-            skip = False
+                try:
+                    os.mkdir(fdir)
+                except (PermissionError, FileNotFoundError):
+                    self.logger.log(self.loc.getKey("msg_dldirNotWriteable", [self.config["dldir"]]))
+                    skip = True
+
             if self.config["checkIfAlreadyDownloaded"] == True:
                 #check if file already exists
                 if os.path.exists(fname) and os.path.isfile(fname):
@@ -171,13 +180,13 @@ class PS3GUD():
                 self.logger.log(self.loc.getKey("msg_startSingleDownload", [i, ql]))
                 self._download_file(url, fname, size, window, i)
                 self.DlList.removeEntry(dl["gameid"]+"-"+dl["version"])
-            if self.config["verify"] == True:
+            if self.config["verify"] == True and skip == False:
                 if sha1 == self._sha1File(fname):
                     self.logger.log(self.loc.getKey("msg_verifySuccess", [fname]))
                 else:
                     self.logger.log(self.loc.getKey("msg_verifyFailure", [fname]))
                     os.remove(fname)
-            if self.config["verify"] == False:
+            if self.config["verify"] == False and skip == False:
                 self.logger.log(self.loc.getKey("msg_noVerify", [fname]))
             i += 1
             

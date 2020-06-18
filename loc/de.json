@@ -73,5 +73,6 @@
     "msg_relCheckError": "Konnte nicht nach neuer Version suchen!",
     "msg_alreadyUpToDate": "Bereits neuste Version!",
     "msg_foundNewRelease": "Neue Version \"{0}\" gefunden",
-    "msg_NoReleaseArchiveForPlatformOrArch": "Konnte kein Release für deine Plattform oder Architektur finden. Plattform: \"{0}\" Architektur: \"{1}\" Kompiliert: \"{2}\""
+    "msg_NoReleaseArchiveForPlatformOrArch": "Konnte kein Release für deine Plattform oder Architektur finden. Plattform: \"{0}\" Architektur: \"{1}\" Kompiliert: \"{2}\"",
+    "msg_dldirNotWriteable": "Ihr ausgewählter Download-Ordner \"{0}\" ist nicht schreibbar!"
 }

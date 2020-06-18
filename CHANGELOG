@@ -9,6 +9,9 @@ future release (aka current master branch):
 +  added sorting and removal of entrys to the queue management
 +  improved select window
 +  every run now has its own logfile
+-  prevent the same update being added to queue multiple times
+-  fix crashes in queue management
++  check if download directory is writeable 
 
 v006:
 +! automatic download and installation of updates
