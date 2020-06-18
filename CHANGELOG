@@ -11,7 +11,8 @@ future release (aka current master branch):
 +  every run now has its own logfile
 -  prevent the same update being added to queue multiple times
 -  fix crashes in queue management
-+  check if download directory is writeable 
++  check if download directory is writeable
++  added percentage and download speed to main window when downloading
 
 v006:
 +! automatic download and installation of updates
