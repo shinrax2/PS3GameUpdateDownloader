@@ -263,14 +263,16 @@ while True:
                 windowQueue["Remove"].Update(disabled=False)
             if evQueue == "Move Up":
                 if len(valQueue["Table"]) == 1:
-                    ps3.DlList.moveUp(getCodeFromQueueData(queueData, valQueue["Table"][0]))
-                    queueData = queueToTable(ps3.DlList.queue, ps3)
-                    windowQueue["Table"].Update(values=queueData)
+                    if len(ps3.DlList.queue) > 1:
+                        ps3.DlList.moveUp(getCodeFromQueueData(queueData, valQueue["Table"][0]))
+                        queueData = queueToTable(ps3.DlList.queue, ps3)
+                        windowQueue["Table"].Update(values=queueData)
             if evQueue == "Move Down":
                 if len(valQueue["Table"]) == 1:
-                    ps3.DlList.moveDown(getCodeFromQueueData(queueData, valQueue["Table"][0]))
-                    queueData = queueToTable(ps3.DlList.queue, ps3)
-                    windowQueue["Table"].Update(values=queueData)
+                    if len(ps3.DlList.queue) > 1:
+                        ps3.DlList.moveDown(getCodeFromQueueData(queueData, valQueue["Table"][0]))
+                        queueData = queueToTable(ps3.DlList.queue, ps3)
+                        windowQueue["Table"].Update(values=queueData)
             if evQueue == "Remove":
                 for row in valQueue["Table"]:
                     code = getCodeFromQueueData(queueData, row)

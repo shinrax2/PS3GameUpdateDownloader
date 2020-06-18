@@ -267,16 +267,17 @@ class Queue():
             if before == False:
                 newNum = item["num"]
                 newCode = item["code"]
-        sort = {}
-        for item in self.queue:
-            sort[item["code"]] = item
-        sort[code]["num"] = newNum
-        sort[newCode]["num"] = currentNum
-        newQueue = []
-        for key, value in sort.items():
-            newQueue.append(value)
-        self.queue = newQueue
-        self._sortQueue()
+        if currentNum != 1:
+            sort = {}
+            for item in self.queue:
+                sort[item["code"]] = item
+            sort[code]["num"] = newNum
+            sort[newCode]["num"] = currentNum
+            newQueue = []
+            for key, value in sort.items():
+                newQueue.append(value)
+            self.queue = newQueue
+            self._sortQueue()
     
     def moveDown(self, code):
         after = False
@@ -288,16 +289,17 @@ class Queue():
             if item["code"] == code:
                 currentNum = item["num"]
                 after = True
-        sort = {}
-        for item in self.queue:
-            sort[item["code"]] = item
-        sort[code]["num"] = newNum
-        sort[newCode]["num"] = currentNum
-        newQueue = []
-        for key, value in sort.items():
-            newQueue.append(value)
-        self.queue = newQueue
-        self._sortQueue()
+        if currentNum != len(self.queue):
+            sort = {}
+            for item in self.queue:
+                sort[item["code"]] = item
+            sort[code]["num"] = newNum
+            sort[newCode]["num"] = currentNum
+            newQueue = []
+            for key, value in sort.items():
+                newQueue.append(value)
+            self.queue = newQueue
+            self._sortQueue()
         
     def getTotalDownloadSize(self):
         size = 0
