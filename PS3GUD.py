@@ -235,7 +235,8 @@ class Queue():
         self.queue = []
     
     def addEntry(self, entry):
-        self.queue.append({"num":(len(self.queue)+1), "code":entry["gameid"]+"-"+entry["version"], "gameid":entry["gameid"], "version":entry["version"], "size": entry["size"], "url": entry["url"], "sha1": entry["sha1"]})
+        if self.isAlreadInQueue(entry["gameid"]+"-"+entry["version"]) != True:
+            self.queue.append({"num":(len(self.queue)+1), "code":entry["gameid"]+"-"+entry["version"], "gameid":entry["gameid"], "version":entry["version"], "size": entry["size"], "url": entry["url"], "sha1": entry["sha1"]})
     
     def removeEntry(self, code):
         newQueue = []
@@ -303,3 +304,10 @@ class Queue():
         for item in self.queue:
             size += int(item["size"])
         return int(size)
+        
+    def isAlreadInQueue(self, code):
+        ret = False
+        for item in self.queue:
+            if code == item["code"]:
+                ret = True
+        return ret
