@@ -13,6 +13,7 @@ import hashlib
 import sys
 import shutil
 import json
+import time
 
 #local files
 import utils
@@ -204,6 +205,7 @@ class PS3GUD():
             if free > int(size):
                 with requests.get(url, stream=True) as r:
                     r.raise_for_status()
+                    start = time.clock()
                     with open(local_filename, 'wb') as f:
                         for chunk in r.iter_content(chunk_size=chunk_size): 
                             if chunk:
@@ -213,7 +215,7 @@ class PS3GUD():
                                 if already_loaded / size > 1:
                                     already_loaded = size
                                 percentage = already_loaded / size * 100
-                                text.Update(self.loc.getKey("window_main_progress_label", [num, utils.formatSize(already_loaded), utils.formatSize(size)]))
+                                text.Update(self.loc.getKey("window_main_progress_label", [num, utils.formatSize(already_loaded), utils.formatSize(size), format(float(percentage), '.1f'), utils.formatSize(already_loaded//(time.clock() - start))+"s"]))
                                 bar.UpdateBar(percentage)
                                 window.Refresh()
             else:

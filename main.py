@@ -64,7 +64,7 @@ sg.change_look_and_feel("DarkAmber")
 layout1 = [ #layout for main window
         [sg.Text(loc.getKey("window_main_titleid_label"), key="window_main_titleid_label")],
         [sg.Input(key="titleid"),sg.Button(loc.getKey("window_main_enter_btn"), key="Enter"), sg.Button(loc.getKey("window_main_queue_btn"), key="Queue"), sg.Button(loc.getKey("window_main_config_btn") ,key="Config")],
-        [sg.Text("", size=(20, 2), key="window_main_progress_label")],
+        [sg.Text("", size=(30, 3), key="window_main_progress_label")],
         [sg.ProgressBar(100, orientation="h", size=(52.85, 20), key="window_main_progress_bar")],
         [sg.Output(size=(80,20), key="Out")],
         [sg.Button(loc.getKey("window_main_exit_btn"), key="Exit")]
