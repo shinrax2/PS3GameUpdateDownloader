@@ -13,6 +13,7 @@ future release (aka current master branch):
 -  fix crashes in queue management
 +  check if download directory is writeable
 +  added percentage and download speed to main window when downloading
++  log crashes for easier debugging
 
 v006:
 +! automatic download and installation of updates

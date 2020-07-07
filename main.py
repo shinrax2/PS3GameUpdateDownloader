@@ -8,6 +8,9 @@ import webbrowser
 import tempfile
 import platform
 import os
+import sys
+import datetime
+import traceback
 
 #local files
 import PS3GUD
@@ -41,6 +44,16 @@ def retranslateWindow(window, loc, items):
         
 def getCodeFromQueueData(queueData, resp):
     return queueData[resp][2]+"-"+queueData[resp][3]
+    
+def logUncaughtException(exctype, value, tb):
+    now = str(datetime.datetime.now()).split(".")[0].replace(" ", "_").replace(":", "-")
+    with open(os.path.join("logs", "Crash-"+now+".txt"), "w") as f:
+        f.write("Uncaught exception:\nType: "+str(exctype)+"\nValue: "+str(value)+"\nTraceback:\n")
+        for item in traceback.format_list(traceback.extract_tb(tb)):
+            f.write(item)
+
+#setup uncaught exception logging
+sys.excepthook = logUncaughtException
     
 #remove leftover files from updating
 suffix = utils.getExecutableSuffix()
