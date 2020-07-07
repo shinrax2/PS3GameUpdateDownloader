@@ -10,6 +10,7 @@ import os
 import platform
 import json
 
+#setup argparse
 parser = argparse.ArgumentParser(description="buildscript for PS3GameUpdateDownloader")
 parser.add_argument("-s", action="store_true", help="building a source version")
 parser.add_argument("-c", action="store_true", help="building a compiled version")
@@ -17,7 +18,6 @@ parser.add_argument("-r", action="store_true", help="building a release version"
 parser.add_argument("-d", action="store_true", help="building a debug version")
 parser.add_argument("-z", action="store_true", help="pack the build to a .zip file")
 args = parser.parse_args()
-#print(args)
 
 #constants
 builddir = "dist/PS3GameUpdateDownloader"
@@ -43,8 +43,6 @@ if args.c == True and args.s == True:
 if args.d == True and args.r == True:
     print("you cant pass \"-d\" and \"-r\" to the buildscript")
     sys.exit()
-
-
 if args.s == True and args.r == True:
     action = "sourcerelease"
 if args.s == True and args.d == True:
@@ -58,7 +56,6 @@ if args.z == True:
     zip = True
     with open("release.json", "r", encoding="utf8") as f:
         version = json.loads(f.read())["version"]
-    #zipname = "PS3GameUpdateDownloader-"+version
     zipname = "dist/PS3GameUpdateDownloader-"+version
 
 if action == "sourcerelease":
