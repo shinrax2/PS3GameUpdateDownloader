@@ -3,6 +3,8 @@
 - bugfix
 
 future release (aka current master branch):
+
+v007:
 -  fixed main window becoming malfunctional when pressing download in the queue window with an empty queue
 -  retranslate main window when changing language
 +  load english string as fallback when the current localization doesnt contain the wanted string
