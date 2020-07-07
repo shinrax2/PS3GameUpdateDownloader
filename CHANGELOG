@@ -15,6 +15,7 @@ future release (aka current master branch):
 +  added percentage and download speed to main window when downloading
 +  log crashes for easier debugging
 -  fix crash when downloading on python 3.8
++  use enter key to search for updates in main window
 
 v006:
 +! automatic download and installation of updates
