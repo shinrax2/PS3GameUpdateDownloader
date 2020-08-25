@@ -172,12 +172,12 @@ class Gui():
         while True:
             evConfig, valConfig = winConfig.Read()
             if evConfig == "Cancel":
-                winConfig.Close()
-                window.UnHide()
+                self.configWindow.Close()
+                self.mainWindow.UnHide()
                 break
             if evConfig in (None, "Exit"):
-                winConfig.Close()
-                window.UnHide()
+                self.configWindow.Close()
+                self.mainWindow.UnHide()
                 break
             if evConfig == "Save" and valConfig["currentLoc"] != "":
                 cL = valConfig["currentLoc"]
