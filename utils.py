@@ -18,6 +18,7 @@ import subprocess
 import sys
 import distutils.core
 import shlex
+import traceback
 
 #pip packages
 import requests
@@ -320,3 +321,20 @@ def getArchiveSuffix():
     else:
         suffix = "source"
     return suffix
+
+def logUncaughtException(exctype, value, tb):
+    now = str(datetime.datetime.now()).split(".")[0].replace(" ", "_").replace(":", "-")
+    with open(os.path.join("logs", "Crash-"+now+".txt"), "w") as f:
+        f.write("Uncaught exception:\nType: "+str(exctype)+"\nValue: "+str(value)+"\nTraceback:\n")
+        for item in traceback.format_list(traceback.extract_tb(tb)):
+            f.write(item)
+
+def cleanupAfterUpdate():
+    suffix = getExecutableSuffix()
+    if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)):
+        os.remove(os.path.join(tempfile.gettempdir(), "PS3GUDup"+suffix)) 
+    if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")):
+        os.remove(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) 
+    if isAppFrozen() == False:
+        if os.path.exists(os.path.join(tempfile.gettempdir(), "utils.py")) and os.path.isfile(os.path.join(tempfile.gettempdir(), "utils.py")):
+            os.remove(os.path.join(tempfile.gettempdir(), "utils.py"))

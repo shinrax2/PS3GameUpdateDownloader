@@ -42,7 +42,7 @@ class PS3GUD():
         self.configDefaults["storageThreshold"] = 95
         self.configDefaults["currentLoc"] = "en"
         self.configDefaults["checkForNewRelease"] = True
-    
+
     def setWindow(self, window):
         self.logger.window = window
         
