@@ -76,6 +76,7 @@ if action == "sourcerelease":
     shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
     shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
     shutil.copy2("release.json", os.path.join(builddir, "release.json"))
+    shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
     
     #build zip
@@ -101,6 +102,7 @@ if action == "sourcedebug":
     shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
     shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
     shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
+    shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
     
     #build zip
@@ -137,6 +139,7 @@ if action == "compilerelease":
     #copy data
     shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
     shutil.copy2("release.json", os.path.join(builddir, "release.json"))
+    shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
     
     #build zip
@@ -173,6 +176,7 @@ if action == "compiledebug":
     #copy data
     shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
     shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
+    shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
     
     #build zip

@@ -4,7 +4,6 @@
 # PS3GameUpdateDownloader by shinrax2
 
 #built-in
-import urllib.request
 import urllib.parse
 import ssl
 import xml.etree.ElementTree as ET
@@ -20,8 +19,6 @@ import utils
 
 #pip packages
 import requests
-
-
 
 class PS3GUD():
     def __init__(self, window=None):
@@ -42,7 +39,7 @@ class PS3GUD():
         self.configDefaults["storageThreshold"] = 95
         self.configDefaults["currentLoc"] = "en"
         self.configDefaults["checkForNewRelease"] = True
-
+        
     def setWindow(self, window):
         self.logger.window = window
         
@@ -64,7 +61,7 @@ class PS3GUD():
         else:
             self.logger.log(self.loc.getKey("msg_noConfigFile"))
             self.config = self.configDefaults
-    
+            
     def setConfig(self, config):
         self.config = config
         with open(self.configFile, "w", encoding="utf8") as f:
@@ -110,17 +107,15 @@ class PS3GUD():
         
         #check for updates
         updates = []
-        ssl._create_default_https_context = ssl._create_unverified_context # needed for sonys self signed cert
         url = urllib.parse.urljoin(urllib.parse.urljoin("https://a0.ww.np.dl.playstation.net/tpl/np/", self.titleid+"/"), self.titleid+"-ver.xml")
         try:
-            resp = urllib.request.urlopen(url)
-        except urllib.error.HTTPError:
+            resp = requests.get(url, verify="sony.pem")
+        except requests.exceptions.ConnectionError:
             self.logger.log(self.loc.getKey("msg_metaNotAvailable"), "e")
             self.titleid = ""
             return
         
-        data = resp.read()
-        info = data.decode('utf-8')
+        info = resp.content
         #check file length for titles like BCAS20074
         if len(info) == 0:
             self.logger.log(self.loc.getKey("msg_metaFileEmpty"), "e")
