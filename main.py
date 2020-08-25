@@ -6,7 +6,7 @@
 #local files
 import gui
 
-def run()
+def run():
     g = gui.Gui()
     g.mainWin()
     
