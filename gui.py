@@ -166,11 +166,11 @@ class Gui():
             [sg.Text(self.loc.getKey("window_config_checkForNewRelease_label")), sg.Checkbox("", default=self.ps3.getConfig("checkForNewRelease"), key="checkForNewRelease")],
             [sg.Text(self.loc.getKey("window_config_storageThreshold_label")), sg.Spin([i for i in range(1, 100)], initial_value=self.ps3.getConfig("storageThreshold"), key="storageThreshold")],
             [sg.Text(self.loc.getKey("window_config_currentLoc_label")), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=self.loc.getKey("language_name"))],
-            [sg.Button(self.loc.getKey("window_config_cancel_btn"), key="Cancel"),sg.Button(self.loc.getKey("window_config_save_btn"), key="Save")]
+            [sg.Button(self.loc.getKey("window_config_cancel_btn"), key="Cancel"), sg.Button(self.loc.getKey("window_config_save_btn"), key="Save")]
         ]
         self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig)
         while True:
-            evConfig, valConfig = winConfig.Read()
+            evConfig, valConfig = self.configWindow.Read()
             if evConfig == "Cancel":
                 self.configWindow.Close()
                 self.mainWindow.UnHide()
@@ -231,12 +231,14 @@ class Gui():
                         self.ps3.DlList.addEntry(self.ps3.getUpdates()[val2["Table"][0]])
                         self.selectWindow.Close()
                         self.mainWindow.UnHide()
+                        self.tryDl = True
                         break
                     if len(val2["Table"]) > 1:
                         for row in val2["Table"]:
                             self.ps3.DlList.addEntry(self.ps3.getUpdates()[row])
                         self.selectWindow.Close()
                         self.mainWindow.UnHide()
+                        self.tryDl = True
                         break
                 if ev2 == "Queue" and len(val2["Table"]) > 0:
                     if len(val2["Table"]) == 1:    
