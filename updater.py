@@ -41,7 +41,7 @@ if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) and 
         rel.downloadNewRelease(data["dir"], window)
         suffix = utils.getExecutableSuffix()
         if utils.isAppFrozen():
-            file = os.path.join(data["dir"], "PS3GUD"+suffix)
+            file = os.path.join(data["dir"], "ps3gud"+suffix)
         else:
             if platform.system() == "Windows":
                 file = "py "+os.path.join(data["dir"], "main"+suffix)

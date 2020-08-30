@@ -153,7 +153,7 @@ class UpdaterGithubRelease():
         text = window["updater_text"]
         bar = window["updater_progressbar"]
         tdir = tempfile.gettempdir()
-        url = self.resp["assets"][0]["browser_download_url"]
+        url = self.resp["assets"][self.getRightAssetNum()]["browser_download_url"]
         local_filename = os.path.join(tdir, os.path.basename(url))
         chunk_size=8192
         count = 0
