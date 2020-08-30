@@ -84,12 +84,15 @@ class Gui():
         translateMainItems["Exit"] = "window_main_exit_btn"
         self.TranslationItems["mainWindow"] = translateMainItems
         self.mainWindow = sg.Window(self.loc.getKey("window_main_title")+" "+self.rel.getVersion(), layout)
+        self.mainWindow = sg.Window(self.loc.getKey("window_main_title")+" "+self.rel.getVersion(), layout, finalize=True)
         self.tryDl = False
         self.ps3.setWindow(self.mainWindow)
         self.ps3.logHeader(self.rel.getVersion())
         
         #main loop
         while True:
+            if self.ps3.useDefaultConfig:
+                self.configWin(nocancel=True)
             if self.ps3.getConfig("checkForNewRelease"):
                 if self.updateChecked == False:
                     self.newReleaseWin()
@@ -153,6 +156,7 @@ class Gui():
                     break
 
     def configWin(self):
+    def configWin(self, nocancel=False):
         self.mainWindow.hide()
         ll = self.loc.getLocs()
         locChoices = []
@@ -169,6 +173,9 @@ class Gui():
             [sg.Button(self.loc.getKey("window_config_cancel_btn"), key="Cancel"), sg.Button(self.loc.getKey("window_config_save_btn"), key="Save")]
         ]
         self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig)
+        self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig, finalize=True)
+        if nocancel:
+            self.configWindow["Cancel"].Update(disabled=True)
         while True:
             evConfig, valConfig = self.configWindow.Read()
             if evConfig == "Cancel":

@@ -32,6 +32,7 @@ class PS3GUD():
         self.DlList = Queue()
         self.titleid = ""
         
+        self.useDefaultConfig = True
         self.configDefaults = {}
         self.configDefaults["dldir"] = "./downloadedPKGs"
         self.configDefaults["verify"] = True
@@ -58,6 +59,7 @@ class PS3GUD():
             self.logger.log(self.loc.getKey("msg_configFileLoaded"))
             with open(self.configFile, "r", encoding="utf8") as f:
                 self.config = json.loads(f.read())
+                self.useDefaultConfig = False
         else:
             self.logger.log(self.loc.getKey("msg_noConfigFile"))
             self.config = self.configDefaults
@@ -67,7 +69,7 @@ class PS3GUD():
         with open(self.configFile, "w", encoding="utf8") as f:
             f.write(json.dumps(self.config, sort_keys=True, indent=4))
         self.logger.log(self.loc.getKey("msg_configFileSaved"))
-        
+        self.useDefaultConfig = False
     def getConfig(self, key):
         try:
             return self.config[key]
