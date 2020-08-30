@@ -108,6 +108,7 @@ class PS3GUD():
         #check for updates
         updates = []
         url = urllib.parse.urljoin(urllib.parse.urljoin("https://a0.ww.np.dl.playstation.net/tpl/np/", self.titleid+"/"), self.titleid+"-ver.xml")
+        requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.SubjectAltNameWarning) 
         try:
             resp = requests.get(url, verify="sony.pem")
         except requests.exceptions.ConnectionError:
