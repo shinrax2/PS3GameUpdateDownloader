@@ -324,6 +324,8 @@ def getArchiveSuffix():
 
 def logUncaughtException(exctype, value, tb):
     now = str(datetime.datetime.now()).split(".")[0].replace(" ", "_").replace(":", "-")
+    if os.path.exists("logs") == False:
+        os.mkdir("logs")
     with open(os.path.join("logs", "Crash-"+now+".txt"), "w") as f:
         f.write("Uncaught exception:\nType: "+str(exctype)+"\nValue: "+str(value)+"\nTraceback:\n")
         for item in traceback.format_list(traceback.extract_tb(tb)):
