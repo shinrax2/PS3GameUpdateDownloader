@@ -1,2 +1,2 @@
-requests
-pysimplegui
+requests>=2.24.0
+PySimpleGUI>=4.29.0
