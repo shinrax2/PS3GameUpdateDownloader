@@ -83,7 +83,6 @@ class Gui():
         translateMainItems["Queue"] = "window_main_queue_btn"
         translateMainItems["Exit"] = "window_main_exit_btn"
         self.TranslationItems["mainWindow"] = translateMainItems
-        self.mainWindow = sg.Window(self.loc.getKey("window_main_title")+" "+self.rel.getVersion(), layout)
         self.mainWindow = sg.Window(self.loc.getKey("window_main_title")+" "+self.rel.getVersion(), layout, finalize=True)
         self.tryDl = False
         self.ps3.setWindow(self.mainWindow)
@@ -134,7 +133,7 @@ class Gui():
             layoutRelNotify = [
                 [sg.Text(self.loc.getKey("window_relNotify_version_label", [self.rel.getVersion(), data["version"]]))],
                 [sg.Text(self.loc.getKey("window_relNotify_changelog_label"))],
-                [sg.Column([[sg.Text(self.rel.getChangelog())]]), sg.Slider(range=(1, len(self.rel.getChangelog().split("\n"))), default_value=1, orientation="v", size=(8, 10))],
+                [sg.Column([[sg.Text(self.rel.getChangelog(), size=(300, len(self.rel.getChangelog().split("\n"))*2))]], size=(700, 300), scrollable=True)],
                 [sg.Button(self.loc.getKey("window_relNotify_dl_btn"), key="dl"), sg.Button(self.loc.getKey("window_relNotify_web_btn"), key="web"), sg.Button(self.loc.getKey("window_relNotify_close_btn"), key="close")]
             ]
             self.newReleaseWindow = sg.Window(self.loc.getKey("window_relNotify_title"), layoutRelNotify)
@@ -155,7 +154,6 @@ class Gui():
                     self.newReleaseWindow.close()
                     break
 
-    def configWin(self):
     def configWin(self, nocancel=False):
         self.mainWindow.hide()
         ll = self.loc.getLocs()
@@ -172,7 +170,6 @@ class Gui():
             [sg.Text(self.loc.getKey("window_config_currentLoc_label")), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=self.loc.getKey("language_name"))],
             [sg.Button(self.loc.getKey("window_config_cancel_btn"), key="Cancel"), sg.Button(self.loc.getKey("window_config_save_btn"), key="Save")]
         ]
-        self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig)
         self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig, finalize=True)
         if nocancel:
             self.configWindow["Cancel"].Update(disabled=True)
