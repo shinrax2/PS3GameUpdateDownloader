@@ -168,11 +168,21 @@ class Gui():
             [sg.Text(self.loc.getKey("window_config_checkForNewRelease_label")), sg.Checkbox("", default=self.ps3.getConfig("checkForNewRelease"), key="checkForNewRelease")],
             [sg.Text(self.loc.getKey("window_config_storageThreshold_label")), sg.Spin([i for i in range(1, 100)], initial_value=self.ps3.getConfig("storageThreshold"), key="storageThreshold")],
             [sg.Text(self.loc.getKey("window_config_currentLoc_label")), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=self.loc.getKey("language_name"))],
+            [sg.Text(self.loc.getKey("window_config_useproxy_label")), sg.Checkbox("", default=self.ps3.getConfig("use_proxy"), key="use_proxy", enable_events=True)],
+            [sg.Text(self.loc.getKey("window_config_proxyip_label")), sg.In(self.ps3.getConfig("proxy_ip"), key="proxy_ip")],
+            [sg.Text(self.loc.getKey("window_config_proxyport_label")), sg.In(self.ps3.getConfig("proxy_port"), key="proxy_port")],
+            [sg.Text(self.loc.getKey("window_config_proxyuser_laber")), sg.In(self.ps3.getConfig("proxy_user"), key="proxy_user")],
+            [sg.Text(self.loc.getKey("window_config_proxypass_label")), sg.In(self.ps3.getConfig("proxy_pass"), key="proxy_pass", password_char="*")],
             [sg.Button(self.loc.getKey("window_config_cancel_btn"), key="Cancel"), sg.Button(self.loc.getKey("window_config_save_btn"), key="Save")]
         ]
         self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig, finalize=True)
         if nocancel:
             self.configWindow["Cancel"].Update(disabled=True)
+        if self.ps3.getConfig("use_proxy") == False:
+            self.configWindow["proxy_ip"].Update(disabled=True)
+            self.configWindow["proxy_port"].Update(disabled=True)
+            self.configWindow["proxy_user"].Update(disabled=True)
+            self.configWindow["proxy_pass"].Update(disabled=True)
         while True:
             evConfig, valConfig = self.configWindow.Read()
             if evConfig == "Cancel":
@@ -183,14 +193,27 @@ class Gui():
                 self.configWindow.Close()
                 self.mainWindow.UnHide()
                 break
+            if evConfig == "use_proxy":
+                if valConfig["use_proxy"] == True:
+                    self.configWindow["proxy_ip"].Update(disabled=False)
+                    self.configWindow["proxy_port"].Update(disabled=False)
+                    self.configWindow["proxy_user"].Update(disabled=False)
+                    self.configWindow["proxy_pass"].Update(disabled=False)
+                else:
+                    self.configWindow["proxy_ip"].Update(disabled=True)
+                    self.configWindow["proxy_port"].Update(disabled=True)
+                    self.configWindow["proxy_user"].Update(disabled=True)
+                    self.configWindow["proxy_pass"].Update(disabled=True)
             if evConfig == "Save" and valConfig["currentLoc"] != "":
                 cL = valConfig["currentLoc"]
                 for l in ll:
                     if cL == l["language_name"]:
                         cL = l["language_short"]
-                config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThreshold": valConfig["storageThreshold"], "currentLoc": cL }
+                config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThreshold": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "proxy_user": valConfig["proxy_user"], "use_proxy": valConfig["use_proxy"]}
                 self.ps3.setConfig(config)
+                self.ps3.setProxyPass(valConfig["proxy_pass"])
                 self.loc.setLoc(cL)
+                self.ps3.setupProxy()
                 self.retranslateWindow(self.mainWindow , self.loc, self.TranslationItems["mainWindow"])
                 self.configWindow.Close()
                 self.mainWindow.UnHide()

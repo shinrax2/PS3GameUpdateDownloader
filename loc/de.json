@@ -19,6 +19,11 @@
     "window_config_checkForNewRelease_label": "Neue Version beim Starten suchen:",
     "window_config_storageThreshold_label": "Speichergrenze (in %):",
     "window_config_currentLoc_label": "Sprache:",
+    "window_config_useproxy_label": "Proxy benutzen? (NUR SOCKS5!)",
+    "window_config_proxyip_label": "Proxy-IP:",
+    "window_config_proxyport_label": "Proxy-Port:",
+    "window_config_proxyuser_laber": "Proxy-Benutzer:",
+    "window_config_proxypass_label": "Proxy-Passwort",
     "window_config_cancel_btn": "Abbrechen",
     "window_config_save_btn": "Speichern",
     
@@ -30,7 +35,7 @@
     "window_select_download_btn": "Herunterladen",
     "window_select_cancel_btn": "Abbrechen",    
     "window_select_queue_btn": "Zur Downloadwarteschlange hinzufügen",
-    "window_select_help_label": "Halte Strg gedrückt und klicke auf die Updates, die Sie auswählen möchten.",
+    "window_select_help_label": "Halten Sie Strg gedrückt und klicken auf die Updates, die Sie auswählen möchten.",
     
     "window_relNotify_title": "Neue Version gefunden!",
     "window_relNotify_version_label": "Aktuelle Version: {0}\nNeue Version: {1}",
@@ -74,5 +79,6 @@
     "msg_alreadyUpToDate": "Bereits neuste Version!",
     "msg_foundNewRelease": "Neue Version \"{0}\" gefunden",
     "msg_NoReleaseArchiveForPlatformOrArch": "Konnte kein Release für deine Plattform oder Architektur finden. Plattform: \"{0}\" Architektur: \"{1}\" Kompiliert: \"{2}\"",
-    "msg_dldirNotWriteable": "Ihr ausgewählter Download-Ordner \"{0}\" ist nicht schreibbar!"
+    "msg_dldirNotWriteable": "Ihr ausgewählter Download-Ordner \"{0}\" ist nicht schreibbar!",
+    "msg_checkProxySettings": "Please verify your proxy settings are correct!"
 }

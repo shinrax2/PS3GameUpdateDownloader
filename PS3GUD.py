@@ -19,6 +19,7 @@ import utils
 
 #pip packages
 import requests
+import keyring
 
 class PS3GUD():
     def __init__(self, window=None):
@@ -31,6 +32,7 @@ class PS3GUD():
         self.Updates = {}
         self.DlList = Queue()
         self.titleid = ""
+        self.proxies = {}
         
         self.useDefaultConfig = True
         self.configDefaults = {}
@@ -40,6 +42,11 @@ class PS3GUD():
         self.configDefaults["storageThreshold"] = 95
         self.configDefaults["currentLoc"] = "en"
         self.configDefaults["checkForNewRelease"] = True
+        self.configDefaults["use_proxy"] = False
+        self.configDefaults["proxy_ip"] = ""
+        self.configDefaults["proxy_port"] = ""
+        self.configDefaults["proxy_user"] = ""
+        self.configDefaults["proxy_pass"] = None
         
     def setWindow(self, window):
         self.logger.window = window
@@ -61,7 +68,9 @@ class PS3GUD():
             self.logger.log(self.loc.getKey("msg_configFileLoaded"))
             with open(self.configFile, "r", encoding="utf8") as f:
                 self.config = json.loads(f.read())
-                self.useDefaultConfig = False
+            self.useDefaultConfig = False
+            self.config["proxy_pass"] = self.getProxyPass()
+            self.setupProxy()
         else:
             self.logger.log(self.loc.getKey("msg_noConfigFile"))
             self.config = self.configDefaults
@@ -72,6 +81,28 @@ class PS3GUD():
             f.write(json.dumps(self.config, sort_keys=True, indent=4))
         self.logger.log(self.loc.getKey("msg_configFileSaved"))
         self.useDefaultConfig = False
+        
+    def setProxyPass(self, pwd):
+        keyring.set_password("ps3gud", "proxy_pass", pwd)
+        self.config["proxy_pass"] = pwd
+        
+    def getProxyPass(self):
+        return keyring.get_password("ps3gud", "proxy_pass")
+        
+    def setupProxy(self):
+        if self.getConfig("use_proxy"):
+            self.proxies["http"] = "socks5://"
+            self.proxies["https"] = "socks5://"
+            if self.getConfig("proxy_user") != "":
+                self.proxies["http"] += self.getConfig("proxy_user")+":"
+                self.proxies["https"] += self.getConfig("proxy_user")+":"
+                if self.getConfig("proxy_pass") != None:
+                    self.proxies["http"] += self.getConfig("proxy_pass")+"@"
+                    self.proxies["https"] += self.getConfig("proxy_pass")+"@"
+            self.proxies["http"] += self.getConfig("proxy_ip")+":"+self.getConfig("proxy_port")
+            self.proxies["https"] += self.getConfig("proxy_ip")+":"+self.getConfig("proxy_port")
+        else:
+            self.proxies = {}
     def getConfig(self, key):
         try:
             return self.config[key]
@@ -114,9 +145,11 @@ class PS3GUD():
         url = urllib.parse.urljoin(urllib.parse.urljoin("https://a0.ww.np.dl.playstation.net/tpl/np/", self.titleid+"/"), self.titleid+"-ver.xml")
         requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.SubjectAltNameWarning) 
         try:
-            resp = requests.get(url, verify="sony.pem")
+            resp = requests.get(url, verify="sony.pem", proxies=self.proxies)
         except requests.exceptions.ConnectionError:
             self.logger.log(self.loc.getKey("msg_metaNotAvailable"), "e")
+            if self.getConfig("use_proxy"):
+                self.logger.log(self.loc.getKey("msg_checkProxySettings"))
             self.titleid = ""
             return
         
@@ -203,7 +236,7 @@ class PS3GUD():
         total, used, free = shutil.disk_usage(os.path.dirname(local_filename))
         if used / total * 100 <= self.config["storageThreshold"]:
             if free > int(size):
-                with requests.get(url, stream=True) as r:
+                with requests.get(url, stream=True, proxies=self.proxies) as r:
                     r.raise_for_status()
                     start = time.perf_counter()
                     with open(local_filename, 'wb') as f:

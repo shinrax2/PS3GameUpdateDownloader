@@ -9,7 +9,6 @@ import datetime
 import os
 import platform
 import json
-import urllib.request
 import urllib.parse
 import tempfile
 import shutil
@@ -22,6 +21,9 @@ import traceback
 
 #pip packages
 import requests
+
+#local files
+import PS3GUD
 
 class Logger():
     def __init__(self, window=None):
@@ -113,6 +115,11 @@ class UpdaterGithubRelease():
         self.resp = {}
         with open(self.rF, "r", encoding="utf8") as f:
             self.release = json.loads(f.read())
+        l = Loc()
+        ps3 = PS3GUD.PS3GUD()
+        ps3.setLoc(l)
+        ps3.loadConfig()
+        self.proxies = ps3.proxies
             
     def getVersion(self):
         return self.release["version"]
@@ -130,11 +137,11 @@ class UpdaterGithubRelease():
     
     def checkForNewRelease(self):
         try:
-            resp = urllib.request.urlopen(urllib.parse.urljoin(urllib.parse.urljoin(urllib.parse.urljoin("https://api.github.com/repos/" ,self.release["author"]+"/"), self.release["repo"]+"/"), "releases/latest"))
-            data = resp.read()
-            data.decode("utf-8")
+            url = urllib.parse.urljoin(urllib.parse.urljoin(urllib.parse.urljoin("https://api.github.com/repos/" ,self.release["author"]+"/"), self.release["repo"]+"/"), "releases/latest")
+            resp = requests.get(url, proxies=self.proxies)
+            data = resp.content
             self.resp = json.loads(data)
-        except urllib.error.HTTPError:
+        except requests.exceptions.ConnectionError:
             return False
         if self.release["version"] < self.resp["tag_name"]:
             assetnum = self.getRightAssetNum()
@@ -158,7 +165,7 @@ class UpdaterGithubRelease():
         chunk_size=8192
         count = 0
         already_loaded = 0
-        with requests.get(url, stream=True) as r:
+        with requests.get(url, stream=True, proxies=self.proxies) as r:
             r.raise_for_status()
             size = int(r.headers["content-length"])
             with open(local_filename, 'wb') as f:
@@ -234,6 +241,7 @@ class UpdaterGithubRelease():
         if isAppFrozen() == False:
             #copy depency if app not compiled
             shutil.copy2(os.path.join(os.getcwd(), "utils.py"), os.path.join(tempfile.gettempdir(), "utils.py"))
+            shutil.copy2(os.path.join(os.getcwd(), "PS3GUD.py"), os.path.join(tempfile.gettempdir(), "PS3GUD.py"))
         
         if isAppFrozen() == False:
             if platform.system() == "Windows":
@@ -340,3 +348,5 @@ def cleanupAfterUpdate():
     if isAppFrozen() == False:
         if os.path.exists(os.path.join(tempfile.gettempdir(), "utils.py")) and os.path.isfile(os.path.join(tempfile.gettempdir(), "utils.py")):
             os.remove(os.path.join(tempfile.gettempdir(), "utils.py"))
+        if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUD.py")) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUD.py")):
+            os.remove(os.path.join(tempfile.gettempdir(), "PS3GUD.py"))

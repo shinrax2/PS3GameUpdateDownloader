@@ -19,6 +19,11 @@
     "window_config_checkForNewRelease_label": "Check for a new release at startup:",
     "window_config_storageThreshold_label": "Storage threshold (in %):",
     "window_config_currentLoc_label": "Language:",
+    "window_config_useproxy_label": "Use Proxy? (ONLY SOCKS5!)",
+    "window_config_proxyip_label": "Proxy IP:",
+    "window_config_proxyport_label": "Proxy Port:",
+    "window_config_proxyuser_laber": "Proxy User:",
+    "window_config_proxypass_label": "Proxy Password",
     "window_config_cancel_btn": "Cancel",
     "window_config_save_btn": "Save",
     
@@ -74,5 +79,6 @@
     "msg_alreadyUpToDate": "Already on the newest release!",
     "msg_foundNewRelease": "Found new Release \"{0}\"",
     "msg_NoReleaseArchiveForPlatformOrArch": "Couldn't find a release archive for you architecture or platform. Platform: \"{0}\" Architecture: \"{1}\" Compiled: \"{2}\"",
-    "msg_dldirNotWriteable": "Your select directory for downloads \"{0}\" is not writeable!"
+    "msg_dldirNotWriteable": "Your select directory for downloads \"{0}\" is not writeable!",
+    "msg_checkProxySettings": "Please verify your proxy settings are correct!"
 }

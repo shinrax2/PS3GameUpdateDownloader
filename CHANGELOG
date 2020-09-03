@@ -8,6 +8,8 @@ future release (aka current master branch):
 +  open configuration window when no configuration file is found
 +  generate "build.log" when using building releases
 +  include pysimplegui version in logs for easier debugging
++  include python version in logs for easier debugging
++  proxy support (only SOCKS5)
 -  fix changelog being cutoff in update notification window
 -  fix updater on linux
 
