@@ -47,12 +47,13 @@ class PS3GUD():
     def setLoc(self, loc):
         self.loc = loc
 
-    def logHeader(self, version):
+    def logHeader(self, version, psgversion):
         self.logger.log("PS3GameUpdateDownloader "+version)
         self.logger.log("Config File: "+self.configFile)
         self.logger.log("Language: "+ self.loc.getLoc()+"\n\n")
         self.logger.log("Current working directory: "+os.getcwd())
         self.logger.log("Compiled: "+str(utils.isAppFrozen()))
+        self.logger.log("PySimpleGUI version: "+psgversion)
         
     def loadConfig(self):
         if os.path.exists(self.configFile) and os.path.isfile(self.configFile):

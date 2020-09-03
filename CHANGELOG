@@ -6,6 +6,8 @@ future release (aka current master branch):
 !  refactored gui code
 !  more secure handling of sonys self signed certificate
 +  open configuration window when no configuration file is found
++  generate "build.log" when using building releases
++  include pysimplegui version in logs for easier debugging
 -  fix changelog being cutoff in update notification window
 -  fix updater on linux
 

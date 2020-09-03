@@ -86,7 +86,7 @@ class Gui():
         self.mainWindow = sg.Window(self.loc.getKey("window_main_title")+" "+self.rel.getVersion(), layout, finalize=True)
         self.tryDl = False
         self.ps3.setWindow(self.mainWindow)
-        self.ps3.logHeader(self.rel.getVersion())
+        self.ps3.logHeader(self.rel.getVersion(), sg.version)
         
         #main loop
         while True:
