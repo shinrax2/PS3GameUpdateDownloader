@@ -54,6 +54,7 @@ class PS3GUD():
         self.logger.log("Current working directory: "+os.getcwd())
         self.logger.log("Compiled: "+str(utils.isAppFrozen()))
         self.logger.log("PySimpleGUI version: "+psgversion)
+        self.logger.log("Python version: "+sys.version)
         
     def loadConfig(self):
         if os.path.exists(self.configFile) and os.path.isfile(self.configFile):
