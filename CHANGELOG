@@ -10,6 +10,7 @@ future release (aka current master branch):
 +  include pysimplegui version in logs for easier debugging
 +  include python version in logs for easier debugging
 +  proxy support (only SOCKS5)
++  add CHANGELOG to builds
 -  fix changelog being cutoff in update notification window
 -  fix updater on linux
 

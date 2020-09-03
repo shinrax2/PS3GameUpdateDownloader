@@ -18,11 +18,10 @@ import logging
 import git
 
 def buildheader(version, commitid, args, pyiver="None"):
-    pythonver = sys.version
     print("Building PS3GameUpdateDownloader")
     print("Version: "+version)
     print("Git Commit: "+commitid)
-    print("Python version: "+pythonver)
+    print("Python version: "+sys.version)
     print("PyInstaller version: "+pyiver)
     print("Compiled: "+str(args.c))
     print("Debug: "+str(args.d))
@@ -92,6 +91,7 @@ if action == "sourcerelease":
             shutil.copy2("PS3GUD.py", os.path.join(builddir, "PS3GUD.py"))
             shutil.copy2("gui.py", os.path.join(builddir, "gui.py"))
             #copy data
+            shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
             shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
             shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
             shutil.copy2("release.json", os.path.join(builddir, "release.json"))
@@ -121,6 +121,7 @@ if action == "sourcedebug":
             shutil.copy2("PS3GUD.py", os.path.join(builddir, "PS3GUD.py"))
             shutil.copy2("gui.py", os.path.join(builddir, "gui.py"))
             #copy data
+            shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
             shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
             shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
             shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
@@ -167,6 +168,7 @@ if action == "compilerelease":
             shutil.move("dist/ps3gud"+suffix, os.path.join(builddir, "ps3gud"+suffix))
             shutil.move("dist/PS3GUDup"+suffix, os.path.join(builddir, "PS3GUDup"+suffix))
             #copy data
+            shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
             shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
             shutil.copy2("release.json", os.path.join(builddir, "release.json"))
             shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
@@ -213,6 +215,7 @@ if action == "compiledebug":
             shutil.move("dist/ps3gud"+suffix, os.path.join(builddir, "ps3gud"+suffix))
             shutil.move("dist/PS3GUDup"+suffix, os.path.join(builddir, "PS3GUDup"+suffix))
             #copy data
+            shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
             shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
             shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
             shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
