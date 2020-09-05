@@ -11,8 +11,10 @@ future release (aka current master branch):
 +  include python version in logs for easier debugging
 +  proxy support (only SOCKS5)
 +  add CHANGELOG to builds
++  add thai translation thanks to https://github.com/CENSOR1337
 -  fix changelog being cutoff in update notification window
 -  fix updater on linux
+-  fix handling unicode languages
 
 v007:
 -  fixed main window becoming malfunctional when pressing download in the queue window with an empty queue
