@@ -6,17 +6,19 @@ future release (aka current master branch):
 !  refactored gui code
 !  more secure handling of sonys self signed certificate
 +  open configuration window when no configuration file is found
-+  generate "build.log" when using building releases
++  generate "build.log" when building releases
 +  include pysimplegui version in logs for easier debugging
 +  include python version in logs for easier debugging
 +  proxy support (only SOCKS5)
 +  add CHANGELOG to builds
 +  add thai translation thanks to https://github.com/CENSOR1337
 +  add russian translation thanks to https://github.com/andoleal
++  add turkish translation thanks to https://steamcommunity.com/profiles/76561198045705212/
 -  fix changelog being cutoff in update notification window
 -  fix updater on linux
 -  fix handling unicode languages
 -  minor typos in english translation
+
 v007:
 -  fixed main window becoming malfunctional when pressing download in the queue window with an empty queue
 -  retranslate main window when changing language
