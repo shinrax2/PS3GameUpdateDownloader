@@ -12,10 +12,11 @@ future release (aka current master branch):
 +  proxy support (only SOCKS5)
 +  add CHANGELOG to builds
 +  add thai translation thanks to https://github.com/CENSOR1337
++  add russian translation thanks to https://github.com/andoleal
 -  fix changelog being cutoff in update notification window
 -  fix updater on linux
 -  fix handling unicode languages
-
+-  minor typos in english translation
 v007:
 -  fixed main window becoming malfunctional when pressing download in the queue window with an empty queue
 -  retranslate main window when changing language
