@@ -186,6 +186,7 @@ class PS3GUD():
             id = dl["gameid"]
             fdir = os.path.join(self.config["dldir"]+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+"["+id+"]/")
             fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
+            total, used, free = shutil.disk_usage(fdir)
             if os.path.exists(self.config["dldir"]) == False and os.path.isfile(self.config["dldir"]) == False:
                 try:
                     os.mkdir(self.config["dldir"])
@@ -211,9 +212,17 @@ class PS3GUD():
                                 self.logger.log(self.loc.getKey("msg_alreadyDownloadedVerify", [os.path.basename(url)]))
                                 skip = True
             if skip == False:
-                self.logger.log(self.loc.getKey("msg_startSingleDownload", [i, ql]))
-                self._download_file(url, fname, size, window, i)
-                self.DlList.removeEntry(dl["gameid"]+"-"+dl["version"])
+                if used / total * 100 <= self.getConfig("storageThreshold"):
+                    if free > int(size):
+                        self.logger.log(self.loc.getKey("msg_startSingleDownload", [i, ql]))
+                        self._download_file(url, fname, size, window, i)
+                        self.DlList.removeEntry(dl["gameid"]+"-"+dl["version"])
+                    else:
+                        self.logger.log(self.loc.getKey("msg_notEnoughDiskSpace"), "e")
+                        skip = True
+                else:
+                    self.logger.log(self.loc.getKey("msg_spaceBelowThreshold", [self.getConfig("storageThreshold")]), "e")
+                    skip = True
             if self.config["verify"] == True and skip == False:
                 if sha1 == self._sha1File(fname):
                     self.logger.log(self.loc.getKey("msg_verifySuccess", [fname]))
@@ -233,28 +242,21 @@ class PS3GUD():
         chunk_size=8192
         count = 0
         already_loaded = 0
-        total, used, free = shutil.disk_usage(os.path.dirname(local_filename))
-        if used / total * 100 <= self.config["storageThreshold"]:
-            if free > int(size):
-                with requests.get(url, stream=True, proxies=self.proxies) as r:
-                    r.raise_for_status()
-                    start = time.perf_counter()
-                    with open(local_filename, 'wb') as f:
-                        for chunk in r.iter_content(chunk_size=chunk_size): 
-                            if chunk:
-                                f.write(chunk)
-                                count += 1
-                                already_loaded = count * chunk_size
-                                if already_loaded / size > 1:
-                                    already_loaded = size
-                                percentage = already_loaded / size * 100
-                                text.Update(self.loc.getKey("window_main_progress_label", [num, utils.formatSize(already_loaded), utils.formatSize(size), format(float(percentage), '.1f'), utils.formatSize(already_loaded//(time.perf_counter() - start))+"s"]))
-                                bar.UpdateBar(percentage)
-                                window.Refresh()
-            else:
-                self.logger.log(self.loc.getKey("msg_notEnoughDiskSpace"), "e")
-        else:
-            self.logger.log(self.loc.getKey("msg_spaceBelowThreshold", [100-self.storageThreshold]), "w")
+        with requests.get(url, stream=True, proxies=self.proxies) as r:
+            r.raise_for_status()
+            start = time.perf_counter()
+            with open(local_filename, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=chunk_size): 
+                    if chunk:
+                        f.write(chunk)
+                        count += 1
+                        already_loaded = count * chunk_size
+                        if already_loaded / size > 1:
+                            already_loaded = size
+                        percentage = already_loaded / size * 100
+                        text.Update(self.loc.getKey("window_main_progress_label", [num, utils.formatSize(already_loaded), utils.formatSize(size), format(float(percentage), '.1f'), utils.formatSize(already_loaded//(time.perf_counter() - start))+"s"]))
+                        bar.UpdateBar(percentage)
+                        window.Refresh()
 
     def _sha1File(self, fname):
         #copy file

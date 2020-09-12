@@ -21,6 +21,7 @@ future release (aka current master branch):
 -  fix handling unicode languages
 -  minor typos in english translation
 -  fix cutoff strings
+-  fix crash when available disc space is below threshold
 
 v007:
 -  fixed main window becoming malfunctional when pressing download in the queue window with an empty queue
