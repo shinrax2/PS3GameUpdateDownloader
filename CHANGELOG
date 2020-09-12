@@ -10,14 +10,17 @@ future release (aka current master branch):
 +  include pysimplegui version in logs for easier debugging
 +  include python version in logs for easier debugging
 +  proxy support (only SOCKS5)
++  improve configuration window layout
 +  add CHANGELOG to builds
 +  add thai translation thanks to https://github.com/CENSOR1337
 +  add russian translation thanks to https://github.com/andoleal
 +  add turkish translation thanks to https://steamcommunity.com/profiles/76561198045705212/
++  add italian translation thanks to https://github.com/Strappazzon
 -  fix changelog being cutoff in update notification window
 -  fix updater on linux
 -  fix handling unicode languages
 -  minor typos in english translation
+-  fix cutoff strings
 
 v007:
 -  fixed main window becoming malfunctional when pressing download in the queue window with an empty queue

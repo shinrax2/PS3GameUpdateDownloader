@@ -69,7 +69,7 @@ class Gui():
     
     def mainWin(self):
         layout = [ #layout for main window
-            [sg.Text(self.loc.getKey("window_main_titleid_label"), key="window_main_titleid_label")],
+            [sg.Text(self.loc.getKey("window_main_titleid_label"), key="window_main_titleid_label", size=(50,1))],
             [sg.Input(key="titleid"),sg.Button(self.loc.getKey("window_main_enter_btn"), key="Enter", bind_return_key=True), sg.Button(self.loc.getKey("window_main_queue_btn"), key="Queue"), sg.Button(self.loc.getKey("window_main_config_btn") ,key="Config")],
             [sg.Text("", size=(30, 3), key="window_main_progress_label")],
             [sg.ProgressBar(100, orientation="h", size=(52.85, 20), key="window_main_progress_bar")],
@@ -162,18 +162,18 @@ class Gui():
             locChoices.append(l["language_name"])
         
         layoutConfig = [
-            [sg.Text(self.loc.getKey("window_config_dldir_label")), sg.In(self.ps3.getConfig("dldir"), key="dldir"), sg.FolderBrowse(target="dldir")],
-            [sg.Text(self.loc.getKey("window_config_verify_label")), sg.Checkbox("", default=self.ps3.getConfig("verify"), key="verify")],
-            [sg.Text(self.loc.getKey("window_config_checkIfAlreadyDownloaded_label")),sg.Checkbox("", default=self.ps3.getConfig("checkIfAlreadyDownloaded"), key="checkIfAlreadyDownloaded")],
-            [sg.Text(self.loc.getKey("window_config_checkForNewRelease_label")), sg.Checkbox("", default=self.ps3.getConfig("checkForNewRelease"), key="checkForNewRelease")],
-            [sg.Text(self.loc.getKey("window_config_storageThreshold_label")), sg.Spin([i for i in range(1, 100)], initial_value=self.ps3.getConfig("storageThreshold"), key="storageThreshold")],
-            [sg.Text(self.loc.getKey("window_config_currentLoc_label")), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=self.loc.getKey("language_name"))],
-            [sg.Text(self.loc.getKey("window_config_useproxy_label")), sg.Checkbox("", default=self.ps3.getConfig("use_proxy"), key="use_proxy", enable_events=True)],
-            [sg.Text(self.loc.getKey("window_config_proxyip_label")), sg.In(self.ps3.getConfig("proxy_ip"), key="proxy_ip")],
-            [sg.Text(self.loc.getKey("window_config_proxyport_label")), sg.In(self.ps3.getConfig("proxy_port"), key="proxy_port")],
-            [sg.Text(self.loc.getKey("window_config_proxyuser_laber")), sg.In(self.ps3.getConfig("proxy_user"), key="proxy_user")],
-            [sg.Text(self.loc.getKey("window_config_proxypass_label")), sg.In(self.ps3.getConfig("proxy_pass"), key="proxy_pass", password_char="*")],
-            [sg.Button(self.loc.getKey("window_config_cancel_btn"), key="Cancel"), sg.Button(self.loc.getKey("window_config_save_btn"), key="Save")]
+            [sg.Text(self.loc.getKey("window_config_dldir_label"), size=(40,1)), sg.In(self.ps3.getConfig("dldir"), key="dldir"), sg.FolderBrowse(target="dldir")],
+            [sg.Text(self.loc.getKey("window_config_verify_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("verify"), key="verify")],
+            [sg.Text(self.loc.getKey("window_config_checkIfAlreadyDownloaded_label"), size=(40,1)),sg.Checkbox("", default=self.ps3.getConfig("checkIfAlreadyDownloaded"), key="checkIfAlreadyDownloaded")],
+            [sg.Text(self.loc.getKey("window_config_checkForNewRelease_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("checkForNewRelease"), key="checkForNewRelease")],
+            [sg.Text(self.loc.getKey("window_config_storageThreshold_label"), size=(40,1)), sg.Spin([i for i in range(1, 100)], initial_value=self.ps3.getConfig("storageThreshold"), key="storageThreshold")],
+            [sg.Text(self.loc.getKey("window_config_currentLoc_label"), size=(40,1)), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=self.loc.getKey("language_name"))],
+            [sg.Text(self.loc.getKey("window_config_useproxy_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("use_proxy"), key="use_proxy", enable_events=True)],
+            [sg.Text(self.loc.getKey("window_config_proxyip_label"), size=(40,1)), sg.In(self.ps3.getConfig("proxy_ip"), key="proxy_ip")],
+            [sg.Text(self.loc.getKey("window_config_proxyport_label"), size=(40,1)), sg.In(self.ps3.getConfig("proxy_port"), key="proxy_port")],
+            [sg.Text(self.loc.getKey("window_config_proxyuser_laber"), size=(40,1)), sg.In(self.ps3.getConfig("proxy_user"), key="proxy_user")],
+            [sg.Text(self.loc.getKey("window_config_proxypass_label"), size=(40,1)), sg.In(self.ps3.getConfig("proxy_pass"), key="proxy_pass", password_char="*")],
+            [sg.Button(self.loc.getKey("window_config_cancel_btn"), key="Cancel"), sg.Button(self.loc.getKey("window_config_save_btn"), key="Save", bind_return_key=True)]
         ]
         self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig, finalize=True)
         if nocancel:
