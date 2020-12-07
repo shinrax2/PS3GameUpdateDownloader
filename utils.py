@@ -78,7 +78,7 @@ class Loc():
         locFiles = [pos_json for pos_json in os.listdir(self.locDir) if pos_json.endswith('.json')]
         for loc in locFiles:
             with open(os.path.join(self.locDir,loc), "r", encoding="utf8") as j:
-                l = json.loads(j.read(), encoding="utf8")
+                l = json.loads(j.read())
             self.locList.append({"language_name":l["language_name"], "language_short":l["language_short"]})
             del(l)
     
@@ -93,10 +93,10 @@ class Loc():
             for l in self.locList:
                 if l["language_short"] == loc:
                     with open(os.path.join(self.locDir, (l["language_short"]+".json")), "r", encoding="utf8") as f:
-                        self.currentLoc = json.loads(f.read(),  encoding="utf8")
+                        self.currentLoc = json.loads(f.read())
         else:
             with open(os.path.join(self.locDir, "./en.json"), "r", encoding="utf8") as f:
-                self.fallbackLoc = json.loads(f.read(),  encoding="utf8")
+                self.fallbackLoc = json.loads(f.read())
                 self.currentLoc = self.fallbackLoc
                 
     def getKey(self, key, args=[]):
