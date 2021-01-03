@@ -37,6 +37,12 @@ class Gui():
         #setup data
         self.TranslationItems = {}
         self.updateChecked = False
+        self.proxydisabled = False
+        
+        #hotfix for keyring and pyinstaller
+        if platform.system() == "Linux" and utils.isAppFrozen() == True:
+            self.proxydisabled = True
+            self.ps3.config["use_proxy"] = False
         
         #setup window style
         sg.change_look_and_feel("DarkAmber")
@@ -90,6 +96,8 @@ class Gui():
         
         #main loop
         while True:
+            if self.proxydisabled:
+                self.hotfix_keyring_linuxWin()
             if self.ps3.useDefaultConfig:
                 self.configWin(nocancel=True)
             if self.ps3.getConfig("checkForNewRelease"):
@@ -178,6 +186,8 @@ class Gui():
         self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig, finalize=True)
         if nocancel:
             self.configWindow["Cancel"].Update(disabled=True)
+        if self.proxydisabled:
+            self.configWindow["use_proxy"].Update(disabled=True)
         if self.ps3.getConfig("use_proxy") == False:
             self.configWindow["proxy_ip"].Update(disabled=True)
             self.configWindow["proxy_port"].Update(disabled=True)
@@ -211,7 +221,8 @@ class Gui():
                         cL = l["language_short"]
                 config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThreshold": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "proxy_user": valConfig["proxy_user"], "use_proxy": valConfig["use_proxy"]}
                 self.ps3.setConfig(config)
-                self.ps3.setProxyPass(valConfig["proxy_pass"])
+                if self.ps3.getConfig("use_proxy") == True:
+                    self.ps3.setProxyPass(valConfig["proxy_pass"])
                 self.loc.setLoc(cL)
                 self.ps3.setupProxy()
                 self.retranslateWindow(self.mainWindow , self.loc, self.TranslationItems["mainWindow"])
@@ -337,5 +348,23 @@ class Gui():
                 break
             if evQueue == "Close":
                 self.queueWindow.Close()
+                self.mainWindow.UnHide()
+                break
+    
+    def hotfix_keyring_linuxWin(self):
+        layout = [
+            [sg.Text(self.loc.getKey("window_hotfix_keyring_linux_info_label"))],
+            [sg.Checkbox(self.loc.getKey("window_hotfix_keyring_linux_dont_show_again_label"), default=False, key="dont_show_again")],
+            [sg.Button(self.loc.getKey("window_hotfix_keyring_linux_ok_btn"), key="ok")]
+        ]
+        self.mainWindow.hide()
+        self.hotfix_keyring_linuxWindow = sg.Window(self.loc.getKey("window_hotfix_keyring_linux_title"), layout)
+        while True:
+            ev, val = self.hotfix_keyring_linuxWindow.read()
+            if ev == "ok":
+                if val["dont_show_again"] == True:
+                    self.ps3.config["dont_show_again_hotfix_keyring_linux"] = True
+                    self.ps3.saveConfig()
+                self.hotfix_keyring_linuxWindow.Close()
                 self.mainWindow.UnHide()
                 break

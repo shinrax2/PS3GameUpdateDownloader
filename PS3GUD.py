@@ -47,6 +47,7 @@ class PS3GUD():
         self.configDefaults["proxy_port"] = ""
         self.configDefaults["proxy_user"] = ""
         self.configDefaults["proxy_pass"] = None
+        self.configDefaults["dont_show_again_hotfix_keyring_linux"] = False
         
     def setWindow(self, window):
         self.logger.window = window
@@ -69,7 +70,10 @@ class PS3GUD():
             with open(self.configFile, "r", encoding="utf8") as f:
                 self.config = json.loads(f.read())
             self.useDefaultConfig = False
-            self.config["proxy_pass"] = self.getProxyPass()
+            if self.config["use_proxy"] == True:
+                self.config["proxy_pass"] = self.getProxyPass()
+            else:
+                self.config["proxy_pass"] = None
             self.setupProxy()
         else:
             self.logger.log(self.loc.getKey("msg_noConfigFile"))
@@ -77,10 +81,13 @@ class PS3GUD():
             
     def setConfig(self, config):
         self.config = config
+        self.saveConfig()
+        
+    def saveConfig(self):
         with open(self.configFile, "w", encoding="utf8") as f:
             f.write(json.dumps(self.config, sort_keys=True, indent=4))
         self.logger.log(self.loc.getKey("msg_configFileSaved"))
-        self.useDefaultConfig = False
+        self.useDefaultConfig = False 
         
     def setProxyPass(self, pwd):
         keyring.set_password("ps3gud", "proxy_pass", pwd)
@@ -103,6 +110,7 @@ class PS3GUD():
             self.proxies["https"] += self.getConfig("proxy_ip")+":"+self.getConfig("proxy_port")
         else:
             self.proxies = {}
+            
     def getConfig(self, key):
         try:
             return self.config[key]
