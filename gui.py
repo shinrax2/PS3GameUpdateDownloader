@@ -16,6 +16,7 @@ import utils
 
 #pip packages
 import PySimpleGUI as sg
+import keyring
 
 class Gui():
     def __init__(self):
@@ -37,6 +38,23 @@ class Gui():
         #setup data
         self.TranslationItems = {}
         self.updateChecked = False
+        self.proxydisabled = False
+        self.noKeyrings = False
+        self.hotfixKeyring = False
+        
+        #hotfix for keyring and pyinstaller
+        if utils.isAppFrozen() == True:
+            self.proxydisabled = True
+            self.ps3.config["use_proxy"] = False
+            self.hotfixKeyring = True
+        
+        #check for avaiable keyring backends and disable proxy support if none is found
+        if self.hotfixKeyring == False:
+            rings = keyring.backend.get_all_keyring()
+            if len(rings) == 1 and isinstance(rings[0], keyring.backends.fail.Keyring) == True:
+                self.proxydisabled = True
+                self.ps3.config["use_proxy"] = False
+                self.noKeyrings = True
         
         #setup window style
         sg.change_look_and_feel("DarkAmber")
@@ -90,7 +108,13 @@ class Gui():
         
         #main loop
         while True:
-            if self.ps3.useDefaultConfig:
+            if self.hotfixKeyring == True:
+                if self.ps3.getConfig("dont_show_again_hotfix_keyring") == False:
+                    self.hotfix_keyring_Win()
+            if self.noKeyrings == True:
+                if self.ps3.getConfig("dont_show_again_keyring_support") == False:
+                    self.keyring_supportWin()
+            if self.ps3.useDefaultConfig == True:
                 self.configWin(nocancel=True)
             if self.ps3.getConfig("checkForNewRelease"):
                 if self.updateChecked == False:
@@ -176,8 +200,10 @@ class Gui():
             [sg.Button(self.loc.getKey("window_config_cancel_btn"), key="Cancel"), sg.Button(self.loc.getKey("window_config_save_btn"), key="Save", bind_return_key=True)]
         ]
         self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig, finalize=True)
-        if nocancel:
+        if nocancel == True:
             self.configWindow["Cancel"].Update(disabled=True)
+        if self.proxydisabled == True:
+            self.configWindow["use_proxy"].Update(disabled=True)
         if self.ps3.getConfig("use_proxy") == False:
             self.configWindow["proxy_ip"].Update(disabled=True)
             self.configWindow["proxy_port"].Update(disabled=True)
@@ -211,7 +237,8 @@ class Gui():
                         cL = l["language_short"]
                 config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThreshold": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "proxy_user": valConfig["proxy_user"], "use_proxy": valConfig["use_proxy"]}
                 self.ps3.setConfig(config)
-                self.ps3.setProxyPass(valConfig["proxy_pass"])
+                if self.ps3.getConfig("use_proxy") == True:
+                    self.ps3.setProxyPass(valConfig["proxy_pass"])
                 self.loc.setLoc(cL)
                 self.ps3.setupProxy()
                 self.retranslateWindow(self.mainWindow , self.loc, self.TranslationItems["mainWindow"])
@@ -337,5 +364,50 @@ class Gui():
                 break
             if evQueue == "Close":
                 self.queueWindow.Close()
+                self.mainWindow.UnHide()
+                break
+    
+    def hotfix_keyring_Win(self):
+        layout = [
+            [sg.Text(self.loc.getKey("window_hotfix_keyring_info_label"))],
+            [sg.Checkbox(self.loc.getKey("window_hotfix_keyring_dont_show_again_label"), default=False, key="dont_show_again"), sg.Button(self.loc.getKey("window_hotfix_keyring_ok_btn"), key="ok")]
+        ]
+        self.mainWindow.hide()
+        self.hotfix_keyring_Window = sg.Window(self.loc.getKey("window_hotfix_keyring_title"), layout, size=(600,100))
+        while True:
+            ev, val = self.hotfix_keyring_Window.read()
+            if ev == "ok":
+                if val["dont_show_again"] == True:
+                    self.ps3.config["dont_show_again_hotfix_keyring"] = True
+                    self.ps3.saveConfig()
+                self.hotfix_keyring_Window.Close()
+                self.mainWindow.UnHide()
+                break
+            if ev in (None, "Exit"):
+                self.hotfix_keyring_Window.Close()
+                self.mainWindow.UnHide()
+                break
+
+    def keyring_supportWin(self):
+        keyring_url = "https://github.com/jaraco/keyring"
+        layout = [
+            [sg.Text(self.loc.getKey("window_keyring_support_info_label", [keyring_url]))],
+            [sg.Checkbox(self.loc.getKey("window_keyring_support_dont_show_again_label"), default=False, key="dont_show_again"), sg.Button(self.loc.getKey("window_keyring_support_ok_btn"), key="ok"), sg.Button(self.loc.getKey("window_keyring_support_browser_btn"), key="browser")]
+        ]
+        self.mainWindow.hide()
+        self.keyring_supportWindow = sg.Window(self.loc.getKey("window_keyring_support_title"), layout, size=(600,100))
+        while True:
+            ev, val = self.keyring_supportWindow.read()
+            if ev == "ok":
+                if val["dont_show_again"] == True:
+                    self.ps3.config["dont_show_again_keyring_support"] = True
+                    self.ps3.saveConfig()
+                self.keyring_supportWindow.Close()
+                self.mainWindow.UnHide()
+                break
+            if ev == "browser":
+                webbrowser.open_new(keyring_url)
+            if ev in (None, "Exit"):
+                self.keyring_supportWindow.Close()
                 self.mainWindow.UnHide()
                 break
