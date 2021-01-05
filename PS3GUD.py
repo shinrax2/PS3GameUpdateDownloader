@@ -47,7 +47,8 @@ class PS3GUD():
         self.configDefaults["proxy_port"] = ""
         self.configDefaults["proxy_user"] = ""
         self.configDefaults["proxy_pass"] = None
-        self.configDefaults["dont_show_again_hotfix_keyring_linux"] = False
+        self.configDefaults["dont_show_again_hotfix_keyring"] = False
+        self.configDefaults["dont_show_again_keyring_support"] = False
         
     def setWindow(self, window):
         self.logger.window = window
@@ -58,11 +59,12 @@ class PS3GUD():
     def logHeader(self, version, psgversion):
         self.logger.log("PS3GameUpdateDownloader "+version)
         self.logger.log("Config File: "+self.configFile)
-        self.logger.log("Language: "+ self.loc.getLoc()+"\n\n")
+        self.logger.log("Language: "+ self.loc.getLoc())
         self.logger.log("Current working directory: "+os.getcwd())
         self.logger.log("Compiled: "+str(utils.isAppFrozen()))
         self.logger.log("PySimpleGUI version: "+psgversion)
         self.logger.log("Python version: "+sys.version)
+        self.logger.log("\n")
         
     def loadConfig(self):
         if os.path.exists(self.configFile) and os.path.isfile(self.configFile):

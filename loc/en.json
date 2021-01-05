@@ -56,6 +56,17 @@
     "window_queue_movedown_btn": "Move Down",
     "window_queue_remove_btn": "Remove",
     "window_queue_totalsize_label": "Total Size: {0}",
+	
+	"window_hotfix_keyring_info_label": "Due issues between keyring and PyInstaller proxy support is disabled in compiled releases.\nIf you really need proxy support please download a source release and use that.\nI'm working on fiding some fix for this.",
+	"window_hotfix_keyring_dont_show_again_label": "Don't show again",
+	"window_hotfix_keyring_ok_btn": "Ok",
+	"window_hotfix_keyring_title": "Warning! Proxy support disabled!",
+
+	"window_keyring_support_info_label": "No viable keyring backends were found.\nPlease check the homepage of keyring for an installation guide.\n{0}",
+	"window_keyring_support_dont_show_again_label": "Don't show again",
+	"window_keyring_support_ok_btn": "Ok",
+	"window_keyring_support_browser_btn": "Open in browser",
+	"window_keyring_support_title": "Warning! Proxy support disabled!",
     
     "msg_configFileLoaded": "Loaded configuration file!",
     "msg_noConfigFile": "No configuration file found! Using defaults!",

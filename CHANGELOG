@@ -22,6 +22,8 @@ future release (aka current master branch):
 -  minor typos in english translation
 -  fix cutoff strings
 -  fix crash when available disc space is below threshold
+-  hotfix for issues between keyring and PyInstaller
+-  inform user when no viable keyring backend could be found
 
 v007:
 -  fixed main window becoming malfunctional when pressing download in the queue window with an empty queue

@@ -56,6 +56,17 @@
     "window_queue_movedown_btn": "Nach Unten",
     "window_queue_remove_btn": "Löschen",
     "window_queue_totalsize_label": "Gesamtgröße: {0}",
+	
+	"window_hotfix_keyring_info_label": "Aufgrund von Problemen zwischen keyring and PyInstaller ist die Proxy Unterstützung in kompilierten Releases deaktiviert.\nWenn Sie Proxy Unterstützung wirklich benötigten, bitte laden Sie ein source release herunter und nutzen diese.\nIch arbeite bereits an einer Lösung für dieses Problem.",
+	"window_hotfix_keyring_dont_show_again_label": "Nicht nochmal anzeigen",
+	"window_hotfix_keyring_ok_btn": "Ok",
+	"window_hotfix_keyring_title": "Achtung! Proxy Unterstützung deaktiviert!",
+
+	"window_keyring_support_info_label": "Kein brauchbares keyring backend gefunden.\nBesuche bitte die Website von keyring für eine Installationsanleitung.\n{0}",
+	"window_keyring_support_dont_show_again_label": "Nicht nochmal anzeigen",
+	"window_keyring_support_ok_btn": "Ok",
+	"window_keyring_support_browser_btn": "Im Browser öffnen",
+	"window_keyring_support_title": "Achtung! Proxy Unterstützung deaktiviert!",
     
     "msg_configFileLoaded": "Konfigurationsdatei geladen!",
     "msg_noConfigFile": "Keine Konfigurationsdatei gefunden! Benutze Vorgaben!",
