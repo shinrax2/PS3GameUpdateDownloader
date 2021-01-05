@@ -11,10 +11,14 @@ Features:
 
 Grab the latest release [here](https://github.com/shinrax2/PS3GameUpdateDownloader/releases/tag/v006) and check the ["Getting Started"](https://github.com/shinrax2/PS3GameUpdateDownloader/wiki/Getting-Started) page on the wiki!
 
+# Contributions
+Contributions in form of translations and bug fixes are welcome.
+
 # Disclaimer:
 This program isnt supported by or affiliated with Sony.
 
 # Screenshots:
 ![Main window](https://github.com/shinrax2/PS3GameUpdateDownloader/raw/master/screenshots/main.PNG)
 ![Config window](https://github.com/shinrax2/PS3GameUpdateDownloader/raw/master/screenshots/config.PNG)
-![Queue window](https://github.com/shinrax2/PS3GameUpdateDownloader/raw/master/screenshots/queue.PNG)![Update select window](https://github.com/shinrax2/PS3GameUpdateDownloader/raw/master/screenshots/select.PNG)
+![Queue window](https://github.com/shinrax2/PS3GameUpdateDownloader/raw/master/screenshots/queue.PNG)
+![Update select window](https://github.com/shinrax2/PS3GameUpdateDownloader/raw/master/screenshots/select.PNG)
