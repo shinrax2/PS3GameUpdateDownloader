@@ -1,5 +1,5 @@
 {
-    "loc_version": "v007",
+    "loc_version": "v008",
     "language_name": "Türkçe",
     "language_short": "tr",
     
@@ -56,6 +56,17 @@
     "window_queue_movedown_btn": "Aşağı indir",
     "window_queue_remove_btn": "Kaldır",
     "window_queue_totalsize_label": "Toplam Boyut: {0}",
+	
+	"window_hotfix_keyring_info_label": "Keyring ve PyInstaller arasındaki sorunlardan ötürü derlenmiş sürümlerde proxy desteği kapatıldı.\nEğer gerçekten proxy desteğine ihtiyacınız varsa, lütfen bir kaynak sürümü indirin ve onu kullanın.\nBunun için bir çözüm üzerine çalışıyorum.",
+	"window_hotfix_keyring_dont_show_again_label": "Tekrar gösterme",
+	"window_hotfix_keyring_ok_btn": "Tamam",
+	"window_hotfix_keyring_title": "Dikkat! Proxy desteği kapatıldı!",
+
+	"window_keyring_support_info_label": "Geçerli backend keyring'i bulunamadı.\nLütfen, ilgili yükleme rehberi için keyring'in anasayfasını ziyaret edin.\n{0}",
+	"window_keyring_support_dont_show_again_label": "Tekrar gösterme",
+	"window_keyring_support_ok_btn": "Tamam",
+	"window_keyring_support_browser_btn": "Tarayıcıda aç",
+	"window_keyring_support_title": "Dikkat! Proxy desteği kapatıldı!",
     
     "msg_configFileLoaded": "Ayar dosyası indirildi!",
     "msg_noConfigFile": "Ayar dosyası bulunamadı! Varsayılan ayarlar kullanılıyor!",
