@@ -12,10 +12,6 @@ import platform
 import json
 import logging
 
-#pip packages
-#import PyInstaller.__main__
-import git
-
 def buildheader(version, commitid , filepath , pyiver="None"):
     lines = [   "Building PS3GameUpdateDownloader",
                 "Build script arguments: "+str(sys.argv),
@@ -107,14 +103,13 @@ parser.add_argument("-r", action="store_true", help="building a release version"
 parser.add_argument("-d", action="store_true", help="building a debug version")
 parser.add_argument("-z", action="store_true", help="pack the build to a .zip file")
 parser.add_argument("-upx", action="store_true", help="use UPX to shrink executables")
+parser.add_argument("-nogit", action="store_true", help="dont use git in the buildscript")
 args = parser.parse_args()
 
 #constants
 builddir = "dist/PS3GameUpdateDownloader"
 buildlog = os.path.join(builddir, "build.log")
 suffix = ""
-repo = git.Repo()
-gitver = repo.head.object.hexsha
 if platform.system() == "Windows":
     suffix = ".exe"
     ostype = "win"
@@ -157,6 +152,12 @@ if args.c == True and args.upx == True:
 if args.z == True:
     zip = True
     zipname = "dist/PS3GameUpdateDownloader-"+version
+if args.nogit == True:
+    gitver = "None"
+else:
+    import git
+    repo = git.Repo()
+    gitver = repo.head.object.hexsha
 
 if action == "sourcerelease":
     #release running from source
