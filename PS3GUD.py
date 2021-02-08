@@ -87,7 +87,7 @@ class PS3GUD():
         
     def saveConfig(self):
         with open(self.configFile, "w", encoding="utf8") as f:
-            f.write(json.dumps(self.config, sort_keys=True, indent=4))
+            f.write(json.dumps(self.config, sort_keys=True, indent=4, ensure_ascii=False))
         self.logger.log(self.loc.getKey("msg_configFileSaved"))
         self.useDefaultConfig = False 
         

@@ -4,6 +4,7 @@
 
 future release (aka current master branch):
 +  update turkish translation
++  use UPX for builds to produce smaller binaries and hopefully slightly less antivirus false positives
 -  fix cut off header in build.log
 
 v008:
