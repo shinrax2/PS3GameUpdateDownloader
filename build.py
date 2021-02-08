@@ -240,6 +240,8 @@ if action == "compilerelease":
     ]
     if upx_check == True:
         arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
+        if platform.system() == "Windows": # fix for UPX
+            arg_main.append("--upx-exclude=vcruntime140.dll")
     arg_main.append("main.py")
     PyInstaller.__main__.run(arg_main)
     #build updater executable
@@ -251,6 +253,8 @@ if action == "compilerelease":
     ]
     if upx_check == True:
         arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())
+        if platform.system() == "Windows": # fix for UPX
+            arg_updater.append("--upx-exclude=vcruntime140.dll")
     arg_updater.append("updater.py")
     PyInstaller.__main__.run(arg_updater)
     #move executables to buildir
@@ -287,19 +291,31 @@ if action == "compiledebug":
         fh.setFormatter(logging.Formatter('%(relativeCreated)d %(levelname)s: %(message)s'))
         log = logging.getLogger("PyInstaller")
         log.addHandler(fh)
-        PyInstaller.__main__.run([
+        arg_main = [
             "--name=ps3gud",
+            "--clean",
             "--onefile",
             "--windowed",
-            "main.py"
-        ])
+        ]
+        if upx_check == True:
+            arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
+            if platform.system() == "Windows": # fix for UPX
+                arg_main.append("--upx-exclude=vcruntime140.dll")
+        arg_main.append("main.py")
+        PyInstaller.__main__.run(arg_main)
         #build updater executable
-        PyInstaller.__main__.run([
+        arg_updater = [
             "--name=PS3GUDup",
+            "--clean",
             "--onefile",
             "--windowed",
-            "updater.py"
-        ])
+        ]
+        if upx_check == True:
+            arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())
+            if platform.system() == "Windows": # fix for UPX
+                arg_updater.append("--upx-exclude=vcruntime140.dll")
+        arg_updater.append("updater.py") 
+        PyInstaller.__main__.run(arg_updater)
         #move executables to buildir
         shutil.move("dist/ps3gud"+suffix, os.path.join(builddir, "ps3gud"+suffix))
         shutil.move("dist/PS3GUDup"+suffix, os.path.join(builddir, "PS3GUDup"+suffix))
