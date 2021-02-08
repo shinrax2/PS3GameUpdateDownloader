@@ -3,6 +3,8 @@
 - bugfix
 
 future release (aka current master branch):
++  update turkish translation
+-  fix cut off header in build.log
 
 v008:
 !  refactored gui code

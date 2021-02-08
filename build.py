@@ -17,14 +17,51 @@ import logging
 #import PyInstaller.__main__
 import git
 
-def buildheader(version, commitid, args, pyiver="None"):
-    print("Building PS3GameUpdateDownloader")
-    print("Version: "+version)
-    print("Git Commit: "+commitid)
-    print("Python version: "+sys.version)
-    print("PyInstaller version: "+pyiver)
-    print("Compiled: "+str(args.c))
-    print("Debug: "+str(args.d))
+def buildheader(version, commitid , filepath , pyiver="None"):
+    lines = [   "Building PS3GameUpdateDownloader",
+                "Build script arguments: "+str(sys.argv),
+                "Version: "+version,
+                "Git Commit: "+commitid,
+                "Python version: "+sys.version
+            ]
+    if pyiver != "None":
+        lines.append("PyInstaller version: "+pyiver)
+        lines.append("")
+        lines.append("PyInstaller Output:")
+        lines.append("")
+    with Prepender(filepath) as filehandle:
+        filehandle.write_lines(lines)
+    
+class Prepender(object): # from https://stackoverflow.com/questions/2677617/write-at-beginning-of-file/20805898#20805898
+    def __init__(self,
+                 file_path,
+                ):
+        # Read in the existing file, so we can write it back later
+        with open(file_path, mode='r') as f:
+            self.__write_queue = f.readlines()
+
+        self.__open_file = open(file_path, mode='w')
+
+    def write_line(self, line): # line order is reversed
+        self.__write_queue.insert(0,
+                                  "%s\n" % line,
+                                 )
+
+    def write_lines(self, lines): # line order is maintained
+        lines.reverse()
+        for line in lines:
+            self.write_line(line)
+
+    def close(self):
+        self.__exit__(None, None, None)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        if self.__write_queue:
+            self.__open_file.writelines(self.__write_queue)
+        self.__open_file.close()
 
 #setup argparse
 parser = argparse.ArgumentParser(description="buildscript for PS3GameUpdateDownloader")
@@ -37,6 +74,7 @@ args = parser.parse_args()
 
 #constants
 builddir = "dist/PS3GameUpdateDownloader"
+buildlog = os.path.join(builddir, "build.log")
 suffix = ""
 arch = ""
 repo = git.Repo()
@@ -52,6 +90,7 @@ if platform.architecture()[0] == "64bit":
     arch += "64"
 with open("release.json", "r", encoding="utf8") as f:
     version = json.loads(f.read())["version"]
+
 #check parameters
 action = ""
 zip = False
@@ -81,9 +120,10 @@ if action == "sourcerelease":
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
-    with open(os.path.join(builddir, "build.log"), "w") as f:
+    with open(buildlog, "w") as f:
         with contextlib.redirect_stdout(f):
-            buildheader(version, gitver, args)
+            #write header to buildlog
+            buildheader(version, gitver, buildlog)
            #copy scripts
             shutil.copy2("main.py", os.path.join(builddir, "main.py"))
             shutil.copy2("utils.py", os.path.join(builddir, "utils.py"))
@@ -97,7 +137,6 @@ if action == "sourcerelease":
             shutil.copy2("release.json", os.path.join(builddir, "release.json"))
             shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
             shutil.copytree("./loc", os.path.join(builddir, "loc"))
-            
             #build zip
             if zip == True:
                 shutil.make_archive(zipname+"-source", "zip", "dist", os.path.relpath(builddir, "dist"))
@@ -105,15 +144,17 @@ if action == "sourcerelease":
 if action == "sourcedebug":
     #debug running from source
     builddir += "Debug"
+    buildlog = os.path.join(builddir, "build.log")
     if os.path.exists(builddir):
         #delete old build
         shutil.rmtree(builddir)
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
-    with open(os.path.join(builddir, "build.log"), "w") as f:
+    with open(buildlog, "w") as f:
         with contextlib.redirect_stdout(f):
-            buildheader(version, gitver, args)
+            #write header to buildlog
+            buildheader(version, gitver, buildlog)
             #copy scripts
             shutil.copy2("main.py", os.path.join(builddir, "main.py"))
             shutil.copy2("utils.py", os.path.join(builddir, "utils.py"))
@@ -127,7 +168,6 @@ if action == "sourcedebug":
             shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
             shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
             shutil.copytree("./loc", os.path.join(builddir, "loc"))
-            
             #build zip
             if zip == True:
                 shutil.make_archive(zipname+"-source-debug", "zip", "dist", os.path.relpath(builddir, "dist"))
@@ -140,12 +180,11 @@ if action == "compilerelease":
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
-    with open(os.path.join(builddir, "build.log"), "w") as f:
+    with open(buildlog, "w") as f:
         with contextlib.redirect_stdout(f):
             #build main executable
             import PyInstaller.__main__
             import PyInstaller.__init__
-            buildheader(version, gitver, args, pyiver=PyInstaller.__init__.__version__)
             fh = logging.FileHandler(os.path.join(builddir, "build.log"))
             fh.setLevel(logging.DEBUG)
             fh.setFormatter(logging.Formatter('%(relativeCreated)d %(levelname)s: %(message)s'))
@@ -173,7 +212,8 @@ if action == "compilerelease":
             shutil.copy2("release.json", os.path.join(builddir, "release.json"))
             shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
             shutil.copytree("./loc", os.path.join(builddir, "loc"))
-            
+            #write header to buildlog
+            buildheader(version, gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
             #build zip
             if zip == True:
                 shutil.make_archive(zipname+"-"+arch, "zip", "dist", os.path.relpath(builddir, "dist"))
@@ -181,18 +221,18 @@ if action == "compilerelease":
 if action == "compiledebug":
     #compiled debug
     builddir += "Debug"
+    buildlog = os.path.join(builddir, "build.log")
     #delete old build
     if os.path.exists(builddir):
         shutil.rmtree(builddir)
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
-    with open(os.path.join(builddir, "build.log"), "w") as f:
+    with open(buildlog, "w") as f:
         with contextlib.redirect_stdout(f):
             #build main executable
             import PyInstaller.__main__
             import PyInstaller.__init__
-            buildheader(version, gitver, args, pyiver=PyInstaller.__init__.__version__)
             fh = logging.FileHandler(os.path.join(builddir, "build.log"))
             fh.setLevel(logging.DEBUG)
             fh.setFormatter(logging.Formatter('%(relativeCreated)d %(levelname)s: %(message)s'))
@@ -220,7 +260,8 @@ if action == "compiledebug":
             shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
             shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
             shutil.copytree("./loc", os.path.join(builddir, "loc"))
-            
+            #write header to buildlog
+            buildheader(version, gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
             #build zip
             if zip == True:
                 shutil.make_archive(zipname+"-"+arch+"-debug", "zip", "dist", os.path.relpath(builddir, "dist"))
