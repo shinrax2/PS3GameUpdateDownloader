@@ -47,7 +47,6 @@ class PS3GUD():
         self.configDefaults["proxy_port"] = ""
         self.configDefaults["proxy_user"] = ""
         self.configDefaults["proxy_pass"] = None
-        self.configDefaults["dont_show_again_hotfix_keyring"] = False
         self.configDefaults["dont_show_again_keyring_support"] = False
         
     def setWindow(self, window):

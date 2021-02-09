@@ -40,21 +40,13 @@ class Gui():
         self.updateChecked = False
         self.proxydisabled = False
         self.noKeyrings = False
-        self.hotfixKeyring = False
-        
-        #hotfix for keyring and pyinstaller
-        if utils.isAppFrozen() == True:
-            self.proxydisabled = True
-            self.ps3.config["use_proxy"] = False
-            self.hotfixKeyring = True
         
         #check for avaiable keyring backends and disable proxy support if none is found
-        if self.hotfixKeyring == False:
-            rings = keyring.backend.get_all_keyring()
-            if len(rings) == 1 and isinstance(rings[0], keyring.backends.fail.Keyring) == True:
-                self.proxydisabled = True
-                self.ps3.config["use_proxy"] = False
-                self.noKeyrings = True
+        rings = keyring.backend.get_all_keyring()
+        if len(rings) == 1 and isinstance(rings[0], keyring.backends.fail.Keyring) == True:
+            self.proxydisabled = True
+            self.ps3.config["use_proxy"] = False
+            self.noKeyrings = True
         
         #setup window style
         sg.change_look_and_feel("DarkAmber")
@@ -108,9 +100,6 @@ class Gui():
         
         #main loop
         while True:
-            if self.hotfixKeyring == True:
-                if self.ps3.getConfig("dont_show_again_hotfix_keyring") == False:
-                    self.hotfix_keyring_Win()
             if self.noKeyrings == True:
                 if self.ps3.getConfig("dont_show_again_keyring_support") == False:
                     self.keyring_supportWin()
@@ -364,27 +353,6 @@ class Gui():
                 break
             if evQueue == "Close":
                 self.queueWindow.Close()
-                self.mainWindow.UnHide()
-                break
-    
-    def hotfix_keyring_Win(self):
-        layout = [
-            [sg.Text(self.loc.getKey("window_hotfix_keyring_info_label"))],
-            [sg.Checkbox(self.loc.getKey("window_hotfix_keyring_dont_show_again_label"), default=False, key="dont_show_again"), sg.Button(self.loc.getKey("window_hotfix_keyring_ok_btn"), key="ok")]
-        ]
-        self.mainWindow.hide()
-        self.hotfix_keyring_Window = sg.Window(self.loc.getKey("window_hotfix_keyring_title"), layout, size=(600,100))
-        while True:
-            ev, val = self.hotfix_keyring_Window.read()
-            if ev == "ok":
-                if val["dont_show_again"] == True:
-                    self.ps3.config["dont_show_again_hotfix_keyring"] = True
-                    self.ps3.saveConfig()
-                self.hotfix_keyring_Window.Close()
-                self.mainWindow.UnHide()
-                break
-            if ev in (None, "Exit"):
-                self.hotfix_keyring_Window.Close()
                 self.mainWindow.UnHide()
                 break
 
