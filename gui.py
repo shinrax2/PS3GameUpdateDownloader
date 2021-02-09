@@ -40,6 +40,10 @@ class Gui():
         self.updateChecked = False
         self.proxydisabled = False
         self.noKeyrings = False
+        if platform.system() == "Windows":
+            self.iconpath = os.path.abspath(os.path.join("logos", "icon.ico"))
+        else:
+            self.iconpath = os.path.abspath(os.path.join("logos", "icon_16x16.png"))
         
         #check for avaiable keyring backends and disable proxy support if none is found
         rings = keyring.backend.get_all_keyring()
@@ -93,7 +97,7 @@ class Gui():
         translateMainItems["Queue"] = "window_main_queue_btn"
         translateMainItems["Exit"] = "window_main_exit_btn"
         self.TranslationItems["mainWindow"] = translateMainItems
-        self.mainWindow = sg.Window(self.loc.getKey("window_main_title")+" "+self.rel.getVersion(), layout, finalize=True)
+        self.mainWindow = sg.Window(self.loc.getKey("window_main_title")+" "+self.rel.getVersion(), layout, finalize=True, icon=self.iconpath)
         self.tryDl = False
         self.ps3.setWindow(self.mainWindow)
         self.ps3.logHeader(self.rel.getVersion(), sg.version)
@@ -149,7 +153,7 @@ class Gui():
                 [sg.Column([[sg.Text(self.rel.getChangelog(), size=(300, len(self.rel.getChangelog().split("\n"))*2))]], size=(700, 300), scrollable=True)],
                 [sg.Button(self.loc.getKey("window_relNotify_dl_btn"), key="dl"), sg.Button(self.loc.getKey("window_relNotify_web_btn"), key="web"), sg.Button(self.loc.getKey("window_relNotify_close_btn"), key="close")]
             ]
-            self.newReleaseWindow = sg.Window(self.loc.getKey("window_relNotify_title"), layoutRelNotify)
+            self.newReleaseWindow = sg.Window(self.loc.getKey("window_relNotify_title"), layoutRelNotify, icon=self.iconpath)
             while True:
                 evRel, valRel = self.newReleaseWindow.read()
                 if evRel == "close":
@@ -188,7 +192,7 @@ class Gui():
             [sg.Text(self.loc.getKey("window_config_proxypass_label"), size=(40,1)), sg.In(self.ps3.getConfig("proxy_pass"), key="proxy_pass", password_char="*")],
             [sg.Button(self.loc.getKey("window_config_cancel_btn"), key="Cancel"), sg.Button(self.loc.getKey("window_config_save_btn"), key="Save", bind_return_key=True)]
         ]
-        self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig, finalize=True)
+        self.configWindow = sg.Window(self.loc.getKey("window_config_title"), layoutConfig, finalize=True, icon=self.iconpath)
         if nocancel == True:
             self.configWindow["Cancel"].Update(disabled=True)
         if self.proxydisabled == True:
@@ -250,7 +254,7 @@ class Gui():
                 [sg.Text(self.loc.getKey("window_select_help_label"), size=(45,2))],
                 [sg.Button(self.loc.getKey("window_select_download_btn"), key="OK", disabled=True),sg.Button(self.loc.getKey("window_select_queue_btn"), key="Queue", disabled=True), sg.Button(self.loc.getKey("window_select_cancel_btn"), key="Cancel")]
             ]
-            self.selectWindow = sg.Window(self.loc.getKey("window_select_title"), lay2)
+            self.selectWindow = sg.Window(self.loc.getKey("window_select_title"), lay2, icon=self.iconpath)
             while True:
                 ev2, val2 = self.selectWindow.Read()
                 if len(val2["Table"]) > 0:
@@ -308,7 +312,7 @@ class Gui():
                     [sg.Button(self.loc.getKey("window_queue_moveup_btn"), key="Move Up", disabled=True), sg.Button(self.loc.getKey("window_queue_movedown_btn"), key="Move Down", disabled=True), sg.Button(self.loc.getKey("window_queue_remove_btn"), key="Remove", disabled=True)],
                     [sg.Button(self.loc.getKey("window_queue_download_btn"), key="Download"), sg.Button(self.loc.getKey("window_queue_close_btn"), key="Close")]
         ]
-        self.queueWindow = sg.Window(self.loc.getKey("window_queue_title"), layQueue)
+        self.queueWindow = sg.Window(self.loc.getKey("window_queue_title"), layQueue, icon=self.iconpath)
         while True:
             evQueue, valQueue = self.queueWindow.read()
             if len(valQueue["Table"]) == 0:
@@ -363,7 +367,7 @@ class Gui():
             [sg.Checkbox(self.loc.getKey("window_keyring_support_dont_show_again_label"), default=False, key="dont_show_again"), sg.Button(self.loc.getKey("window_keyring_support_ok_btn"), key="ok"), sg.Button(self.loc.getKey("window_keyring_support_browser_btn"), key="browser")]
         ]
         self.mainWindow.hide()
-        self.keyring_supportWindow = sg.Window(self.loc.getKey("window_keyring_support_title"), layout, size=(600,100))
+        self.keyring_supportWindow = sg.Window(self.loc.getKey("window_keyring_support_title"), layout, size=(600,100), icon=self.iconpath)
         while True:
             ev, val = self.keyring_supportWindow.read()
             if ev == "ok":

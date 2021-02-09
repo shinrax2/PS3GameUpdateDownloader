@@ -34,10 +34,7 @@ class Upx():
         if os.path.isfile(self.build_config):
             with open(self.build_config, "r", encoding="utf8") as f:
                 self.upx = json.loads(f.read())
-    
-    #def __del__(self):
-    #    self.save_upx_paths()
-    
+
     def get_upx_dir(self, arch=("win" if platform.system() == "Windows" else "linux")+("64" if platform.architecture()[0] == "64bit" else "32")):
         try:
             return self.upx[arch]
@@ -120,6 +117,7 @@ if platform.architecture()[0] == "32bit":
 if platform.architecture()[0] == "64bit":
     bits = "64"
 arch = ostype + bits
+iconpath = os.path.abspath(os.path.join("logos", "icon.ico"))
 
 with open("release.json", "r", encoding="utf8") as f:
     version = json.loads(f.read())["version"]
@@ -183,6 +181,7 @@ if action == "sourcerelease":
         shutil.copy2("release.json", os.path.join(builddir, "release.json"))
         shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
         shutil.copytree("./loc", os.path.join(builddir, "loc"))
+        shutil.copytree("./logos", os.path.join(builddir, "logos"))
         #build zip
         if zip == True:
             shutil.make_archive(zipname+"-source", "zip", "dist", os.path.relpath(builddir, "dist"))
@@ -213,6 +212,7 @@ if action == "sourcedebug":
         shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
         shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
         shutil.copytree("./loc", os.path.join(builddir, "loc"))
+        shutil.copytree("./logos", os.path.join(builddir, "logos"))
         #build zip
         if zip == True:
             shutil.make_archive(zipname+"-source-debug", "zip", "dist", os.path.relpath(builddir, "dist"))
@@ -238,6 +238,7 @@ if action == "compilerelease":
         "--clean",
         "--onefile",
         "--windowed",
+        "--icon="+iconpath
     ]
     if upx_check == True:
         arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
@@ -251,6 +252,7 @@ if action == "compilerelease":
         "--clean",
         "--onefile",
         "--windowed",
+        "--icon=NONE"
     ]
     if upx_check == True:
         arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())
@@ -267,6 +269,7 @@ if action == "compilerelease":
     shutil.copy2("release.json", os.path.join(builddir, "release.json"))
     shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
+    shutil.copytree("./logos", os.path.join(builddir, "logos"))
     #write header to buildlog
     buildheader(version, gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
     #build zip
@@ -310,6 +313,7 @@ if action == "compiledebug":
             "--clean",
             "--onefile",
             "--windowed",
+            "--icon=NONE"
         ]
         if upx_check == True:
             arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())
@@ -326,6 +330,7 @@ if action == "compiledebug":
         shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
         shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
         shutil.copytree("./loc", os.path.join(builddir, "loc"))
+        shutil.copytree("./logos", os.path.join(builddir, "logos"))
         #write header to buildlog
         buildheader(version, gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
         #build zip
