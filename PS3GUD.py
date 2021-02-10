@@ -195,7 +195,7 @@ class PS3GUD():
             id = dl["gameid"]
             fdir = os.path.join(self.config["dldir"]+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+"["+id+"]/")
             fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
-            total, used, free = shutil.disk_usage(fdir)
+
             if os.path.exists(self.config["dldir"]) == False and os.path.isfile(self.config["dldir"]) == False:
                 try:
                     os.mkdir(self.config["dldir"])
@@ -208,7 +208,8 @@ class PS3GUD():
                 except (PermissionError, FileNotFoundError):
                     self.logger.log(self.loc.getKey("msg_dldirNotWriteable", [self.config["dldir"]]))
                     skip = True
-
+            total, used, free = shutil.disk_usage(fdir)
+            
             if self.config["checkIfAlreadyDownloaded"] == True:
                 #check if file already exists
                 if os.path.exists(fname) and os.path.isfile(fname):
