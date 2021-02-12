@@ -3,11 +3,15 @@
 - bugfix
 
 future release (aka current master branch):
+
+v009:
 +  update turkish translation
 +  use UPX for builds to produce smaller binaries and hopefully slightly less antivirus false positives
 +  added an icon to the executable and the windows
 -  fix cut off header in build.log
 -  removed hotfix for issues between keyring and PyInstaller
+-  fix crash when downloading updates
+-  fix finding updates on modern linux
 
 v008:
 !  refactored gui code

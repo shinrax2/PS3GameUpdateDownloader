@@ -14,13 +14,14 @@ import logging
 
 def buildheader(version, commitid , filepath , pyiver="None"):
     lines = [   "Building PS3GameUpdateDownloader",
-                "Build script arguments: "+str(sys.argv),
+                "Build script arguments: "+str(sys.argv[1:]),
                 "Version: "+version,
                 "Git Commit: "+commitid,
                 "Python version: "+sys.version
             ]
     if pyiver != "None":
         lines.append("PyInstaller version: "+pyiver)
+        lines.append("Platform: "+platform.system()+" "+platform.architecture()[0])
         lines.append("")
         lines.append("PyInstaller Output:")
         lines.append("")
@@ -124,7 +125,7 @@ with open("release.json", "r", encoding="utf8") as f:
 
 #check parameters
 action = ""
-zip = False
+zip_check = False
 upx_check = False
 if args.c == True and args.s == True:
     print("You cant pass \"-c\" and \"-s\" to the buildscript.")
@@ -148,7 +149,7 @@ if args.c == True and args.upx == True:
     upx_check = True
     upx_paths = Upx()
 if args.z == True:
-    zip = True
+    zip_check = True
     zipname = "dist/PS3GameUpdateDownloader-"+version
 if args.nogit == True:
     gitver = "None"
@@ -183,7 +184,7 @@ if action == "sourcerelease":
         shutil.copytree("./loc", os.path.join(builddir, "loc"))
         shutil.copytree("./logos", os.path.join(builddir, "logos"))
         #build zip
-        if zip == True:
+        if zip_check == True:
             shutil.make_archive(zipname+"-source", "zip", "dist", os.path.relpath(builddir, "dist"))
    
 if action == "sourcedebug":
@@ -214,7 +215,7 @@ if action == "sourcedebug":
         shutil.copytree("./loc", os.path.join(builddir, "loc"))
         shutil.copytree("./logos", os.path.join(builddir, "logos"))
         #build zip
-        if zip == True:
+        if zipzip_check == True:
             shutil.make_archive(zipname+"-source-debug", "zip", "dist", os.path.relpath(builddir, "dist"))
         
 if action == "compilerelease":
@@ -273,7 +274,7 @@ if action == "compilerelease":
     #write header to buildlog
     buildheader(version, gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
     #build zip
-    if zip == True:
+    if zip_check == True:
         shutil.make_archive(zipname+"-"+arch, "zip", "dist", os.path.relpath(builddir, "dist"))
 
 if action == "compiledebug":
@@ -300,6 +301,7 @@ if action == "compiledebug":
             "--clean",
             "--onefile",
             "--windowed",
+            "--icon="+iconpath
         ]
         if upx_check == True:
             arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
@@ -334,5 +336,5 @@ if action == "compiledebug":
         #write header to buildlog
         buildheader(version, gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
         #build zip
-        if zip == True:
+        if zip_check == True:
             shutil.make_archive(zipname+"-"+arch+"-debug", "zip", "dist", os.path.relpath(builddir, "dist"))

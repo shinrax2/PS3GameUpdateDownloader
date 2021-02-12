@@ -40,6 +40,7 @@ class Gui():
         self.updateChecked = False
         self.proxydisabled = False
         self.noKeyrings = False
+        self.keyring_support_shown = False
         if platform.system() == "Windows":
             self.iconpath = os.path.abspath(os.path.join("logos", "icon.ico"))
         else:
@@ -105,8 +106,10 @@ class Gui():
         #main loop
         while True:
             if self.noKeyrings == True:
-                if self.ps3.getConfig("dont_show_again_keyring_support") == False:
-                    self.keyring_supportWin()
+                if self.keyring_support_shown == False:
+                    if self.ps3.getConfig("dont_show_again_keyring_support") == False:
+                        self.keyring_supportWin()
+                        self.keyring_support_shown = True
             if self.ps3.useDefaultConfig == True:
                 self.configWin(nocancel=True)
             if self.ps3.getConfig("checkForNewRelease"):
