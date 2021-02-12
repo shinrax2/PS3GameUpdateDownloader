@@ -152,15 +152,19 @@ class PS3GUD():
         #check for updates
         updates = []
         url = urllib.parse.urljoin(urllib.parse.urljoin("https://a0.ww.np.dl.playstation.net/tpl/np/", self.titleid+"/"), self.titleid+"-ver.xml")
-        requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.SubjectAltNameWarning) 
+        requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.SubjectAltNameWarning)
+        requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
         try:
             resp = requests.get(url, verify="sony.pem", proxies=self.proxies)
         except requests.exceptions.ConnectionError:
-            self.logger.log(self.loc.getKey("msg_metaNotAvailable"), "e")
-            if self.getConfig("use_proxy"):
-                self.logger.log(self.loc.getKey("msg_checkProxySettings"))
-            self.titleid = ""
-            return
+            try:
+                resp = requests.get(url, verify=False, proxies=self.proxies)
+            except requests.exceptions.ConnectionError:
+                self.logger.log(self.loc.getKey("msg_metaNotAvailable"), "e")
+                if self.getConfig("use_proxy"):
+                    self.logger.log(self.loc.getKey("msg_checkProxySettings"))
+                self.titleid = ""
+                return
         
         info = resp.content
         #check file length for titles like BCAS20074
