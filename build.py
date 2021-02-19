@@ -133,7 +133,7 @@ if args.c == True and args.s == True:
 if args.d == True and args.r == True:
     print("You cant pass \"-d\" and \"-r\" to the buildscript.")
     sys.exit()
-if args.c == False and arga.upx == True:
+if args.c == False and args.upx == True:
     print("You need to build a compiled release to use UPX")
     sys.exit()
 if args.s == True and args.r == True:
