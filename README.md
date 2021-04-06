@@ -9,7 +9,7 @@ Features:
 - Localized GUI
 - Automatic updates
 
-Grab the latest release [here](https://github.com/shinrax2/PS3GameUpdateDownloader/releases/tag/v006) and check the ["Getting Started"](https://github.com/shinrax2/PS3GameUpdateDownloader/wiki/Getting-Started) page on the wiki!
+Grab the latest release [here](https://github.com/shinrax2/PS3GameUpdateDownloader/releases/latest) and check the ["Getting Started"](https://github.com/shinrax2/PS3GameUpdateDownloader/wiki/Getting-Started) page on the wiki!
 
 # Contributions
 Contributions in form of translations and bug fixes are welcome.

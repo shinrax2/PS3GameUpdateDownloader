@@ -109,7 +109,6 @@ class Gui():
                 if self.keyring_support_shown == False:
                     if self.ps3.getConfig("dont_show_again_keyring_support") == False:
                         self.keyring_supportWin()
-                        self.keyring_support_shown = True
             if self.ps3.useDefaultConfig == True:
                 self.configWin(nocancel=True)
             if self.ps3.getConfig("checkForNewRelease"):
@@ -125,7 +124,6 @@ class Gui():
             if event == "Queue" and self.tryDl == False:
                 self.queueWin()
             if event == "Enter"  and self.tryDl == False:
-                #self.tryDl = True
                 self.ps3.checkForUpdates(value["titleid"])
                 self.selectWin()
             if self.tryDl == True and len(self.ps3.DlList.queue) > 0:
@@ -364,6 +362,7 @@ class Gui():
                 break
 
     def keyring_supportWin(self):
+        self.keyring_support_shown = True
         keyring_url = "https://github.com/jaraco/keyring"
         layout = [
             [sg.Text(self.loc.getKey("window_keyring_support_info_label", [keyring_url]))],

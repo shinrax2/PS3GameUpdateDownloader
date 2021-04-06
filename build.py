@@ -16,10 +16,10 @@ def buildheader(version, commitid , filepath , pyiver="None"):
     lines = [   "Building PS3GameUpdateDownloader",
                 "Build script arguments: "+str(sys.argv[1:]),
                 "Version: "+version,
-                "Git Commit: "+commitid,
-                "Python version: "+sys.version
+                "Git Commit: "+commitid
             ]
     if pyiver != "None":
+        lines.append("Python version: "+sys.version)
         lines.append("PyInstaller version: "+pyiver)
         lines.append("Platform: "+platform.system()+" "+platform.architecture()[0])
         lines.append("")
