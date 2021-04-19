@@ -4,6 +4,10 @@
 
 future release (aka current master branch):
 
+v010:
+-  fix a crash when checking updates*
++  add info about the ps3 store shutdown
+
 v009:
 +  update turkish translation
 +  use UPX for builds to produce smaller binaries and hopefully slightly less antivirus false positives
