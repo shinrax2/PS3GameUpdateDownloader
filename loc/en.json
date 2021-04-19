@@ -86,5 +86,7 @@
     "msg_foundNewRelease": "Found new Release \"{0}\"",
     "msg_NoReleaseArchiveForPlatformOrArch": "Couldn't find a release archive for you architecture or platform. Platform: \"{0}\" Architecture: \"{1}\" Compiled: \"{2}\"",
     "msg_dldirNotWriteable": "Your select directory for downloads \"{0}\" is not writeable!",
-    "msg_checkProxySettings": "Please verify your proxy settings are correct!"
+    "msg_checkProxySettings": "Please verify your proxy settings are correct!",
+	"msg_metaFileBrokenSyntax": "The requested meta file  for \"{0}\" contains broken syntax. This is most likely due to Sony prepairing to shutdown the update servers.",
+	"msg_sonyPS3StoreShutdownNotice": "!!! IMPORTANT !!! Sony will be closing the PS3 store on 02.07.21. This might include the servers hosting the updates for PS3 games."
 }
