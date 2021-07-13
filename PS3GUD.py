@@ -98,7 +98,7 @@ class PS3GUD():
         return keyring.get_password("ps3gud", "proxy_pass")
         
     def setupProxy(self):
-        if self.getConfig("use_proxy"):
+        if self.getConfig("use_proxy") and self.getConfig("proxy_ip") != "" and self.getConfig("proxy_port") != "":
             self.proxies["http"] = "socks5://"
             self.proxies["https"] = "socks5://"
             if self.getConfig("proxy_user") != "":
