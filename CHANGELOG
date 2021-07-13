@@ -6,6 +6,7 @@ future release (aka current master branch):
 -  fix crash when proxy is enabled but no proper proxy settings are set
 -  fix typo in download speed display
 +  moved proxy user to keyring
+-  fixed proxy support not being installed from requirements.txt
 
 v010:
 -  fix a crash when checking updates

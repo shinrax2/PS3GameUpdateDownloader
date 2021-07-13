@@ -12,7 +12,7 @@ Features:
 Grab the latest release [here](https://github.com/shinrax2/PS3GameUpdateDownloader/releases/latest) and check the ["Getting Started"](https://github.com/shinrax2/PS3GameUpdateDownloader/wiki/Getting-Started) page on the wiki!
 
 # Attention
-Sony will be closing the PS3 store on 02.07.21. This might include the servers hosting the updates for PS3 games.
+Sony has announced that they will be closing the PS3 store on 02.07.21 and later reversed that decision. It seems that some game updates got deleted in the time between the announcement and its reversal. I recommend you backup your downloaded game updates.
 
 # Contributions
 Contributions in form of translations and bug fixes are welcome.
