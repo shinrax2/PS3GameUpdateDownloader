@@ -274,6 +274,7 @@ class PS3GUD():
                             already_loaded = size
                         percentage = already_loaded / size * 100
                         text.Update(self.loc.getKey("window_main_progress_label", [num, utils.formatSize(already_loaded), utils.formatSize(size), format(float(percentage), '.1f'), utils.formatSize(already_loaded//(time.perf_counter() - start))+"s"]))
+                        text.Update(self.loc.getKey("window_main_progress_label", [num, utils.formatSize(already_loaded), utils.formatSize(size), format(float(percentage), '.1f'), utils.formatSize(already_loaded//(time.perf_counter() - start))+"/s"]))
                         bar.UpdateBar(percentage)
                         window.Refresh()
 
