@@ -3,9 +3,12 @@
 - bugfix
 
 future release (aka current master branch):
+-  fix crash when proxy is enabled but no proper proxy settings are set
+-  fix typo in download speed display
++  moved proxy user to keyring
 
 v010:
--  fix a crash when checking updates*
+-  fix a crash when checking updates
 +  add info about the ps3 store shutdown
 
 v009:

@@ -45,7 +45,7 @@ class PS3GUD():
         self.configDefaults["use_proxy"] = False
         self.configDefaults["proxy_ip"] = ""
         self.configDefaults["proxy_port"] = ""
-        self.configDefaults["proxy_user"] = ""
+        self.configDefaults["proxy_user"] = None
         self.configDefaults["proxy_pass"] = None
         self.configDefaults["dont_show_again_keyring_support"] = False
         
@@ -72,9 +72,9 @@ class PS3GUD():
                 self.config = json.loads(f.read())
             self.useDefaultConfig = False
             if self.config["use_proxy"] == True:
-                self.config["proxy_pass"] = self.getProxyPass()
+                self.config["proxy_pass"], self.config["proxy_user"] = self.getProxyCredentials()
             else:
-                self.config["proxy_pass"] = None
+                self.config["proxy_pass"], self.config["proxy_user"] = (None, None)
             self.setupProxy()
         else:
             self.logger.log(self.loc.getKey("msg_noConfigFile"))
@@ -90,18 +90,20 @@ class PS3GUD():
         self.logger.log(self.loc.getKey("msg_configFileSaved"))
         self.useDefaultConfig = False 
         
-    def setProxyPass(self, pwd):
+    def setProxyCredentials(self, pwd, user):
         keyring.set_password("ps3gud", "proxy_pass", pwd)
         self.config["proxy_pass"] = pwd
+        keyring.set_password("ps3gud", "proxy_user", user)
+        self.config["proxy_user"] = user
         
-    def getProxyPass(self):
-        return keyring.get_password("ps3gud", "proxy_pass")
+    def getProxyCredentials(self):
+        return (keyring.get_password("ps3gud", "proxy_pass"), keyring.get_password("ps3gud", "proxy_user"))
         
     def setupProxy(self):
         if self.getConfig("use_proxy") and self.getConfig("proxy_ip") != "" and self.getConfig("proxy_port") != "":
             self.proxies["http"] = "socks5://"
             self.proxies["https"] = "socks5://"
-            if self.getConfig("proxy_user") != "":
+            if self.getConfig("proxy_user") != None:
                 self.proxies["http"] += self.getConfig("proxy_user")+":"
                 self.proxies["https"] += self.getConfig("proxy_user")+":"
                 if self.getConfig("proxy_pass") != None:
@@ -111,7 +113,7 @@ class PS3GUD():
             self.proxies["https"] += self.getConfig("proxy_ip")+":"+self.getConfig("proxy_port")
         else:
             self.proxies = {}
-            
+        
     def getConfig(self, key):
         try:
             return self.config[key]
@@ -273,7 +275,6 @@ class PS3GUD():
                         if already_loaded / size > 1:
                             already_loaded = size
                         percentage = already_loaded / size * 100
-                        text.Update(self.loc.getKey("window_main_progress_label", [num, utils.formatSize(already_loaded), utils.formatSize(size), format(float(percentage), '.1f'), utils.formatSize(already_loaded//(time.perf_counter() - start))+"s"]))
                         text.Update(self.loc.getKey("window_main_progress_label", [num, utils.formatSize(already_loaded), utils.formatSize(size), format(float(percentage), '.1f'), utils.formatSize(already_loaded//(time.perf_counter() - start))+"/s"]))
                         bar.UpdateBar(percentage)
                         window.Refresh()

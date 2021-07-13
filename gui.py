@@ -230,10 +230,10 @@ class Gui():
                 for l in ll:
                     if cL == l["language_name"]:
                         cL = l["language_short"]
-                config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThreshold": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "proxy_user": valConfig["proxy_user"], "use_proxy": valConfig["use_proxy"]}
+                config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThreshold": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "use_proxy": valConfig["use_proxy"]}
                 self.ps3.setConfig(config)
                 if self.ps3.getConfig("use_proxy") == True:
-                    self.ps3.setProxyPass(valConfig["proxy_pass"])
+                    self.ps3.setProxyCredentials(valConfig["proxy_pass"], valConfig["proxy_user"])
                 self.loc.setLoc(cL)
                 self.ps3.setupProxy()
                 self.retranslateWindow(self.mainWindow , self.loc, self.TranslationItems["mainWindow"])
