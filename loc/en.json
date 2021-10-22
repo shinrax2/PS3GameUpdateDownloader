@@ -19,6 +19,8 @@
     "window_config_checkForNewRelease_label": "Check for a new release at startup:",
     "window_config_storageThreshold_label": "Storage threshold (in %):",
     "window_config_currentLoc_label": "Language:",
+	"window_config_renamepkgs_label": "Rename PKGs:",
+	"window_config_renamepkgs_tooltip": "Renames PKGs to $GAMENAME_[$GAMEID]_$GAMEVERSION",
     "window_config_useproxy_label": "Use Proxy? (ONLY SOCKS5!)",
     "window_config_proxyip_label": "Proxy IP:",
     "window_config_proxyport_label": "Proxy Port:",

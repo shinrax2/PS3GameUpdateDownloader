@@ -187,6 +187,7 @@ class Gui():
             [sg.Text(self.loc.getKey("window_config_checkForNewRelease_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("checkForNewRelease"), key="checkForNewRelease")],
             [sg.Text(self.loc.getKey("window_config_storageThreshold_label"), size=(40,1)), sg.Spin([i for i in range(1, 100)], initial_value=self.ps3.getConfig("storageThreshold"), key="storageThreshold")],
             [sg.Text(self.loc.getKey("window_config_currentLoc_label"), size=(40,1)), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=self.loc.getKey("language_name"))],
+            [sg.Text(self.loc.getKey("window_config_renamepkgs_label"), size=(40,1), tooltip=self.loc.getKey("window_config_renamepkgs_tooltip")), sg.Checkbox("", default=self.ps3.getConfig("rename_pkgs"), key="rename_pkgs", tooltip=self.loc.getKey("window_config_renamepkgs_tooltip"))],
             [sg.Text(self.loc.getKey("window_config_useproxy_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("use_proxy"), key="use_proxy", enable_events=True)],
             [sg.Text(self.loc.getKey("window_config_proxyip_label"), size=(40,1)), sg.In(self.ps3.getConfig("proxy_ip"), key="proxy_ip")],
             [sg.Text(self.loc.getKey("window_config_proxyport_label"), size=(40,1)), sg.In(self.ps3.getConfig("proxy_port"), key="proxy_port")],
@@ -230,7 +231,7 @@ class Gui():
                 for l in ll:
                     if cL == l["language_name"]:
                         cL = l["language_short"]
-                config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThreshold": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "use_proxy": valConfig["use_proxy"]}
+                config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThreshold": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "use_proxy": valConfig["use_proxy"], "rename_pkgs": valConfig["rename_pkgs"]}
                 self.ps3.setConfig(config)
                 if self.ps3.getConfig("use_proxy") == True:
                     self.ps3.setProxyCredentials(valConfig["proxy_pass"], valConfig["proxy_user"])

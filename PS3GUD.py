@@ -48,6 +48,7 @@ class PS3GUD():
         self.configDefaults["proxy_user"] = None
         self.configDefaults["proxy_pass"] = None
         self.configDefaults["dont_show_again_keyring_support"] = False
+        self.configDefaults["rename_pkgs"] = True
         
     def setWindow(self, window):
         self.logger.window = window
@@ -205,7 +206,10 @@ class PS3GUD():
             size = dl["size"]
             id = dl["gameid"]
             fdir = os.path.join(self.config["dldir"]+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+"["+id+"]/")
-            fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
+            if self.getConfig("rename_pkgs") == True:
+                fname = os.path.join(fdir, utils.filterIllegalCharsFilename(self.getTitleNameFromId(id)+"_["+id+"]_"+dl["version"]+".pkg"))
+            else:
+                fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
 
             if os.path.exists(self.config["dldir"]) == False and os.path.isfile(self.config["dldir"]) == False:
                 try:

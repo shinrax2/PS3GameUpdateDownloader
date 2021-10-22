@@ -19,6 +19,8 @@
     "window_config_checkForNewRelease_label": "Neue Version beim Starten suchen:",
     "window_config_storageThreshold_label": "Speichergrenze (in %):",
     "window_config_currentLoc_label": "Sprache:",
+	"window_config_renamepkgs_label": "PKGs umbenennen:",
+	"window_config_renamepkgs_tooltip": "Benenne PKGs in $GAMENAME_[$GAMEID]_$GAMEVERSION um",
     "window_config_useproxy_label": "Proxy benutzen? (NUR SOCKS5!)",
     "window_config_proxyip_label": "Proxy-IP:",
     "window_config_proxyport_label": "Proxy-Port:",
