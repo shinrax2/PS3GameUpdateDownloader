@@ -256,6 +256,8 @@ class PS3GUD():
                     os.remove(fname)
             if self.config["verify"] == False and skip == False:
                 self.logger.log(self.loc.getKey("msg_noVerify", [fname]))
+            if skip == True:
+                self.DlList.removeEntry(dl["gameid"]+"-"+dl["version"])
             i += 1
             
         self.logger.log(self.loc.getKey("msg_finishedDownload", [ql]))
