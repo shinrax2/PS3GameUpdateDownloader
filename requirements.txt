@@ -1,4 +1,4 @@
 requests==2.26.0
 PySimpleGUI==4.33.0
-keyring==21.8.0
+keyring==23.2.1
 requests[socks]==2.25.1
