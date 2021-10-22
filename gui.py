@@ -42,9 +42,9 @@ class Gui():
         self.noKeyrings = False
         self.keyring_support_shown = False
         if platform.system() == "Windows":
-            self.iconpath = os.path.abspath(os.path.join("logos", "icon.ico"))
+            self.iconpath = os.path.abspath(os.path.join("images", "icon.ico"))
         else:
-            self.iconpath = os.path.abspath(os.path.join("logos", "icon_16x16.png"))
+            self.iconpath = os.path.abspath(os.path.join("images", "icon_16x16.png"))
         
         #check for avaiable keyring backends and disable proxy support if none is found
         rings = keyring.backend.get_all_keyring()

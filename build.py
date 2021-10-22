@@ -118,7 +118,7 @@ if platform.architecture()[0] == "32bit":
 if platform.architecture()[0] == "64bit":
     bits = "64"
 arch = ostype + bits
-iconpath = os.path.abspath(os.path.join("logos", "icon.ico"))
+iconpath = os.path.abspath(os.path.join("images", "icon.ico"))
 
 with open("release.json", "r", encoding="utf8") as f:
     version = json.loads(f.read())["version"]
@@ -182,7 +182,7 @@ if action == "sourcerelease":
         shutil.copy2("release.json", os.path.join(builddir, "release.json"))
         shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
         shutil.copytree("./loc", os.path.join(builddir, "loc"))
-        shutil.copytree("./logos", os.path.join(builddir, "logos"))
+        shutil.copytree("./images", os.path.join(builddir, "images"))
         #build zip
         if zip_check == True:
             shutil.make_archive(zipname+"-source", "zip", "dist", os.path.relpath(builddir, "dist"))
@@ -213,7 +213,7 @@ if action == "sourcedebug":
         shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
         shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
         shutil.copytree("./loc", os.path.join(builddir, "loc"))
-        shutil.copytree("./logos", os.path.join(builddir, "logos"))
+        shutil.copytree("./images", os.path.join(builddir, "images"))
         #build zip
         if zipzip_check == True:
             shutil.make_archive(zipname+"-source-debug", "zip", "dist", os.path.relpath(builddir, "dist"))
@@ -270,7 +270,7 @@ if action == "compilerelease":
     shutil.copy2("release.json", os.path.join(builddir, "release.json"))
     shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
     shutil.copytree("./loc", os.path.join(builddir, "loc"))
-    shutil.copytree("./logos", os.path.join(builddir, "logos"))
+    shutil.copytree("./images", os.path.join(builddir, "images"))
     #write header to buildlog
     buildheader(version, gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
     #build zip
@@ -332,7 +332,7 @@ if action == "compiledebug":
         shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
         shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
         shutil.copytree("./loc", os.path.join(builddir, "loc"))
-        shutil.copytree("./logos", os.path.join(builddir, "logos"))
+        shutil.copytree("./images", os.path.join(builddir, "images"))
         #write header to buildlog
         buildheader(version, gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
         #build zip
