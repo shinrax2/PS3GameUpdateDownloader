@@ -30,7 +30,7 @@ class PS3GUD():
         self.configFile = "./config.json"
         self.config = {}
         self.Updates = {}
-        self.DlList = Queue()
+        self.DlList = Queue(self)
         self.titleid = ""
         self.proxies = {}
         
@@ -304,8 +304,9 @@ class PS3GUD():
         del self.logger
 
 class Queue():
-    def __init__(self):
+    def __init__(self, ps3):
         self.queue = []
+        self.ps3 = ps3
     
     def addEntry(self, entry):
         if self.isAlreadInQueue(entry["gameid"]+"-"+entry["version"]) != True:
@@ -386,3 +387,21 @@ class Queue():
             if code == item["code"]:
                 ret = True
         return ret
+        
+    def exportQueue(self, format, exportFile):
+        if format == "txt":
+            s = ""
+            games = {}
+            for entry in self.queue:
+                try:
+                    games[entry["gameid"]]
+                except KeyError:
+                    games[entry["gameid"]] = []
+                games[entry["gameid"]].append(entry["url"])
+            for id, data in games.items():
+                s += self.ps3.getTitleNameFromId(id)+"["+id+"]:\n\n"
+                for url in data:
+                    s += "\t"+url+"\n"
+                s += "\n"
+            with open(exportFile, "w") as f:
+                f.write(s)

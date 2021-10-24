@@ -58,6 +58,8 @@
     "window_queue_movedown_btn": "Move Down",
     "window_queue_remove_btn": "Remove",
     "window_queue_totalsize_label": "Total Size: {0}",
+	"window_queue_export_label": "Export queue to:",
+	"window_queue_export_btn": "Export",
 
 	"window_keyring_support_info_label": "No viable keyring backends were found.\nPlease check the homepage of keyring for an installation guide.\n{0}",
 	"window_keyring_support_dont_show_again_label": "Don't show again",
