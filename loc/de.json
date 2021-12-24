@@ -21,6 +21,7 @@
     "window_config_currentLoc_label": "Sprache:",
 	"window_config_renamepkgs_label": "PKGs umbenennen:",
 	"window_config_renamepkgs_tooltip": "Benenne PKGs in $GAMENAME_[$GAMEID]_$GAMEVERSION um",
+	"window_config_updatetitledb_label": "Beim Start TitleDB aktualisieren:",
     "window_config_useproxy_label": "Proxy benutzen? (NUR SOCKS5!)",
     "window_config_proxyip_label": "Proxy-IP:",
     "window_config_proxyport_label": "Proxy-Port:",
@@ -89,5 +90,6 @@
     "msg_NoReleaseArchiveForPlatformOrArch": "Konnte kein Release für ihre Plattform oder Architektur finden. Plattform: \"{0}\" Architektur: \"{1}\" Kompiliert: \"{2}\"",
     "msg_dldirNotWriteable": "Ihr ausgewählter Download-Ordner \"{0}\" ist nicht schreibbar!",
     "msg_checkProxySettings": "Bitte stellen Sie sicher, dass die Proxy-Einstellungen korrekt sind!",
-	"msg_sonyPS3StoreShutdownNotice": "!!! IMPORTANT !!! Sony hat angekündigt, den PS3-Store am 02.07.21 zu schließen und diese Entscheidung später rückgängig gemacht. Es scheint, dass in der Zeit zwischen der Ankündigung und der Rücknahme wurden einige Spielupdates gelöscht wurden. Ich empfehle Ihnen, Ihre heruntergeladenen Spielupdates zu sichern."
+	"msg_sonyPS3StoreShutdownNotice": "!!! IMPORTANT !!! Sony hat angekündigt, den PS3-Store am 02.07.21 zu schließen und diese Entscheidung später rückgängig gemacht. Es scheint, dass in der Zeit zwischen der Ankündigung und der Rücknahme wurden einige Spielupdates gelöscht wurden. Ich empfehle Ihnen, Ihre heruntergeladenen Spielupdates zu sichern.",
+	"msg_newTitleDbVersion": "Neue Version der TitleDB heruntergeladen."
 }

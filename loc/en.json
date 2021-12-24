@@ -21,6 +21,7 @@
     "window_config_currentLoc_label": "Language:",
 	"window_config_renamepkgs_label": "Rename PKGs:",
 	"window_config_renamepkgs_tooltip": "Renames PKGs to $GAMENAME_[$GAMEID]_$GAMEVERSION",
+	"window_config_updatetitledb_label": "Update TitleDB on startup:",
     "window_config_useproxy_label": "Use Proxy? (ONLY SOCKS5!)",
     "window_config_proxyip_label": "Proxy IP:",
     "window_config_proxyport_label": "Proxy Port:",
@@ -92,5 +93,6 @@
     "msg_dldirNotWriteable": "Your select directory for downloads \"{0}\" is not writeable!",
     "msg_checkProxySettings": "Please verify your proxy settings are correct!",
 	"msg_metaFileBrokenSyntax": "The requested meta file  for \"{0}\" contains broken syntax. This is most likely due to Sony prepairing to shutdown the update servers.",
-	"msg_sonyPS3StoreShutdownNotice": "!!! IMPORTANT !!! Sony has announced that they will be closing the PS3 store on 02.07.21 and later reversed that decision. It seems that some game updates got deleted in the time between the announcement and its reversal. I recommend you backup your downloaded game updates."
+	"msg_sonyPS3StoreShutdownNotice": "!!! IMPORTANT !!! Sony has announced that they will be closing the PS3 store on 02.07.21 and later reversed that decision. It seems that some game updates got deleted in the time between the announcement and its reversal. I recommend you backup your downloaded game updates.",
+	"msg_newTitleDbVersion": "Downloaded new version of TitleDB"
 }

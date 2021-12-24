@@ -28,6 +28,7 @@ class PS3GUD():
         else:
             self.logger = utils.Logger()
         self.configFile = "./config.json"
+        self.titledbFile = "./titledb.json"
         self.config = {}
         self.Updates = {}
         self.DlList = Queue(self)
@@ -49,6 +50,7 @@ class PS3GUD():
         self.configDefaults["proxy_pass"] = None
         self.configDefaults["dont_show_again_keyring_support"] = False
         self.configDefaults["rename_pkgs"] = True
+        self.configDefaults["update_titledb"] = True
         
     def setWindow(self, window):
         self.logger.window = window
@@ -63,8 +65,7 @@ class PS3GUD():
         self.logger.log("Current working directory: "+os.getcwd())
         self.logger.log("Compiled: "+str(utils.isAppFrozen()))
         self.logger.log("PySimpleGUI version: "+psgversion)
-        self.logger.log("Python version: "+sys.version)
-        self.logger.log("\n")
+        self.logger.log("Python version: "+sys.version+"\n")
         
     def loadConfig(self):
         if os.path.exists(self.configFile) and os.path.isfile(self.configFile):
@@ -121,11 +122,32 @@ class PS3GUD():
         except KeyError:
             return self.configDefaults[key]
     
-    def loadTitleDb(self, titledb = "titledb.json"):
-        with open(titledb, "r", encoding="utf8") as f:
+    def checkTitleDbVersion(self):
+        if self.getConfig("update_titledb") == True:
+            url = "https://raw.githubusercontent.com/shinrax2/PS3GameUpdateDownloader/master/titledb.json"
+            try:
+                data = json.loads(requests.get(url, proxies=self.proxies).content)
+            except requests.exceptions.ConnectionError:
+                if self.getConfig("use_proxy"):
+                    self.logger.log(self.loc.getKey("msg_checkProxySettings"))
+                    return
+            
+            if self.titledbver < data["version"]:
+                self.logger.log(self.loc.getKey("msg_newTitleDbVersion"))
+                if os.path.exists(self.titledbFile+".bak"):
+                    os.remove(self.titledbFile+".bak")
+                os.rename(self.titledbFile, self.titledbFile+".bak")
+                with open(self.titledbFile, "w", encoding="utf8") as f:
+                    f.write(json.dumps(data, ensure_ascii=False))
+                self.loadTitleDb()
+        
+    
+    def loadTitleDb(self):
+        with open(self.titledbFile, "r", encoding="utf8") as f:
             data = json.loads(f.read())
-        self.titledb = data
-        self.logger.log(self.loc.getKey("msg_loadedTitledb", [titledb]))
+        self.titledb = data["db"]
+        self.titledbver = data["version"]
+        self.logger.log(self.loc.getKey("msg_loadedTitledb", [self.titledbFile]))
         
     def getTitleNameFromId(self, titleid=None):
         if titleid == None:
