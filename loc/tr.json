@@ -1,89 +1,318 @@
 {
-    "language_name": "Türkçe",
-    "language_short": "tr",
-    
-    
-    "window_main_title": "PS3 Game Update Downloader",
-    "window_main_titleid_label": "TitleID Gir",
-    "window_main_enter_btn": "Ara",
-    "window_main_progress_label": "Dosya indiriliyor {0}:\n{1}/{2}({3}%)\nHız: {4}",
-    "window_main_config_btn": "Ayarlar",
-    "window_main_exit_btn": "Kapat",
-    "window_main_queue_btn": "Sıra",
-    
-    "window_config_title": "Ayarlar",
-    "window_config_dldir_label": "İndirilenler klasörü:",
-    "window_config_verify_label": "Dosyaları doğrula:",
-    "window_config_checkIfAlreadyDownloaded_label": "Dosyanın zaten indirilip indirilmediğini kontrol et:",
-    "window_config_checkForNewRelease_label": "Başlangıçta yeni sürüm olup olmadığını kontrol et:",
-    "window_config_storageThreshold_label": "Depo limiti (% olarak):",
-    "window_config_currentLoc_label": "Dil:",
-    "window_config_useproxy_label": "Proxy kullan? (SADECE SOCKS5!)",
-    "window_config_proxyip_label": "Proxy IP:",
-    "window_config_proxyport_label": "Proxy Port:",
-    "window_config_proxyuser_laber": "Proxy Kullanıcısı:",
-    "window_config_proxypass_label": "Proxy Parolası",
-    "window_config_cancel_btn": "İptal",
-    "window_config_save_btn": "Kaydet",
-    
-    "window_select_title": "Güncellemeleri seç",
-    "window_select_text_label": "Oyun: {0}\tTitleID: {1}",
-    "window_select_table_ver": "Versiyon",
-    "window_select_table_size": "Dosya boyutu",
-    "window_select_table_sysver": "PS3 FW Versiyon",
-    "window_select_download_btn": "İndir",
-    "window_select_cancel_btn": "İptal",
-    "window_select_queue_btn": "İndirme sırasına ekle",
-    "window_select_help_label": "CTRL'ye basılı tutarak istediğin güncellemeleri seç.",
-    
-    "window_relNotify_title": "Yeni sürüm bulundu!",
-    "window_relNotify_version_label": "Şu anki sürüm: {0}\nYeni sürüm: {1}",
-    "window_relNotify_changelog_label": "Değişiklikler:",
-    "window_relNotify_web_btn": "Siteyi tarayıcı da aç",
-    "window_relNotify_dl_btn": "Güncellemeyi indir ve yükle",
-    "window_relNotify_close_btn": "Kapat",
-    
-    "window_queue_title": "İndirme sırası",
-    "window_queue_table_num": "Sıra",
-    "window_queue_table_game": "Oyun",
-    "window_queue_table_titleid": "TitleID",
-    "window_queue_table_ver": "Versiyon",
-    "window_queue_table_size": "Dosya boyutu",
-    "window_queue_download_btn": "İndirmeyi başlat",
-    "window_queue_close_btn": "Kapat",
-    "window_queue_moveup_btn": "Yukarı çıkar",
-    "window_queue_movedown_btn": "Aşağı indir",
-    "window_queue_remove_btn": "Kaldır",
-    "window_queue_totalsize_label": "Toplam Boyut: {0}",
-	
-	"window_keyring_support_info_label": "Geçerli backend keyring'i bulunamadı.\nLütfen, ilgili yükleme rehberi için keyring'in anasayfasını ziyaret edin.\n{0}",
-	"window_keyring_support_dont_show_again_label": "Tekrar gösterme",
-	"window_keyring_support_ok_btn": "Tamam",
-	"window_keyring_support_browser_btn": "Tarayıcıda aç",
-	"window_keyring_support_title": "Dikkat! Proxy desteği kapatıldı!",
-    
-    "msg_configFileLoaded": "Ayar dosyası indirildi!",
-    "msg_noConfigFile": "Ayar dosyası bulunamadı! Varsayılan ayarlar kullanılıyor!",
-    "msg_configFileSaved": "Ayarlar kaydedildi!",
-    "msg_loadedTitledb": "TitleDB \"{0}\" yüklendi.",
-    "msg_titleIDIs": "Oyun: {0}\t TitleID: {1}",
-    "msg_titleIDNotValid": "TitleID geçersiz!",
-    "msg_metaNotAvailable": "Bu TitleID için meta dosyası mevcut değil!",
-    "msg_metaFileEmpty": "Bu TitleID için meta dosyası hiçbir veri bulundurmuyor!",
-    "msg_startingDownloads": "Güncelleme indirmeleri başlıyor",
-    "msg_alreadyDownloadedNoVerify": "Dosya \"{0}\" zaten indirilmişti! Geçiliyor! Doğrulanmadı!",
-    "msg_alreadyDownloadedVerify": "Dosya \"{0}\" zaten indirilmişti! Geçiliyor! SHA-1 doğrulandı!",
-    "msg_startSingleDownload": "İndirme başlatılıyor {0}/{1}",
-    "msg_verifySuccess": "\"{0}\" doğrulaması başarılı!",
-    "msg_verifyFailure": "\"{0}\" doğrulaması başarısız!\tDosya siliniyor!",
-    "msg_noVerify": "\"{0}\" doğrulanamadı!",
-    "msg_finishedDownload": "{0} dosyalar indirildi!",
-    "msg_notEnoughDiskSpace": "Yetersiz depo alanı!",
-    "msg_spaceBelowThreshold": "Depo alanı %{0} altında",
-    "msg_relCheckError": "Yeni sürüm kontrol edilemedi!",
-    "msg_alreadyUpToDate": "Zaten en yeni sürüm bu!",
-    "msg_foundNewRelease": "Yeni sürüm bulundu \"{0}\"",
-    "msg_NoReleaseArchiveForPlatformOrArch": "Bu mimari veya platform için uygun bir arşiv sürümü bulunamadı. Platform: \"{0}\" Mimari: \"{1}\" Derleme: \"{2}\"",
-    "msg_dldirNotWriteable": "\"{0}\" indirmeleri için seçilen klasör yazılabilir değil!",
-    "msg_checkProxySettings": "Lütfen, Proxy ayarlarının doğruluğunu kontrol et!"
+    "language_name": {
+        "string": "Türkçe",
+        "comment": "Name of the language"
+    },
+    "language_short": {
+        "string": "tr",
+        "comment": "Name of the language file"
+    },
+    "window_main_title": {
+        "string": "PS3 Game Update Downloader",
+        "comment": "Main window title (don't translate)"
+    },
+    "window_main_titleid_label": {
+        "string": "TitleID Gir",
+        "comment": ""
+    },
+    "window_main_enter_btn": {
+        "string": "Ara",
+        "comment": ""
+    },
+    "window_main_progress_label": {
+        "string": "Dosya indiriliyor {0}:\n{1}/{2}({3}%)\nHız: {4}",
+        "comment": "0: Number of download, 1: Amount of downloaded data, 2: Total file size, 3: Amount of downloaded data in %, 4: Download speed"
+    },
+    "window_main_config_btn": {
+        "string": "Ayarlar",
+        "comment": ""
+    },
+    "window_main_exit_btn": {
+        "string": "Kapat",
+        "comment": ""
+    },
+    "window_main_queue_btn": {
+        "string": "Sıra",
+        "comment": ""
+    },
+    "window_config_title": {
+        "string": "Ayarlar",
+        "comment": ""
+    },
+    "window_config_dldir_label": {
+        "string": "İndirilenler klasörü:",
+        "comment": ""
+    },
+    "window_config_verify_label": {
+        "string": "Dosyaları doğrula:",
+        "comment": ""
+    },
+    "window_config_checkIfAlreadyDownloaded_label": {
+        "string": "Dosyanın zaten indirilip indirilmediğini kontrol et:",
+        "comment": ""
+    },
+    "window_config_checkForNewRelease_label": {
+        "string": "Başlangıçta yeni sürüm olup olmadığını kontrol et:",
+        "comment": ""
+    },
+    "window_config_storageThreshold_label": {
+        "string": "Depo limiti (% olarak):",
+        "comment": ""
+    },
+    "window_config_currentLoc_label": {
+        "string": "Dil:",
+        "comment": ""
+    },
+    "window_config_useproxy_label": {
+        "string": "Proxy kullan? (SADECE SOCKS5!)",
+        "comment": ""
+    },
+    "window_config_proxyip_label": {
+        "string": "Proxy IP:",
+        "comment": ""
+    },
+    "window_config_proxyport_label": {
+        "string": "Proxy Port:",
+        "comment": ""
+    },
+    "window_config_proxyuser_laber": {
+        "string": "Proxy Kullanıcısı:",
+        "comment": ""
+    },
+    "window_config_proxypass_label": {
+        "string": "Proxy Parolası",
+        "comment": ""
+    },
+    "window_config_cancel_btn": {
+        "string": "İptal",
+        "comment": ""
+    },
+    "window_config_save_btn": {
+        "string": "Kaydet",
+        "comment": ""
+    },
+    "window_select_title": {
+        "string": "Güncellemeleri seç",
+        "comment": ""
+    },
+    "window_select_text_label": {
+        "string": "Oyun: {0}\tTitleID: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "window_select_table_ver": {
+        "string": "Versiyon",
+        "comment": ""
+    },
+    "window_select_table_size": {
+        "string": "Dosya boyutu",
+        "comment": ""
+    },
+    "window_select_table_sysver": {
+        "string": "PS3 FW Versiyon",
+        "comment": ""
+    },
+    "window_select_download_btn": {
+        "string": "İndir",
+        "comment": ""
+    },
+    "window_select_cancel_btn": {
+        "string": "İptal",
+        "comment": ""
+    },
+    "window_select_queue_btn": {
+        "string": "İndirme sırasına ekle",
+        "comment": ""
+    },
+    "window_select_help_label": {
+        "string": "CTRL'ye basılı tutarak istediğin güncellemeleri seç.",
+        "comment": ""
+    },
+    "window_relNotify_title": {
+        "string": "Yeni sürüm bulundu!",
+        "comment": ""
+    },
+    "window_relNotify_version_label": {
+        "string": "Şu anki sürüm: {0}\nYeni sürüm: {1}",
+        "comment": "0: Current programm version, 1: New programm version"
+    },
+    "window_relNotify_changelog_label": {
+        "string": "Değişiklikler:",
+        "comment": ""
+    },
+    "window_relNotify_web_btn": {
+        "string": "Siteyi tarayıcı da aç",
+        "comment": ""
+    },
+    "window_relNotify_dl_btn": {
+        "string": "Güncellemeyi indir ve yükle",
+        "comment": ""
+    },
+    "window_relNotify_close_btn": {
+        "string": "Kapat",
+        "comment": ""
+    },
+    "window_queue_title": {
+        "string": "İndirme sırası",
+        "comment": ""
+    },
+    "window_queue_table_num": {
+        "string": "Sıra",
+        "comment": ""
+    },
+    "window_queue_table_game": {
+        "string": "Oyun",
+        "comment": ""
+    },
+    "window_queue_table_titleid": {
+        "string": "TitleID",
+        "comment": ""
+    },
+    "window_queue_table_ver": {
+        "string": "Versiyon",
+        "comment": ""
+    },
+    "window_queue_table_size": {
+        "string": "Dosya boyutu",
+        "comment": ""
+    },
+    "window_queue_download_btn": {
+        "string": "İndirmeyi başlat",
+        "comment": ""
+    },
+    "window_queue_close_btn": {
+        "string": "Kapat",
+        "comment": ""
+    },
+    "window_queue_moveup_btn": {
+        "string": "Yukarı çıkar",
+        "comment": ""
+    },
+    "window_queue_movedown_btn": {
+        "string": "Aşağı indir",
+        "comment": ""
+    },
+    "window_queue_remove_btn": {
+        "string": "Kaldır",
+        "comment": ""
+    },
+    "window_queue_totalsize_label": {
+        "string": "Toplam Boyut: {0}",
+        "comment": "0: Total download size of queue"
+    },
+    "window_keyring_support_info_label": {
+        "string": "Geçerli backend keyring'i bulunamadı.\nLütfen, ilgili yükleme rehberi için keyring'in anasayfasını ziyaret edin.\n{0}",
+        "comment": "0: Url of keyring homepage"
+    },
+    "window_keyring_support_dont_show_again_label": {
+        "string": "Tekrar gösterme",
+        "comment": ""
+    },
+    "window_keyring_support_ok_btn": {
+        "string": "Tamam",
+        "comment": ""
+    },
+    "window_keyring_support_browser_btn": {
+        "string": "Tarayıcıda aç",
+        "comment": ""
+    },
+    "window_keyring_support_title": {
+        "string": "Dikkat! Proxy desteği kapatıldı!",
+        "comment": ""
+    },
+    "msg_configFileLoaded": {
+        "string": "Ayar dosyası indirildi!",
+        "comment": ""
+    },
+    "msg_noConfigFile": {
+        "string": "Ayar dosyası bulunamadı! Varsayılan ayarlar kullanılıyor!",
+        "comment": ""
+    },
+    "msg_configFileSaved": {
+        "string": "Ayarlar kaydedildi!",
+        "comment": ""
+    },
+    "msg_loadedTitledb": {
+        "string": "TitleDB \"{0}\" yüklendi.",
+        "comment": "0: Path to TitleDB"
+    },
+    "msg_titleIDIs": {
+        "string": "Oyun: {0}\t TitleID: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "msg_titleIDNotValid": {
+        "string": "TitleID geçersiz!",
+        "comment": ""
+    },
+    "msg_metaNotAvailable": {
+        "string": "Bu TitleID için meta dosyası mevcut değil!",
+        "comment": ""
+    },
+    "msg_metaFileEmpty": {
+        "string": "Bu TitleID için meta dosyası hiçbir veri bulundurmuyor!",
+        "comment": ""
+    },
+    "msg_startingDownloads": {
+        "string": "Güncelleme indirmeleri başlıyor",
+        "comment": ""
+    },
+    "msg_alreadyDownloadedNoVerify": {
+        "string": "Dosya \"{0}\" zaten indirilmişti! Geçiliyor! Doğrulanmadı!",
+        "comment": "0: File name"
+    },
+    "msg_alreadyDownloadedVerify": {
+        "string": "Dosya \"{0}\" zaten indirilmişti! Geçiliyor! SHA-1 doğrulandı!",
+        "comment": "0: File name"
+    },
+    "msg_startSingleDownload": {
+        "string": "İndirme başlatılıyor {0}/{1}",
+        "comment": "0: Number of download, 1: Total number of downloads in queue"
+    },
+    "msg_verifySuccess": {
+        "string": "\"{0}\" doğrulaması başarılı!",
+        "comment": "0: File name"
+    },
+    "msg_verifyFailure": {
+        "string": "\"{0}\" doğrulaması başarısız!\tDosya siliniyor!",
+        "comment": "0: File name"
+    },
+    "msg_noVerify": {
+        "string": "\"{0}\" doğrulanamadı!",
+        "comment": "0: File name"
+    },
+    "msg_finishedDownload": {
+        "string": "{0} dosyalar indirildi!",
+        "comment": "0: Number of files downloaded"
+    },
+    "msg_notEnoughDiskSpace": {
+        "string": "Yetersiz depo alanı!",
+        "comment": ""
+    },
+    "msg_spaceBelowThreshold": {
+        "string": "Depo alanı %{0} altında",
+        "comment": "0: Storage threshold"
+    },
+    "msg_relCheckError": {
+        "string": "Yeni sürüm kontrol edilemedi!",
+        "comment": ""
+    },
+    "msg_alreadyUpToDate": {
+        "string": "Zaten en yeni sürüm bu!",
+        "comment": ""
+    },
+    "msg_foundNewRelease": {
+        "string": "Yeni sürüm bulundu \"{0}\"",
+        "comment": "0: New programm version"
+    },
+    "msg_NoReleaseArchiveForPlatformOrArch": {
+        "string": "Bu mimari veya platform için uygun bir arşiv sürümü bulunamadı. Platform: \"{0}\" Mimari: \"{1}\" Derleme: \"{2}\"",
+        "comment": "0: Platform, 1: Architecture, 2: App is compiled(True|False)"
+    },
+    "msg_dldirNotWriteable": {
+        "string": "\"{0}\" indirmeleri için seçilen klasör yazılabilir değil!",
+        "comment": "0: Directory name"
+    },
+    "msg_checkProxySettings": {
+        "string": "Lütfen, Proxy ayarlarının doğruluğunu kontrol et!",
+        "comment": ""
+    }
 }

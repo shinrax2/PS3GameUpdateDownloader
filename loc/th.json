@@ -1,83 +1,298 @@
 {
-    "language_name": "ภาษาไทย",
-    "language_short": "th",
-    
-    
-    "window_main_title": "ระบบดาวน์โหลดอัปเดตเกม PS3",
-    "window_main_titleid_label": "กรุณาใส่รหัส TitleID",
-    "window_main_enter_btn": "ค้นหา",
-    "window_main_progress_label": "กำลังโหลดไฟล์ {0}:\n{1}/{2}({3}%)\nความเร็วในการดาวน์โหลด: {4}",
-    "window_main_config_btn": "การกำหนดค่า",
-    "window_main_exit_btn": "ออก",
-    "window_main_queue_btn": "คิว",
-    
-    "window_config_title": "การกำหนดค่า",
-    "window_config_dldir_label": "ตำแหน่งการดาวน์โหลด:",
-    "window_config_verify_label": "ยืนยันไฟล์:",
-    "window_config_checkIfAlreadyDownloaded_label": "ตรวจสอบไฟล์ที่ถูกดาวน์โหลดแล้ว:",
-    "window_config_checkForNewRelease_label": "ตรวบจสอบเนื้อหาใหม่ขณะกำลังเริ่มต้น:",
-    "window_config_storageThreshold_label": "เกณฑ์การจัดเก็บ (ในรูปแบบ %):",
-    "window_config_currentLoc_label": "ภาษา:",
-    "window_config_useproxy_label": "ใช้งานพร็อกซี่เซิฟเวอร์ใหม่ไม่? (สำหรับ SOCKS5 เท่านั้น!)",
-    "window_config_proxyip_label": "พร็อกซี่ IP:",
-    "window_config_proxyport_label": "พร็อกซี่ Port:",
-    "window_config_proxyuser_laber": "พร็อกซี่ชื่อผู้ใช้:",
-    "window_config_proxypass_label": "พร็อกซี่รหัสผ่าน",
-    "window_config_cancel_btn": "ยกเลิก",
-    "window_config_save_btn": "บันทึก",
-    
-    "window_select_title": "เลือกการอัปเดต",
-    "window_select_text_label": "เกม: {0}\tรหัสเกม: {1}",
-    "window_select_table_ver": "เวอร์ชั่น",
-    "window_select_table_size": "ขนาดไฟล์",
-    "window_select_table_sysver": "PS3 เวอร์ชั่นเฟิร์มแวร์",
-    "window_select_download_btn": "ดาวน์โหลด",
-    "window_select_cancel_btn": "ยกเลิก",
-    "window_select_queue_btn": "เพิ่มเข้าคิวดาวน์โหลด",
-    "window_select_help_label": "กดปุ่ม Ctrl ค้างและคลิกการอัปเดตที่คุณต้องการเลือก",
-    
-    "window_relNotify_title": "พบเนื้อหาใหม่!",
-    "window_relNotify_version_label": "เวอร์ชั่นปัจจุบัน: {0}\nเวอร์ชั่นใหม่: {1}",
-    "window_relNotify_changelog_label": "การเปลี่ยนแปลง:",
-    "window_relNotify_web_btn": "เปิดในเว็บเบราว์เซอร์",
-    "window_relNotify_dl_btn": "ดาวน์โหลดและติดตั้งอัปเดต",
-    "window_relNotify_close_btn": "ปิด",
-    
-    "window_queue_title": "คิดการดาวน์โหลด",
-    "window_queue_table_num": "เลขที่",
-    "window_queue_table_game": "เกม",
-    "window_queue_table_titleid": "รหัสเกม",
-    "window_queue_table_ver": "เวอร์ชั่น",
-    "window_queue_table_size": "ขนาดไฟล์",
-    "window_queue_download_btn": "เริ่มดาวน์โหลด",
-    "window_queue_close_btn": "ปิด",
-    "window_queue_moveup_btn": "ย้ายขั้น",
-    "window_queue_movedown_btn": "ย้ายลง",
-    "window_queue_remove_btn": "ลบ",
-    "window_queue_totalsize_label": "ขนาดไฟล์: {0}",
-    
-    "msg_configFileLoaded": "โหลดไฟล์การกำหนดค่าเรียบร้อยแล้ว!",
-    "msg_noConfigFile": "ไม่พบไฟล์การกำหนดค่าใช้การตั้งค่าเดิม!",
-    "msg_configFileSaved": "บันทึกการกำหนดค่าแล้วร้อยแล้ว",
-    "msg_loadedTitledb": "โหลดรหัสเกม \"{0}\"",
-    "msg_titleIDIs": "เกม: {0}\t รหัสเกม: {1}",
-    "msg_titleIDNotValid": "รหัสเกมไม่ถูกต้องd!",
-    "msg_metaNotAvailable": "ไม่พบไฟล์ Meta สำหรับรหัสเกมนี้!",
-    "msg_metaFileEmpty": "ไม่พบข้อมูลที่อยู่ในไฟล์ Meta สำหรับรหัสเกมนี้!",
-    "msg_startingDownloads": "เริ่มดาวน์โหลดอัปเดต",
-    "msg_alreadyDownloadedNoVerify": "ไฟล์ \"{0}\" ถูกดาวน์โหลดแล้วกำลังทำการข้าม! ไฟล์ไม่ถูกยืนยัน!",
-    "msg_alreadyDownloadedVerify": "ไฟล์ \"{0}\" ถูกดาวน์โหลดแล้วกำลังทำการข้าม! ยืนยันโดยการเข้ารหัส SHA-1!",
-    "msg_startSingleDownload": "เริ่มการดาวน์โหลดแล้ว {0} จาก {1}",
-    "msg_verifySuccess": "การยืนยันสำหรับ \"{0}\" เสร็จสิ้นแล้ว!",
-    "msg_verifyFailure": "การยืนยันสำหรับ \"{0}\" ล้มเหลว!\tกำลังลบไฟล์!",
-    "msg_noVerify": "ไฟล์ \"{0}\" ไม่ได้รับการยืนยัน!",
-    "msg_finishedDownload": "กำลังเสร็จสิ้นการดาวน์โหลด {0} ไฟล์!",
-    "msg_notEnoughDiskSpace": "พื้นที่ไม่เพียงพอ!",
-    "msg_spaceBelowThreshold": "ขนาดที่ว่างมีน้อยกว่า {0}%",
-    "msg_relCheckError": "ไม่สามารถตรวจสอบเนื้อหาใหม่ได้!",
-    "msg_alreadyUpToDate": "เป็นเนื้อหาล่าสุดอยู่แล้ว!",
-    "msg_foundNewRelease": "พบเนื้อหาใหม่ \"{0}\"",
-    "msg_NoReleaseArchiveForPlatformOrArch": "ไม่สามารถค้นหาเนื้อใหม่สำหรับสถาปัตยกรรมหรือแพลตฟอร์มปัจจุบันของคุณได้. แพลตฟอร์ม(Platform): \"{0}\" สถาปัตยกรรม(Architecture): \"{1}\" การประมวลผล(Compile): \"{2}\"",
-    "msg_dldirNotWriteable": "เส้นการดาวน์โหลดที่คุณได้เลือกไว้ไม่สามารถเขียนข้อมูลได้! \"{0}\"",
-    "msg_checkProxySettings": "กรุณาตรวจสอบความถูกต้องของการตั้งค่าพร็อกซี่เซิฟเวอร์!"
+    "language_name": {
+        "string": "ภาษาไทย",
+        "comment": "Name of the language"
+    },
+    "language_short": {
+        "string": "th",
+        "comment": "Name of the language file"
+    },
+    "window_main_title": {
+        "string": "ระบบดาวน์โหลดอัปเดตเกม PS3",
+        "comment": "Main window title (don't translate)"
+    },
+    "window_main_titleid_label": {
+        "string": "กรุณาใส่รหัส TitleID",
+        "comment": ""
+    },
+    "window_main_enter_btn": {
+        "string": "ค้นหา",
+        "comment": ""
+    },
+    "window_main_progress_label": {
+        "string": "กำลังโหลดไฟล์ {0}:\n{1}/{2}({3}%)\nความเร็วในการดาวน์โหลด: {4}",
+        "comment": "0: Number of download, 1: Amount of downloaded data, 2: Total file size, 3: Amount of downloaded data in %, 4: Download speed"
+    },
+    "window_main_config_btn": {
+        "string": "การกำหนดค่า",
+        "comment": ""
+    },
+    "window_main_exit_btn": {
+        "string": "ออก",
+        "comment": ""
+    },
+    "window_main_queue_btn": {
+        "string": "คิว",
+        "comment": ""
+    },
+    "window_config_title": {
+        "string": "การกำหนดค่า",
+        "comment": ""
+    },
+    "window_config_dldir_label": {
+        "string": "ตำแหน่งการดาวน์โหลด:",
+        "comment": ""
+    },
+    "window_config_verify_label": {
+        "string": "ยืนยันไฟล์:",
+        "comment": ""
+    },
+    "window_config_checkIfAlreadyDownloaded_label": {
+        "string": "ตรวจสอบไฟล์ที่ถูกดาวน์โหลดแล้ว:",
+        "comment": ""
+    },
+    "window_config_checkForNewRelease_label": {
+        "string": "ตรวบจสอบเนื้อหาใหม่ขณะกำลังเริ่มต้น:",
+        "comment": ""
+    },
+    "window_config_storageThreshold_label": {
+        "string": "เกณฑ์การจัดเก็บ (ในรูปแบบ %):",
+        "comment": ""
+    },
+    "window_config_currentLoc_label": {
+        "string": "ภาษา:",
+        "comment": ""
+    },
+    "window_config_useproxy_label": {
+        "string": "ใช้งานพร็อกซี่เซิฟเวอร์ใหม่ไม่? (สำหรับ SOCKS5 เท่านั้น!)",
+        "comment": ""
+    },
+    "window_config_proxyip_label": {
+        "string": "พร็อกซี่ IP:",
+        "comment": ""
+    },
+    "window_config_proxyport_label": {
+        "string": "พร็อกซี่ Port:",
+        "comment": ""
+    },
+    "window_config_proxyuser_laber": {
+        "string": "พร็อกซี่ชื่อผู้ใช้:",
+        "comment": ""
+    },
+    "window_config_proxypass_label": {
+        "string": "พร็อกซี่รหัสผ่าน",
+        "comment": ""
+    },
+    "window_config_cancel_btn": {
+        "string": "ยกเลิก",
+        "comment": ""
+    },
+    "window_config_save_btn": {
+        "string": "บันทึก",
+        "comment": ""
+    },
+    "window_select_title": {
+        "string": "เลือกการอัปเดต",
+        "comment": ""
+    },
+    "window_select_text_label": {
+        "string": "เกม: {0}\tรหัสเกม: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "window_select_table_ver": {
+        "string": "เวอร์ชั่น",
+        "comment": ""
+    },
+    "window_select_table_size": {
+        "string": "ขนาดไฟล์",
+        "comment": ""
+    },
+    "window_select_table_sysver": {
+        "string": "PS3 เวอร์ชั่นเฟิร์มแวร์",
+        "comment": ""
+    },
+    "window_select_download_btn": {
+        "string": "ดาวน์โหลด",
+        "comment": ""
+    },
+    "window_select_cancel_btn": {
+        "string": "ยกเลิก",
+        "comment": ""
+    },
+    "window_select_queue_btn": {
+        "string": "เพิ่มเข้าคิวดาวน์โหลด",
+        "comment": ""
+    },
+    "window_select_help_label": {
+        "string": "กดปุ่ม Ctrl ค้างและคลิกการอัปเดตที่คุณต้องการเลือก",
+        "comment": ""
+    },
+    "window_relNotify_title": {
+        "string": "พบเนื้อหาใหม่!",
+        "comment": ""
+    },
+    "window_relNotify_version_label": {
+        "string": "เวอร์ชั่นปัจจุบัน: {0}\nเวอร์ชั่นใหม่: {1}",
+        "comment": "0: Current programm version, 1: New programm version"
+    },
+    "window_relNotify_changelog_label": {
+        "string": "การเปลี่ยนแปลง:",
+        "comment": ""
+    },
+    "window_relNotify_web_btn": {
+        "string": "เปิดในเว็บเบราว์เซอร์",
+        "comment": ""
+    },
+    "window_relNotify_dl_btn": {
+        "string": "ดาวน์โหลดและติดตั้งอัปเดต",
+        "comment": ""
+    },
+    "window_relNotify_close_btn": {
+        "string": "ปิด",
+        "comment": ""
+    },
+    "window_queue_title": {
+        "string": "คิดการดาวน์โหลด",
+        "comment": ""
+    },
+    "window_queue_table_num": {
+        "string": "เลขที่",
+        "comment": ""
+    },
+    "window_queue_table_game": {
+        "string": "เกม",
+        "comment": ""
+    },
+    "window_queue_table_titleid": {
+        "string": "รหัสเกม",
+        "comment": ""
+    },
+    "window_queue_table_ver": {
+        "string": "เวอร์ชั่น",
+        "comment": ""
+    },
+    "window_queue_table_size": {
+        "string": "ขนาดไฟล์",
+        "comment": ""
+    },
+    "window_queue_download_btn": {
+        "string": "เริ่มดาวน์โหลด",
+        "comment": ""
+    },
+    "window_queue_close_btn": {
+        "string": "ปิด",
+        "comment": ""
+    },
+    "window_queue_moveup_btn": {
+        "string": "ย้ายขั้น",
+        "comment": ""
+    },
+    "window_queue_movedown_btn": {
+        "string": "ย้ายลง",
+        "comment": ""
+    },
+    "window_queue_remove_btn": {
+        "string": "ลบ",
+        "comment": ""
+    },
+    "window_queue_totalsize_label": {
+        "string": "ขนาดไฟล์: {0}",
+        "comment": "0: Total download size of queue"
+    },
+    "msg_configFileLoaded": {
+        "string": "โหลดไฟล์การกำหนดค่าเรียบร้อยแล้ว!",
+        "comment": ""
+    },
+    "msg_noConfigFile": {
+        "string": "ไม่พบไฟล์การกำหนดค่าใช้การตั้งค่าเดิม!",
+        "comment": ""
+    },
+    "msg_configFileSaved": {
+        "string": "บันทึกการกำหนดค่าแล้วร้อยแล้ว",
+        "comment": ""
+    },
+    "msg_loadedTitledb": {
+        "string": "โหลดรหัสเกม \"{0}\"",
+        "comment": "0: Path to TitleDB"
+    },
+    "msg_titleIDIs": {
+        "string": "เกม: {0}\t รหัสเกม: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "msg_titleIDNotValid": {
+        "string": "รหัสเกมไม่ถูกต้องd!",
+        "comment": ""
+    },
+    "msg_metaNotAvailable": {
+        "string": "ไม่พบไฟล์ Meta สำหรับรหัสเกมนี้!",
+        "comment": ""
+    },
+    "msg_metaFileEmpty": {
+        "string": "ไม่พบข้อมูลที่อยู่ในไฟล์ Meta สำหรับรหัสเกมนี้!",
+        "comment": ""
+    },
+    "msg_startingDownloads": {
+        "string": "เริ่มดาวน์โหลดอัปเดต",
+        "comment": ""
+    },
+    "msg_alreadyDownloadedNoVerify": {
+        "string": "ไฟล์ \"{0}\" ถูกดาวน์โหลดแล้วกำลังทำการข้าม! ไฟล์ไม่ถูกยืนยัน!",
+        "comment": "0: File name"
+    },
+    "msg_alreadyDownloadedVerify": {
+        "string": "ไฟล์ \"{0}\" ถูกดาวน์โหลดแล้วกำลังทำการข้าม! ยืนยันโดยการเข้ารหัส SHA-1!",
+        "comment": "0: File name"
+    },
+    "msg_startSingleDownload": {
+        "string": "เริ่มการดาวน์โหลดแล้ว {0} จาก {1}",
+        "comment": "0: Number of download, 1: Total number of downloads in queue"
+    },
+    "msg_verifySuccess": {
+        "string": "การยืนยันสำหรับ \"{0}\" เสร็จสิ้นแล้ว!",
+        "comment": "0: File name"
+    },
+    "msg_verifyFailure": {
+        "string": "การยืนยันสำหรับ \"{0}\" ล้มเหลว!\tกำลังลบไฟล์!",
+        "comment": "0: File name"
+    },
+    "msg_noVerify": {
+        "string": "ไฟล์ \"{0}\" ไม่ได้รับการยืนยัน!",
+        "comment": "0: File name"
+    },
+    "msg_finishedDownload": {
+        "string": "กำลังเสร็จสิ้นการดาวน์โหลด {0} ไฟล์!",
+        "comment": "0: Number of files downloaded"
+    },
+    "msg_notEnoughDiskSpace": {
+        "string": "พื้นที่ไม่เพียงพอ!",
+        "comment": ""
+    },
+    "msg_spaceBelowThreshold": {
+        "string": "ขนาดที่ว่างมีน้อยกว่า {0}%",
+        "comment": "0: Storage threshold"
+    },
+    "msg_relCheckError": {
+        "string": "ไม่สามารถตรวจสอบเนื้อหาใหม่ได้!",
+        "comment": ""
+    },
+    "msg_alreadyUpToDate": {
+        "string": "เป็นเนื้อหาล่าสุดอยู่แล้ว!",
+        "comment": ""
+    },
+    "msg_foundNewRelease": {
+        "string": "พบเนื้อหาใหม่ \"{0}\"",
+        "comment": "0: New programm version"
+    },
+    "msg_NoReleaseArchiveForPlatformOrArch": {
+        "string": "ไม่สามารถค้นหาเนื้อใหม่สำหรับสถาปัตยกรรมหรือแพลตฟอร์มปัจจุบันของคุณได้. แพลตฟอร์ม(Platform): \"{0}\" สถาปัตยกรรม(Architecture): \"{1}\" การประมวลผล(Compile): \"{2}\"",
+        "comment": "0: Platform, 1: Architecture, 2: App is compiled(True|False)"
+    },
+    "msg_dldirNotWriteable": {
+        "string": "เส้นการดาวน์โหลดที่คุณได้เลือกไว้ไม่สามารถเขียนข้อมูลได้! \"{0}\"",
+        "comment": "0: Directory name"
+    },
+    "msg_checkProxySettings": {
+        "string": "กรุณาตรวจสอบความถูกต้องของการตั้งค่าพร็อกซี่เซิฟเวอร์!",
+        "comment": ""
+    }
 }

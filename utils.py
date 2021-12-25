@@ -79,14 +79,14 @@ class Loc():
         for loc in locFiles:
             with open(os.path.join(self.locDir,loc), "r", encoding="utf8") as j:
                 l = json.loads(j.read())
-            self.locList.append({"language_name":l["language_name"], "language_short":l["language_short"]})
+            self.locList.append({"language_name":l["language_name"]["string"], "language_short":l["language_short"]["string"]})
             del(l)
     
     def getLocs(self):
         return self.locList
         
     def getLoc(self):
-        return self.currentLoc["language_short"]
+        return self.getKey("language_short")
         
     def setLoc(self, loc=None):
         if loc != None:
@@ -101,10 +101,10 @@ class Loc():
                 
     def getKey(self, key, args=[]):
         try:
-            return massFormat(self.currentLoc[key], args)
+            return massFormat(self.currentLoc[key]["string"], args)
         except KeyError:
             try:
-                return massFormat(self.fallbackLoc[key], args)
+                return massFormat(self.fallbackLoc[key]["string"], args)
             except KeyError:
                 return "ERROR \""+key+"\""
 

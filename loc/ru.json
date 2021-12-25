@@ -1,83 +1,298 @@
 {
-    "language_name": "Русский",
-    "language_short": "ru",
-    
-    
-    "window_main_title": "PS3 Game Update Downloader",
-    "window_main_titleid_label": "Введите TitleID",
-    "window_main_enter_btn": "Найти",
-    "window_main_progress_label": "Загрузка файла {0}:\n{1}/{2}({3}%)\nСкорость: {4}",
-    "window_main_config_btn": "Настройки",
-    "window_main_exit_btn": "Выход",
-    "window_main_queue_btn": "Очередь загрузок",
-    
-    "window_config_title": "Настройки",
-    "window_config_dldir_label": "Папка загрузок:",
-    "window_config_verify_label": "Проверять целостность файлов:",
-    "window_config_checkIfAlreadyDownloaded_label": "Проверять, был ли файл уже загружен:",
-    "window_config_checkForNewRelease_label": "Проверять обновления при запуске:",
-    "window_config_storageThreshold_label": "Лимит диска (в %):",
-    "window_config_currentLoc_label": "Язык:",
-    "window_config_useproxy_label": "Использовать прокси? (ТОЛЬКО SOCKS5!)",
-    "window_config_proxyip_label": "IP прокси:",
-    "window_config_proxyport_label": "Порт прокси:",
-    "window_config_proxyuser_laber": "Пользователь прокси:",
-    "window_config_proxypass_label": "Пароль прокси",
-    "window_config_cancel_btn": "Отмена",
-    "window_config_save_btn": "Сохранить",
-    
-    "window_select_title": "Выбор обновлений",
-    "window_select_text_label": "Игра: {0}\tTitleID: {1}",
-    "window_select_table_ver": "Версия",
-    "window_select_table_size": "Размер файла",
-    "window_select_table_sysver": "Версия PS3 FW",
-    "window_select_download_btn": "Загрузить",
-    "window_select_cancel_btn": "Отмена",
-    "window_select_queue_btn": "Добавить в очередь загрузок",
-    "window_select_help_label": "Удерживайте Ctrl и кликайте на обновления, которые хотите выбрать.",
-    
-    "window_relNotify_title": "Доступно обновление!",
-    "window_relNotify_version_label": "Текущая версия: {0}\nНовая версия: {1}",
-    "window_relNotify_changelog_label": "Изменения:",
-    "window_relNotify_web_btn": "Открыть сайт в браузере",
-    "window_relNotify_dl_btn": "Загрузить и установить обновление",
-    "window_relNotify_close_btn": "Закрыть",
-    
-    "window_queue_title": "Очередь загрузок",
-    "window_queue_table_num": "№",
-    "window_queue_table_game": "Игра",
-    "window_queue_table_titleid": "TitleID",
-    "window_queue_table_ver": "Версия",
-    "window_queue_table_size": "Размер файла",
-    "window_queue_download_btn": "Начать загрузку",
-    "window_queue_close_btn": "Закрыть",
-    "window_queue_moveup_btn": "Выше",
-    "window_queue_movedown_btn": "Ниже",
-    "window_queue_remove_btn": "Удалить",
-    "window_queue_totalsize_label": "Общий размер: {0}",
-    
-    "msg_configFileLoaded": "Конфигурация загружена из файла!",
-    "msg_noConfigFile": "Файл конфигурации не найден! Используются настройки по умолчанию!",
-    "msg_configFileSaved": "Файл конфигурации сохранен!",
-    "msg_loadedTitledb": "Загружен TitleDB \"{0}\"",
-    "msg_titleIDIs": "Игра: {0}\t TitleID: {1}",
-    "msg_titleIDNotValid": "Неверный TitleID!",
-    "msg_metaNotAvailable": "Недоступен мета-файл для данного TitleID!",
-    "msg_metaFileEmpty": "Мета-файл для данного TitleID пустой!",
-    "msg_startingDownloads": "Начало загрузки",
-    "msg_alreadyDownloadedNoVerify": "Файл \"{0}\" был загружен ранее и будет пропущен! Целостность не подтрерждена!",
-    "msg_alreadyDownloadedVerify": "Файл \"{0}\" был загружен ранее и будет пропущен! Хеш SHA-1 подтрержден!",
-    "msg_startSingleDownload": "Начало загрузки {0} из {1}",
-    "msg_verifySuccess": "Целостность файла \"{0}\" подтверждена!",
-    "msg_verifyFailure": "Целостность файла \"{0}\" не подтверждена!\tФайл будет удален!",
-    "msg_noVerify": "Целостность файла \"{0}\" не подтверждена!",
-    "msg_finishedDownload": "Завершена загрузка {0} файлов!",
-    "msg_notEnoughDiskSpace": "Недостаточно места на диске!",
-    "msg_spaceBelowThreshold": "На диске менее {0}% свободного места",
-    "msg_relCheckError": "Не удалось проверить обновления!",
-    "msg_alreadyUpToDate": "Используется последняя версия!",
-    "msg_foundNewRelease": "Найдена новая версия \"{0}\"",
-    "msg_NoReleaseArchiveForPlatformOrArch": "Не удалось найти версию для вашей архитектуры или платформы. Платформа: \"{0}\" Архитектура: \"{1}\" Скомпилированный код: \"{2}\"",
-    "msg_dldirNotWriteable": "Нет доступа для записи файлов в выбранную папку загрузок \"{0}\"",
-    "msg_checkProxySettings": "Убедитесь, что настройки прокси введены правльно!"
+    "language_name": {
+        "string": "Русский",
+        "comment": "Name of the language"
+    },
+    "language_short": {
+        "string": "ru",
+        "comment": "Name of the language file"
+    },
+    "window_main_title": {
+        "string": "PS3 Game Update Downloader",
+        "comment": "Main window title (don't translate)"
+    },
+    "window_main_titleid_label": {
+        "string": "Введите TitleID",
+        "comment": ""
+    },
+    "window_main_enter_btn": {
+        "string": "Найти",
+        "comment": ""
+    },
+    "window_main_progress_label": {
+        "string": "Загрузка файла {0}:\n{1}/{2}({3}%)\nСкорость: {4}",
+        "comment": "0: Number of download, 1: Amount of downloaded data, 2: Total file size, 3: Amount of downloaded data in %, 4: Download speed"
+    },
+    "window_main_config_btn": {
+        "string": "Настройки",
+        "comment": ""
+    },
+    "window_main_exit_btn": {
+        "string": "Выход",
+        "comment": ""
+    },
+    "window_main_queue_btn": {
+        "string": "Очередь загрузок",
+        "comment": ""
+    },
+    "window_config_title": {
+        "string": "Настройки",
+        "comment": ""
+    },
+    "window_config_dldir_label": {
+        "string": "Папка загрузок:",
+        "comment": ""
+    },
+    "window_config_verify_label": {
+        "string": "Проверять целостность файлов:",
+        "comment": ""
+    },
+    "window_config_checkIfAlreadyDownloaded_label": {
+        "string": "Проверять, был ли файл уже загружен:",
+        "comment": ""
+    },
+    "window_config_checkForNewRelease_label": {
+        "string": "Проверять обновления при запуске:",
+        "comment": ""
+    },
+    "window_config_storageThreshold_label": {
+        "string": "Лимит диска (в %):",
+        "comment": ""
+    },
+    "window_config_currentLoc_label": {
+        "string": "Язык:",
+        "comment": ""
+    },
+    "window_config_useproxy_label": {
+        "string": "Использовать прокси? (ТОЛЬКО SOCKS5!)",
+        "comment": ""
+    },
+    "window_config_proxyip_label": {
+        "string": "IP прокси:",
+        "comment": ""
+    },
+    "window_config_proxyport_label": {
+        "string": "Порт прокси:",
+        "comment": ""
+    },
+    "window_config_proxyuser_laber": {
+        "string": "Пользователь прокси:",
+        "comment": ""
+    },
+    "window_config_proxypass_label": {
+        "string": "Пароль прокси",
+        "comment": ""
+    },
+    "window_config_cancel_btn": {
+        "string": "Отмена",
+        "comment": ""
+    },
+    "window_config_save_btn": {
+        "string": "Сохранить",
+        "comment": ""
+    },
+    "window_select_title": {
+        "string": "Выбор обновлений",
+        "comment": ""
+    },
+    "window_select_text_label": {
+        "string": "Игра: {0}\tTitleID: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "window_select_table_ver": {
+        "string": "Версия",
+        "comment": ""
+    },
+    "window_select_table_size": {
+        "string": "Размер файла",
+        "comment": ""
+    },
+    "window_select_table_sysver": {
+        "string": "Версия PS3 FW",
+        "comment": ""
+    },
+    "window_select_download_btn": {
+        "string": "Загрузить",
+        "comment": ""
+    },
+    "window_select_cancel_btn": {
+        "string": "Отмена",
+        "comment": ""
+    },
+    "window_select_queue_btn": {
+        "string": "Добавить в очередь загрузок",
+        "comment": ""
+    },
+    "window_select_help_label": {
+        "string": "Удерживайте Ctrl и кликайте на обновления, которые хотите выбрать.",
+        "comment": ""
+    },
+    "window_relNotify_title": {
+        "string": "Доступно обновление!",
+        "comment": ""
+    },
+    "window_relNotify_version_label": {
+        "string": "Текущая версия: {0}\nНовая версия: {1}",
+        "comment": "0: Current programm version, 1: New programm version"
+    },
+    "window_relNotify_changelog_label": {
+        "string": "Изменения:",
+        "comment": ""
+    },
+    "window_relNotify_web_btn": {
+        "string": "Открыть сайт в браузере",
+        "comment": ""
+    },
+    "window_relNotify_dl_btn": {
+        "string": "Загрузить и установить обновление",
+        "comment": ""
+    },
+    "window_relNotify_close_btn": {
+        "string": "Закрыть",
+        "comment": ""
+    },
+    "window_queue_title": {
+        "string": "Очередь загрузок",
+        "comment": ""
+    },
+    "window_queue_table_num": {
+        "string": "№",
+        "comment": ""
+    },
+    "window_queue_table_game": {
+        "string": "Игра",
+        "comment": ""
+    },
+    "window_queue_table_titleid": {
+        "string": "TitleID",
+        "comment": ""
+    },
+    "window_queue_table_ver": {
+        "string": "Версия",
+        "comment": ""
+    },
+    "window_queue_table_size": {
+        "string": "Размер файла",
+        "comment": ""
+    },
+    "window_queue_download_btn": {
+        "string": "Начать загрузку",
+        "comment": ""
+    },
+    "window_queue_close_btn": {
+        "string": "Закрыть",
+        "comment": ""
+    },
+    "window_queue_moveup_btn": {
+        "string": "Выше",
+        "comment": ""
+    },
+    "window_queue_movedown_btn": {
+        "string": "Ниже",
+        "comment": ""
+    },
+    "window_queue_remove_btn": {
+        "string": "Удалить",
+        "comment": ""
+    },
+    "window_queue_totalsize_label": {
+        "string": "Общий размер: {0}",
+        "comment": "0: Total download size of queue"
+    },
+    "msg_configFileLoaded": {
+        "string": "Конфигурация загружена из файла!",
+        "comment": ""
+    },
+    "msg_noConfigFile": {
+        "string": "Файл конфигурации не найден! Используются настройки по умолчанию!",
+        "comment": ""
+    },
+    "msg_configFileSaved": {
+        "string": "Файл конфигурации сохранен!",
+        "comment": ""
+    },
+    "msg_loadedTitledb": {
+        "string": "Загружен TitleDB \"{0}\"",
+        "comment": "0: Path to TitleDB"
+    },
+    "msg_titleIDIs": {
+        "string": "Игра: {0}\t TitleID: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "msg_titleIDNotValid": {
+        "string": "Неверный TitleID!",
+        "comment": ""
+    },
+    "msg_metaNotAvailable": {
+        "string": "Недоступен мета-файл для данного TitleID!",
+        "comment": ""
+    },
+    "msg_metaFileEmpty": {
+        "string": "Мета-файл для данного TitleID пустой!",
+        "comment": ""
+    },
+    "msg_startingDownloads": {
+        "string": "Начало загрузки",
+        "comment": ""
+    },
+    "msg_alreadyDownloadedNoVerify": {
+        "string": "Файл \"{0}\" был загружен ранее и будет пропущен! Целостность не подтрерждена!",
+        "comment": "0: File name"
+    },
+    "msg_alreadyDownloadedVerify": {
+        "string": "Файл \"{0}\" был загружен ранее и будет пропущен! Хеш SHA-1 подтрержден!",
+        "comment": "0: File name"
+    },
+    "msg_startSingleDownload": {
+        "string": "Начало загрузки {0} из {1}",
+        "comment": "0: Number of download, 1: Total number of downloads in queue"
+    },
+    "msg_verifySuccess": {
+        "string": "Целостность файла \"{0}\" подтверждена!",
+        "comment": "0: File name"
+    },
+    "msg_verifyFailure": {
+        "string": "Целостность файла \"{0}\" не подтверждена!\tФайл будет удален!",
+        "comment": "0: File name"
+    },
+    "msg_noVerify": {
+        "string": "Целостность файла \"{0}\" не подтверждена!",
+        "comment": "0: File name"
+    },
+    "msg_finishedDownload": {
+        "string": "Завершена загрузка {0} файлов!",
+        "comment": "0: Number of files downloaded"
+    },
+    "msg_notEnoughDiskSpace": {
+        "string": "Недостаточно места на диске!",
+        "comment": ""
+    },
+    "msg_spaceBelowThreshold": {
+        "string": "На диске менее {0}% свободного места",
+        "comment": "0: Storage threshold"
+    },
+    "msg_relCheckError": {
+        "string": "Не удалось проверить обновления!",
+        "comment": ""
+    },
+    "msg_alreadyUpToDate": {
+        "string": "Используется последняя версия!",
+        "comment": ""
+    },
+    "msg_foundNewRelease": {
+        "string": "Найдена новая версия \"{0}\"",
+        "comment": "0: New programm version"
+    },
+    "msg_NoReleaseArchiveForPlatformOrArch": {
+        "string": "Не удалось найти версию для вашей архитектуры или платформы. Платформа: \"{0}\" Архитектура: \"{1}\" Скомпилированный код: \"{2}\"",
+        "comment": "0: Platform, 1: Architecture, 2: App is compiled(True|False)"
+    },
+    "msg_dldirNotWriteable": {
+        "string": "Нет доступа для записи файлов в выбранную папку загрузок \"{0}\"",
+        "comment": "0: Directory name"
+    },
+    "msg_checkProxySettings": {
+        "string": "Убедитесь, что настройки прокси введены правльно!",
+        "comment": ""
+    }
 }

@@ -1,94 +1,338 @@
 {
-    "language_name": "Deutsch",
-    "language_short": "de",
-    
-    
-    "window_main_title": "PS3 Game Update Downloader",
-    "window_main_titleid_label": "TitleID Eingeben",
-    "window_main_enter_btn": "Suchen",
-    "window_main_progress_label": "Lade Datei {0} herunter:\n{1}/{2}({3}%)\nGeschwindigkeit: {4}",
-    "window_main_config_btn": "Konfiguration",
-    "window_main_exit_btn": "Verlassen",
-    "window_main_queue_btn": "Warteschlange",
-    
-    "window_config_title": "Konfiguration",
-    "window_config_dldir_label": "Downloadverzeichnis:",
-    "window_config_verify_label": "Dateien überprüfen:",
-    "window_config_checkIfAlreadyDownloaded_label": "Prüfen, ob Dateien bereits heruntergeladen wurden:",
-    "window_config_checkForNewRelease_label": "Neue Version beim Starten suchen:",
-    "window_config_storageThreshold_label": "Speichergrenze (in %):",
-    "window_config_currentLoc_label": "Sprache:",
-	"window_config_renamepkgs_label": "PKGs umbenennen:",
-	"window_config_renamepkgs_tooltip": "Benenne PKGs in $GAMENAME_[$GAMEID]_$GAMEVERSION um",
-	"window_config_updatetitledb_label": "Beim Start TitleDB aktualisieren:",
-    "window_config_useproxy_label": "Proxy benutzen? (NUR SOCKS5!)",
-    "window_config_proxyip_label": "Proxy-IP:",
-    "window_config_proxyport_label": "Proxy-Port:",
-    "window_config_proxyuser_laber": "Proxy-Benutzer:",
-    "window_config_proxypass_label": "Proxy-Passwort",
-    "window_config_cancel_btn": "Abbrechen",
-    "window_config_save_btn": "Speichern",
-    
-    "window_select_title": "Updates auswählen",
-    "window_select_text_label": "Spiel: {0}\tTitleID: {1}",
-    "window_select_table_ver": "Version",
-    "window_select_table_size": "Dateigröße",
-    "window_select_table_sysver": "PS3 FW Version",
-    "window_select_download_btn": "Herunterladen",
-    "window_select_cancel_btn": "Abbrechen",    
-    "window_select_queue_btn": "Zur Downloadwarteschlange hinzufügen",
-    "window_select_help_label": "Halten Sie Strg gedrückt und klicken auf die Updates, die Sie auswählen möchten.",
-    
-    "window_relNotify_title": "Neue Version gefunden!",
-    "window_relNotify_version_label": "Aktuelle Version: {0}\nNeue Version: {1}",
-    "window_relNotify_changelog_label": "Neuerungen:",
-    "window_relNotify_web_btn": "Öffne Website im Browser",
-    "window_relNotify_dl_btn": "Update herunterladen und installieren",
-    "window_relNotify_close_btn": "Schließen",
-    
-    "window_queue_title": "Downloadwarteschlange",
-    "window_queue_table_num": "Num",
-    "window_queue_table_game": "Spiel",
-    "window_queue_table_titleid": "TitleID",
-    "window_queue_table_ver": "Version",
-    "window_queue_table_size": "Dateigröße",
-    "window_queue_download_btn": "Herunterladen",
-    "window_queue_close_btn": "Schließen",
-    "window_queue_moveup_btn": "Nach Oben",
-    "window_queue_movedown_btn": "Nach Unten",
-    "window_queue_remove_btn": "Löschen",
-    "window_queue_totalsize_label": "Gesamtgröße: {0}",
-
-	"window_keyring_support_info_label": "Kein brauchbares keyring backend gefunden.\nBesuche bitte die Website von keyring für eine Installationsanleitung.\n{0}",
-	"window_keyring_support_dont_show_again_label": "Nicht nochmal anzeigen",
-	"window_keyring_support_ok_btn": "Ok",
-	"window_keyring_support_browser_btn": "Im Browser öffnen",
-	"window_keyring_support_title": "Achtung! Proxy Unterstützung deaktiviert!",
-    
-    "msg_configFileLoaded": "Konfigurationsdatei geladen!",
-    "msg_noConfigFile": "Keine Konfigurationsdatei gefunden! Benutze Vorgaben!",
-    "msg_configFileSaved": "Konfigurationsdatei gespeichert!",
-    "msg_loadedTitledb": "TitleDB \"{0}\" geladen",
-    "msg_titleIDIs": "Spiel: {0}\t TitleID: {1}",
-    "msg_titleIDNotValid": "TitleID ist falsch!",
-    "msg_metaNotAvailable": "Die Metadatei für diese TitleID ist nicht verfügbar!",
-    "msg_metaFileEmpty": "Die Metadatei für diese TitleID enthält keine Informationen!",
-    "msg_startingDownloads": "Starte Download der Updates",
-    "msg_alreadyDownloadedNoVerify": "Datei \"{0}\" wurde bereits heruntergeladen! Überspringen! Nicht überprüft!",
-    "msg_alreadyDownloadedVerify": "Datei \"{0}\" wurde bereits heruntergeladen! Überspringen! SHA-1 überprüft!",
-    "msg_startSingleDownload": "Starte Download {0} von {1}",
-    "msg_verifySuccess": "Überprüfung von \"{0}\" war erfolgreich!",
-    "msg_verifyFailure": "Überprüfung von \"{0}\" ist gescheitert!\tDatei wird gelöscht!",
-    "msg_noVerify": "Datei \"{0}\" wurde nicht überprüft!",
-    "msg_finishedDownload": "{0} Dateien wurden heruntergeladen!",
-    "msg_notEnoughDiskSpace": "Nicht genügend Speicherplatz!",
-    "msg_spaceBelowThreshold": "Freier Speicherplatz unter {0}%",
-    "msg_relCheckError": "Konnte nicht nach neuer Version suchen!",
-    "msg_alreadyUpToDate": "Bereits neuste Version!",
-    "msg_foundNewRelease": "Neue Version \"{0}\" gefunden",
-    "msg_NoReleaseArchiveForPlatformOrArch": "Konnte kein Release für ihre Plattform oder Architektur finden. Plattform: \"{0}\" Architektur: \"{1}\" Kompiliert: \"{2}\"",
-    "msg_dldirNotWriteable": "Ihr ausgewählter Download-Ordner \"{0}\" ist nicht schreibbar!",
-    "msg_checkProxySettings": "Bitte stellen Sie sicher, dass die Proxy-Einstellungen korrekt sind!",
-	"msg_sonyPS3StoreShutdownNotice": "!!! IMPORTANT !!! Sony hat angekündigt, den PS3-Store am 02.07.21 zu schließen und diese Entscheidung später rückgängig gemacht. Es scheint, dass in der Zeit zwischen der Ankündigung und der Rücknahme wurden einige Spielupdates gelöscht wurden. Ich empfehle Ihnen, Ihre heruntergeladenen Spielupdates zu sichern.",
-	"msg_newTitleDbVersion": "Neue Version der TitleDB heruntergeladen."
+    "language_name": {
+        "string": "Deutsch",
+        "comment": "Name of the language"
+    },
+    "language_short": {
+        "string": "de",
+        "comment": "Name of the language file"
+    },
+    "window_main_title": {
+        "string": "PS3 Game Update Downloader",
+        "comment": "Main window title (don't translate)"
+    },
+    "window_main_titleid_label": {
+        "string": "TitleID Eingeben",
+        "comment": ""
+    },
+    "window_main_enter_btn": {
+        "string": "Suchen",
+        "comment": ""
+    },
+    "window_main_progress_label": {
+        "string": "Lade Datei {0} herunter:\n{1}/{2}({3}%)\nGeschwindigkeit: {4}",
+        "comment": "0: Number of download, 1: Amount of downloaded data, 2: Total file size, 3: Amount of downloaded data in %, 4: Download speed"
+    },
+    "window_main_config_btn": {
+        "string": "Konfiguration",
+        "comment": ""
+    },
+    "window_main_exit_btn": {
+        "string": "Verlassen",
+        "comment": ""
+    },
+    "window_main_queue_btn": {
+        "string": "Warteschlange",
+        "comment": ""
+    },
+    "window_config_title": {
+        "string": "Konfiguration",
+        "comment": ""
+    },
+    "window_config_dldir_label": {
+        "string": "Downloadverzeichnis:",
+        "comment": ""
+    },
+    "window_config_verify_label": {
+        "string": "Dateien überprüfen:",
+        "comment": ""
+    },
+    "window_config_checkIfAlreadyDownloaded_label": {
+        "string": "Prüfen, ob Dateien bereits heruntergeladen wurden:",
+        "comment": ""
+    },
+    "window_config_checkForNewRelease_label": {
+        "string": "Neue Version beim Starten suchen:",
+        "comment": ""
+    },
+    "window_config_storageThreshold_label": {
+        "string": "Speichergrenze (in %):",
+        "comment": ""
+    },
+    "window_config_currentLoc_label": {
+        "string": "Sprache:",
+        "comment": ""
+    },
+    "window_config_renamepkgs_label": {
+        "string": "PKGs umbenennen:",
+        "comment": ""
+    },
+    "window_config_renamepkgs_tooltip": {
+        "string": "Benenne PKGs in $GAMENAME_[$GAMEID]_$GAMEVERSION um",
+        "comment": ""
+    },
+    "window_config_updatetitledb_label": {
+        "string": "Beim Start TitleDB aktualisieren:",
+        "comment": ""
+    },
+    "window_config_useproxy_label": {
+        "string": "Proxy benutzen? (NUR SOCKS5!)",
+        "comment": ""
+    },
+    "window_config_proxyip_label": {
+        "string": "Proxy-IP:",
+        "comment": ""
+    },
+    "window_config_proxyport_label": {
+        "string": "Proxy-Port:",
+        "comment": ""
+    },
+    "window_config_proxyuser_laber": {
+        "string": "Proxy-Benutzer:",
+        "comment": ""
+    },
+    "window_config_proxypass_label": {
+        "string": "Proxy-Passwort",
+        "comment": ""
+    },
+    "window_config_cancel_btn": {
+        "string": "Abbrechen",
+        "comment": ""
+    },
+    "window_config_save_btn": {
+        "string": "Speichern",
+        "comment": ""
+    },
+    "window_select_title": {
+        "string": "Updates auswählen",
+        "comment": ""
+    },
+    "window_select_text_label": {
+        "string": "Spiel: {0}\tTitleID: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "window_select_table_ver": {
+        "string": "Version",
+        "comment": ""
+    },
+    "window_select_table_size": {
+        "string": "Dateigröße",
+        "comment": ""
+    },
+    "window_select_table_sysver": {
+        "string": "PS3 FW Version",
+        "comment": ""
+    },
+    "window_select_download_btn": {
+        "string": "Herunterladen",
+        "comment": ""
+    },
+    "window_select_cancel_btn": {
+        "string": "Abbrechen",
+        "comment": ""
+    },
+    "window_select_queue_btn": {
+        "string": "Zur Downloadwarteschlange hinzufügen",
+        "comment": ""
+    },
+    "window_select_help_label": {
+        "string": "Halten Sie Strg gedrückt und klicken auf die Updates, die Sie auswählen möchten.",
+        "comment": ""
+    },
+    "window_relNotify_title": {
+        "string": "Neue Version gefunden!",
+        "comment": ""
+    },
+    "window_relNotify_version_label": {
+        "string": "Aktuelle Version: {0}\nNeue Version: {1}",
+        "comment": "0: Current programm version, 1: New programm version"
+    },
+    "window_relNotify_changelog_label": {
+        "string": "Neuerungen:",
+        "comment": ""
+    },
+    "window_relNotify_web_btn": {
+        "string": "Öffne Website im Browser",
+        "comment": ""
+    },
+    "window_relNotify_dl_btn": {
+        "string": "Update herunterladen und installieren",
+        "comment": ""
+    },
+    "window_relNotify_close_btn": {
+        "string": "Schließen",
+        "comment": ""
+    },
+    "window_queue_title": {
+        "string": "Downloadwarteschlange",
+        "comment": ""
+    },
+    "window_queue_table_num": {
+        "string": "Num",
+        "comment": ""
+    },
+    "window_queue_table_game": {
+        "string": "Spiel",
+        "comment": ""
+    },
+    "window_queue_table_titleid": {
+        "string": "TitleID",
+        "comment": ""
+    },
+    "window_queue_table_ver": {
+        "string": "Version",
+        "comment": ""
+    },
+    "window_queue_table_size": {
+        "string": "Dateigröße",
+        "comment": ""
+    },
+    "window_queue_download_btn": {
+        "string": "Herunterladen",
+        "comment": ""
+    },
+    "window_queue_close_btn": {
+        "string": "Schließen",
+        "comment": ""
+    },
+    "window_queue_moveup_btn": {
+        "string": "Nach Oben",
+        "comment": ""
+    },
+    "window_queue_movedown_btn": {
+        "string": "Nach Unten",
+        "comment": ""
+    },
+    "window_queue_remove_btn": {
+        "string": "Löschen",
+        "comment": ""
+    },
+    "window_queue_totalsize_label": {
+        "string": "Gesamtgröße: {0}",
+        "comment": "0: Total download size of queue"
+    },
+    "window_keyring_support_info_label": {
+        "string": "Kein brauchbares keyring backend gefunden.\nBesuche bitte die Website von keyring für eine Installationsanleitung.\n{0}",
+        "comment": "0: Url of keyring homepage"
+    },
+    "window_keyring_support_dont_show_again_label": {
+        "string": "Nicht nochmal anzeigen",
+        "comment": ""
+    },
+    "window_keyring_support_ok_btn": {
+        "string": "Ok",
+        "comment": ""
+    },
+    "window_keyring_support_browser_btn": {
+        "string": "Im Browser öffnen",
+        "comment": ""
+    },
+    "window_keyring_support_title": {
+        "string": "Achtung! Proxy Unterstützung deaktiviert!",
+        "comment": ""
+    },
+    "msg_configFileLoaded": {
+        "string": "Konfigurationsdatei geladen!",
+        "comment": ""
+    },
+    "msg_noConfigFile": {
+        "string": "Keine Konfigurationsdatei gefunden! Benutze Vorgaben!",
+        "comment": ""
+    },
+    "msg_configFileSaved": {
+        "string": "Konfigurationsdatei gespeichert!",
+        "comment": ""
+    },
+    "msg_loadedTitledb": {
+        "string": "TitleDB \"{0}\" geladen",
+        "comment": "0: Path to TitleDB"
+    },
+    "msg_titleIDIs": {
+        "string": "Spiel: {0}\t TitleID: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "msg_titleIDNotValid": {
+        "string": "TitleID ist falsch!",
+        "comment": ""
+    },
+    "msg_metaNotAvailable": {
+        "string": "Die Metadatei für diese TitleID ist nicht verfügbar!",
+        "comment": ""
+    },
+    "msg_metaFileEmpty": {
+        "string": "Die Metadatei für diese TitleID enthält keine Informationen!",
+        "comment": ""
+    },
+    "msg_startingDownloads": {
+        "string": "Starte Download der Updates",
+        "comment": ""
+    },
+    "msg_alreadyDownloadedNoVerify": {
+        "string": "Datei \"{0}\" wurde bereits heruntergeladen! Überspringen! Nicht überprüft!",
+        "comment": "0: File name"
+    },
+    "msg_alreadyDownloadedVerify": {
+        "string": "Datei \"{0}\" wurde bereits heruntergeladen! Überspringen! SHA-1 überprüft!",
+        "comment": "0: File name"
+    },
+    "msg_startSingleDownload": {
+        "string": "Starte Download {0} von {1}",
+        "comment": "0: Number of download, 1: Total number of downloads in queue"
+    },
+    "msg_verifySuccess": {
+        "string": "Überprüfung von \"{0}\" war erfolgreich!",
+        "comment": "0: File name"
+    },
+    "msg_verifyFailure": {
+        "string": "Überprüfung von \"{0}\" ist gescheitert!\tDatei wird gelöscht!",
+        "comment": "0: File name"
+    },
+    "msg_noVerify": {
+        "string": "Datei \"{0}\" wurde nicht überprüft!",
+        "comment": "0: File name"
+    },
+    "msg_finishedDownload": {
+        "string": "{0} Dateien wurden heruntergeladen!",
+        "comment": "0: Number of files downloaded"
+    },
+    "msg_notEnoughDiskSpace": {
+        "string": "Nicht genügend Speicherplatz!",
+        "comment": ""
+    },
+    "msg_spaceBelowThreshold": {
+        "string": "Freier Speicherplatz unter {0}%",
+        "comment": "0: Storage threshold"
+    },
+    "msg_relCheckError": {
+        "string": "Konnte nicht nach neuer Version suchen!",
+        "comment": ""
+    },
+    "msg_alreadyUpToDate": {
+        "string": "Bereits neuste Version!",
+        "comment": ""
+    },
+    "msg_foundNewRelease": {
+        "string": "Neue Version \"{0}\" gefunden",
+        "comment": "0: New programm version"
+    },
+    "msg_NoReleaseArchiveForPlatformOrArch": {
+        "string": "Konnte kein Release für ihre Plattform oder Architektur finden. Plattform: \"{0}\" Architektur: \"{1}\" Kompiliert: \"{2}\"",
+        "comment": "0: Platform, 1: Architecture, 2: App is compiled(True|False)"
+    },
+    "msg_dldirNotWriteable": {
+        "string": "Ihr ausgewählter Download-Ordner \"{0}\" ist nicht schreibbar!",
+        "comment": "0: Directory name"
+    },
+    "msg_checkProxySettings": {
+        "string": "Bitte stellen Sie sicher, dass die Proxy-Einstellungen korrekt sind!",
+        "comment": ""
+    },
+    "msg_sonyPS3StoreShutdownNotice": {
+        "string": "!!! IMPORTANT !!! Sony hat angekündigt, den PS3-Store am 02.07.21 zu schließen und diese Entscheidung später rückgängig gemacht. Es scheint, dass in der Zeit zwischen der Ankündigung und der Rücknahme wurden einige Spielupdates gelöscht wurden. Ich empfehle Ihnen, Ihre heruntergeladenen Spielupdates zu sichern.",
+        "comment": ""
+    },
+    "msg_newTitleDbVersion": {
+        "string": "Neue Version der TitleDB heruntergeladen.",
+        "comment": ""
+    }
 }
