@@ -73,7 +73,7 @@ class PS3GUD():
             with open(self.configFile, "r", encoding="utf8") as f:
                 self.config = json.loads(f.read())
             self.useDefaultConfig = False
-            if self.config["use_proxy"] == True:
+            if self.getConfig("use_proxy") == True:
                 self.config["proxy_pass"], self.config["proxy_user"] = self.getProxyCredentials()
             else:
                 self.config["proxy_pass"], self.config["proxy_user"] = (None, None)
@@ -227,31 +227,31 @@ class PS3GUD():
             sha1 = dl["sha1"]
             size = dl["size"]
             id = dl["gameid"]
-            fdir = os.path.join(self.config["dldir"]+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+"["+id+"]/")
+            fdir = os.path.join(self.getConfig("dldir")+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+"["+id+"]/")
             if self.getConfig("rename_pkgs") == True:
                 fname = os.path.join(fdir, utils.filterIllegalCharsFilename(self.getTitleNameFromId(id)+"_["+id+"]_"+dl["version"]+".pkg"))
             else:
                 fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
 
-            if os.path.exists(self.config["dldir"]) == False and os.path.isfile(self.config["dldir"]) == False:
+            if os.path.exists(self.getConfig("dldir")) == False and os.path.isfile(self.getConfig("dldir")) == False:
                 try:
-                    os.mkdir(self.config["dldir"])
+                    os.mkdir(self.getConfig("dldir"))
                 except (PermissionError, FileNotFoundError):
-                    self.logger.log(self.loc.getKey("msg_dldirNotWriteable", [self.config["dldir"]]))
+                    self.logger.log(self.loc.getKey("msg_dldirNotWriteable", [self.getConfig("dldir")]))
                     skip = True
             if os.path.exists(fdir) == False and os.path.isfile(fdir) == False:
                 try:
                     os.mkdir(fdir)
                 except (PermissionError, FileNotFoundError):
-                    self.logger.log(self.loc.getKey("msg_dldirNotWriteable", [self.config["dldir"]]))
+                    self.logger.log(self.loc.getKey("msg_dldirNotWriteable", [self.getConfig("dldir")]))
                     skip = True
             total, used, free = shutil.disk_usage(fdir)
             
-            if self.config["checkIfAlreadyDownloaded"] == True:
+            if self.getConfig("checkIfAlreadyDownloaded") == True:
                 #check if file already exists
                 if os.path.exists(fname) and os.path.isfile(fname):
                     if int(os.path.getsize(fname)) == int(size):
-                        if self.config["verify"] == False:
+                        if self.getConfig("verify") == False:
                             self.logger.log(self.loc.getKey("msg_alreadyDownloadedNoVerify", [os.path.basename(url)]))
                             skip = True
                         else:
@@ -270,13 +270,13 @@ class PS3GUD():
                 else:
                     self.logger.log(self.loc.getKey("msg_spaceBelowThreshold", [self.getConfig("storageThreshold")]), "e")
                     skip = True
-            if self.config["verify"] == True and skip == False:
+            if self.getConfig("verify") == True and skip == False:
                 if sha1 == self._sha1File(fname):
                     self.logger.log(self.loc.getKey("msg_verifySuccess", [fname]))
                 else:
                     self.logger.log(self.loc.getKey("msg_verifyFailure", [fname]))
                     os.remove(fname)
-            if self.config["verify"] == False and skip == False:
+            if self.getConfig("verify") == False and skip == False:
                 self.logger.log(self.loc.getKey("msg_noVerify", [fname]))
             if skip == True:
                 self.DlList.removeEntry(dl["gameid"]+"-"+dl["version"])
