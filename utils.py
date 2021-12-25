@@ -38,7 +38,7 @@ class Logger():
         else:
             self.window = None
             
-    def log(self, text,level="i"):
+    def log(self, text, level="i"):
         if level == "i":
             level = "[INFO]"
         elif level == "w":
@@ -47,21 +47,14 @@ class Logger():
             level = "[ERROR]"
         
         if type(text) != str:
-            log = level+" "+str(datetime.datetime.now())+" "+str(text)
-            if self.window != None:
-                print(log)
-                self.window.Refresh()
-            self.logfile.write(log+"\n")
-            self.logfile.flush()
-            os.fsync(self.logfile.fileno())
-        else:
-            log = level+" "+str(datetime.datetime.now())+" "+text
-            if self.window != None:
-                print(log)
-                self.window.Refresh()
-            self.logfile.write(log+"\n")
-            self.logfile.flush()
-            os.fsync(self.logfile.fileno())
+            text = str(text)
+        log = level+" "+str(datetime.datetime.now())+" "+text
+        if self.window != None:
+            print(log)
+            self.window.Refresh()
+        self.logfile.write(log+"\n")
+        self.logfile.flush()
+        os.fsync(self.logfile.fileno())
     
     def __del__(self):
         self.logfile.close()
