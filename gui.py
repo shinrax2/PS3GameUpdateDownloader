@@ -317,7 +317,7 @@ class Gui():
         layQueue = [
                     [sg.Table(values=queueData, headings=[self.loc.getKey("window_queue_table_num"), self.loc.getKey("window_queue_table_game"), self.loc.getKey("window_queue_table_titleid"), self.loc.getKey("window_queue_table_ver"), self.loc.getKey("window_queue_table_size")], key="Table", enable_events=True)],
                     [sg.Text(self.loc.getKey("window_queue_totalsize_label", [utils.formatSize(self.ps3.DlList.getTotalDownloadSize())]), key="TotalSize", size=(20, 1))],
-                    [sg.Text(self.loc.getKey("window_queue_export_label")), sg.OptionMenu(["txt"], key="export_format"), sg.Input("", key="exportFile"), sg.FileSaveAs(target="exportFile"), sg.Button(self.loc.getKey("window_queue_export_btn"), key="export")],
+                    [sg.Text(self.loc.getKey("window_queue_export_label")), sg.Input("", key="exportFile"), sg.FileSaveAs(target="exportFile"), sg.Button(self.loc.getKey("window_queue_export_btn"), key="export")],
                     [sg.Button(self.loc.getKey("window_queue_moveup_btn"), key="Move Up", disabled=True), sg.Button(self.loc.getKey("window_queue_movedown_btn"), key="Move Down", disabled=True), sg.Button(self.loc.getKey("window_queue_remove_btn"), key="Remove", disabled=True)],
                     [sg.Button(self.loc.getKey("window_queue_download_btn"), key="Download"), sg.Button(self.loc.getKey("window_queue_close_btn"), key="Close")]
         ]
@@ -361,7 +361,7 @@ class Gui():
                 self.mainWindow.UnHide()
                 break
             if evQueue == "export":
-                self.ps3.DlList.exportQueue(valQueue["export_format"], valQueue["exportFile"])
+                self.ps3.DlList.exportQueue(valQueue["exportFile"])
             if evQueue in (None, "Exit"):
                 self.queueWindow.Close()
                 self.mainWindow.UnHide()

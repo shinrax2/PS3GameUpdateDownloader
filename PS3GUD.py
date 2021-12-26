@@ -410,20 +410,19 @@ class Queue():
                 ret = True
         return ret
         
-    def exportQueue(self, format, exportFile):
-        if format == "txt":
-            s = ""
-            games = {}
-            for entry in self.queue:
-                try:
-                    games[entry["gameid"]]
-                except KeyError:
-                    games[entry["gameid"]] = []
-                games[entry["gameid"]].append(entry["url"])
-            for id, data in games.items():
-                s += self.ps3.getTitleNameFromId(id)+"["+id+"]:\n\n"
-                for url in data:
-                    s += "\t"+url+"\n"
-                s += "\n"
-            with open(exportFile, "w") as f:
-                f.write(s)
+    def exportQueue(self, exportFile):
+        s = ""
+        games = {}
+        for entry in self.queue:
+            try:
+                games[entry["gameid"]]
+            except KeyError:
+                games[entry["gameid"]] = []
+            games[entry["gameid"]].append(entry["url"])
+        for id, data in games.items():
+            s += self.ps3.getTitleNameFromId(id)+"["+id+"]:\n\n"
+            for url in data:
+                s += "\t"+url+"\n"
+            s += "\n"
+        with open(exportFile, "w", encoding="utf8") as f:
+            f.write(s)
