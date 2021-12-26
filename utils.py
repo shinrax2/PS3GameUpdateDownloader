@@ -18,6 +18,7 @@ import sys
 import distutils.core
 import shlex
 import traceback
+import hashlib
 
 #pip packages
 import requests
@@ -127,6 +128,14 @@ class UpdaterGithubRelease():
                 return num
             num += 1
         return -1
+        
+    def getRightAssetNumSHA256(self):
+        num = 0
+        for asset in self.resp["assets"]:
+            if asset["browser_download_url"].endswith(getArchiveSuffix()+".zip.sha256"):
+                return num
+            num += 1
+        return -1
     
     def checkForNewRelease(self):
         try:
@@ -154,6 +163,7 @@ class UpdaterGithubRelease():
         bar = window["updater_progressbar"]
         tdir = tempfile.gettempdir()
         url = self.resp["assets"][self.getRightAssetNum()]["browser_download_url"]
+        shaurl = self.resp["assets"][self.getRightAssetNumSHA256()]["browser_download_url"]
         local_filename = os.path.join(tdir, os.path.basename(url))
         chunk_size=8192
         count = 0
@@ -175,49 +185,52 @@ class UpdaterGithubRelease():
                         bar.UpdateBar(percentage)
                         window.Refresh()
         if int(os.path.getsize(local_filename)) == int(self.resp["assets"][0]["size"]):
-            text.Update("Backing up stuff")
+            text.Update("Verifying update")
             window.Refresh()
-            #backup config and downloadedPKGs
-            if os.path.exists(os.path.join(cwd, "config.json")) and os.path.isfile(os.path.join(cwd, "config.json")):
-                shutil.copy2(os.path.join(cwd, "config.json"), os.path.join(tdir, "config.json"))
-            if os.path.exists(os.path.join(tdir, "downloadedPKGs")) and os.path.isdir(os.path.join(tdir, "downloadedPKGs")):
-                shutil.rmtree(os.path.join(tdir, "downloadedPKGs"))
-            if os.path.exists(os.path.join(cwd, "downloadedPKGs")) and os.path.isdir(os.path.join(cwd, "downloadedPKGs")):
-                shutil.copytree(os.path.join(cwd, "downloadedPKGs"), os.path.join(tdir, "downloadedPKGs"))
+            if requests.get(shaurl, proxies=self.proxies).content.decode("ascii") == sha256File(local_filename):
+                text.Update("Backing up stuff")
+                window.Refresh()
+                #backup config and downloadedPKGs
+                if os.path.exists(os.path.join(cwd, "config.json")) and os.path.isfile(os.path.join(cwd, "config.json")):
+                    shutil.copy2(os.path.join(cwd, "config.json"), os.path.join(tdir, "config.json"))
+                if os.path.exists(os.path.join(tdir, "downloadedPKGs")) and os.path.isdir(os.path.join(tdir, "downloadedPKGs")):
+                    shutil.rmtree(os.path.join(tdir, "downloadedPKGs"))
+                if os.path.exists(os.path.join(cwd, "downloadedPKGs")) and os.path.isdir(os.path.join(cwd, "downloadedPKGs")):
+                    shutil.copytree(os.path.join(cwd, "downloadedPKGs"), os.path.join(tdir, "downloadedPKGs"))
+                    
+                rmDirContents(cwd)
                 
-            rmDirContents(cwd)
-            
-            tzipdir = os.path.join(tdir, "PS3GUDUpdate")
-            if os.path.exists(tzipdir) == False and os.path.isfile(tzipdir) == False:
-                os.mkdir(tzipdir)
-            text.Update("Extracting update")
-            window.Refresh()
-            with zipfile.ZipFile(local_filename, "r") as zipf:
-                zipf.extractall(tzipdir)
-            if len(os.listdir(tzipdir)) == 1:
-                    if os.path.isdir(os.path.join(tzipdir, os.listdir(tzipdir)[0])):
-                        copysrc = os.path.join(tzipdir, os.listdir(tzipdir)[0])
-                    else:
-                        copysrc = tzipdir
-            else:
-                copysrc = tzipdir
-            text.Update("Installing update")
-            window.Refresh()
-            distutils.dir_util.copy_tree(copysrc, cwd)
-                        
-            text.Update("Restoring backedup stuff and cleaning up")
-            window.Refresh()
-            #restore config and downloadedPKGs
-            if os.path.exists(os.path.join(tdir, "config.json")) and os.path.isfile(os.path.join(tdir, "config.json")):
-                shutil.copy2(os.path.join(tdir, "config.json"), os.path.join(cwd, "config.json"))
-                os.remove(os.path.join(tdir, "config.json"))
-            if os.path.exists(os.path.join(tdir, "downloadedPKGs")) and os.path.isdir(os.path.join(tdir, "downloadedPKGs")):
-                shutil.copytree(os.path.join(tdir, "downloadedPKGs"), os.path.join(cwd, "downloadedPKGs"))
-                shutil.rmtree(os.path.join(tdir, "downloadedPKGs"))
-            os.remove(local_filename)
-            os.remove(os.path.join(tdir, "PS3GUDUpdate.json"))
-            shutil.rmtree(tzipdir)
-            
+                tzipdir = os.path.join(tdir, "PS3GUDUpdate")
+                if os.path.exists(tzipdir) == False and os.path.isfile(tzipdir) == False:
+                    os.mkdir(tzipdir)
+                text.Update("Extracting update")
+                window.Refresh()
+                with zipfile.ZipFile(local_filename, "r") as zipf:
+                    zipf.extractall(tzipdir)
+                if len(os.listdir(tzipdir)) == 1:
+                        if os.path.isdir(os.path.join(tzipdir, os.listdir(tzipdir)[0])):
+                            copysrc = os.path.join(tzipdir, os.listdir(tzipdir)[0])
+                        else:
+                            copysrc = tzipdir
+                else:
+                    copysrc = tzipdir
+                text.Update("Installing update")
+                window.Refresh()
+                distutils.dir_util.copy_tree(copysrc, cwd)
+                            
+                text.Update("Restoring backedup stuff and cleaning up")
+                window.Refresh()
+                #restore config and downloadedPKGs
+                if os.path.exists(os.path.join(tdir, "config.json")) and os.path.isfile(os.path.join(tdir, "config.json")):
+                    shutil.copy2(os.path.join(tdir, "config.json"), os.path.join(cwd, "config.json"))
+                    os.remove(os.path.join(tdir, "config.json"))
+                if os.path.exists(os.path.join(tdir, "downloadedPKGs")) and os.path.isdir(os.path.join(tdir, "downloadedPKGs")):
+                    shutil.copytree(os.path.join(tdir, "downloadedPKGs"), os.path.join(cwd, "downloadedPKGs"))
+                    shutil.rmtree(os.path.join(tdir, "downloadedPKGs"))
+                os.remove(local_filename)
+                os.remove(os.path.join(tdir, "PS3GUDUpdate.json"))
+                shutil.rmtree(tzipdir)
+                
     def startUpdater(self):
         suffix = getExecutableSuffix()
         if isAppFrozen():
@@ -343,3 +356,10 @@ def cleanupAfterUpdate():
             os.remove(os.path.join(tempfile.gettempdir(), "utils.py"))
         if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUD.py")) and os.path.isfile(os.path.join(tempfile.gettempdir(), "PS3GUD.py")):
             os.remove(os.path.join(tempfile.gettempdir(), "PS3GUD.py"))
+
+def sha256File(file):
+    hash = hashlib.sha256()
+    with open(file, "rb") as f:
+        for block in iter(lambda: f.read(4096), b""):
+            hash.update(block)
+    return hash.hexdigest()

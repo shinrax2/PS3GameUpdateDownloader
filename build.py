@@ -12,6 +12,9 @@ import platform
 import json
 import logging
 
+#local files
+import utils
+
 def buildheader(version, commitid , filepath , pyiver="None"):
     lines = [   "Building PS3GameUpdateDownloader",
                 "Build script arguments: "+str(sys.argv[1:]),
@@ -27,6 +30,10 @@ def buildheader(version, commitid , filepath , pyiver="None"):
         lines.append("")
     with Prepender(filepath) as filehandle:
         filehandle.write_lines(lines)
+
+def createDigest(file):
+    with open(file+".sha256", "w") as f:
+        f.write(utils.sha256File(file))
 
 class Upx():
     def __init__(self, build_config="build_config.json"):
@@ -186,6 +193,7 @@ if action == "sourcerelease":
         #build zip
         if zip_check == True:
             shutil.make_archive(zipname+"-source", "zip", "dist", os.path.relpath(builddir, "dist"))
+            createDigest(zipname+"-source.zip")
    
 if action == "sourcedebug":
     #debug running from source
@@ -215,8 +223,9 @@ if action == "sourcedebug":
         shutil.copytree("./loc", os.path.join(builddir, "loc"))
         shutil.copytree("./images", os.path.join(builddir, "images"))
         #build zip
-        if zipzip_check == True:
+        if zip_check == True:
             shutil.make_archive(zipname+"-source-debug", "zip", "dist", os.path.relpath(builddir, "dist"))
+            createDigest(zipname+"-source-debug.zip")
         
 if action == "compilerelease":
     #compiled release
@@ -276,6 +285,7 @@ if action == "compilerelease":
     #build zip
     if zip_check == True:
         shutil.make_archive(zipname+"-"+arch, "zip", "dist", os.path.relpath(builddir, "dist"))
+        createDigest(zipname+"-"+arch+".zip")
 
 if action == "compiledebug":
     #compiled debug
@@ -338,3 +348,4 @@ if action == "compiledebug":
         #build zip
         if zip_check == True:
             shutil.make_archive(zipname+"-"+arch+"-debug", "zip", "dist", os.path.relpath(builddir, "dist"))
+            createDigest(zipname+"-"+arch+"-debug.zip")

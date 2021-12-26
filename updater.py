@@ -26,8 +26,8 @@ if os.path.exists(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json")) and 
     
     sg.change_look_and_feel("DarkAmber")
     layout = [
-                [sg.Text("Checking for updates", size=(20, 2), key="updater_text")],
-                [sg.ProgressBar(100, orientation="h", size=(20, 20), key="updater_progressbar")]
+                [sg.Text("Checking for updates", size=(40, 3), key="updater_text")],
+                [sg.ProgressBar(100, orientation="h", size=(40, 20), key="updater_progressbar")]
     ]
     window = sg.Window("PS3GUD Updater", layout)
     window.finalize()
