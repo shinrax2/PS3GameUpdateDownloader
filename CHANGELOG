@@ -9,6 +9,7 @@ future release (aka current master branch):
 -  fixed proxy support not being installed from requirements.txt
 -  added two japanese psn titleid to titledb
 +  added updater for titledb
++  added download verification to auto updater
 
 v010:
 -  fix a crash when checking updates
