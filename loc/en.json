@@ -239,6 +239,18 @@
         "string": "Warning! Proxy support disabled!",
         "comment": ""
     },
+	"window_msgBox_ok_btn": {
+		"string": "Ok",
+		"comment": ""
+	},
+	"window_msgBox_queueExported_title": {
+		"string": "Queue exported",
+		"comment": ""
+	},
+	"window_msgBox_queueExported_label": {
+		"string": "Queue exported to \"{0}\".",
+		"comment": "0: File name"
+	},
     "msg_configFileLoaded": {
         "string": "Loaded configuration file!",
         "comment": ""

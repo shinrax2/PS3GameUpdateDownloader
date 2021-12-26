@@ -360,8 +360,9 @@ class Gui():
                 self.queueWindow.Close()
                 self.mainWindow.UnHide()
                 break
-            if evQueue == "export":
+            if evQueue == "export" and valQueue["exportFile"] != "":
                 self.ps3.DlList.exportQueue(valQueue["exportFile"])
+                self.msgBox(self.loc.getKey("window_msgBox_queueExported_label", [valQueue["exportFile"]]), self.loc.getKey("window_msgBox_queueExported_title"))
             if evQueue in (None, "Exit"):
                 self.queueWindow.Close()
                 self.mainWindow.UnHide()
@@ -395,3 +396,19 @@ class Gui():
                 self.keyring_supportWindow.Close()
                 self.mainWindow.UnHide()
                 break
+                
+    def msgBox(self, text, title):
+        layout = [
+            [sg.Text(text)],
+            [sg.Button(self.loc.getKey("window_msgBox_ok_btn"), key="ok")]
+        ]
+        win = sg.Window(title, layout)
+        while True:
+            ev, val = win.read()
+            if ev == "ok":
+                win.Close()
+                break
+            if ev in (None, "Exit"):
+                win.Close()
+                break
+    

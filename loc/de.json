@@ -239,6 +239,18 @@
         "string": "Achtung! Proxy Unterstützung deaktiviert!",
         "comment": ""
     },
+	"window_msgBox_ok_btn": {
+		"string": "Ok",
+		"comment": ""
+	},
+	"window_msgBox_queueExported_title": {
+		"string": "Warteschlange exportiert",
+		"comment": ""
+	},
+	"window_msgBox_queueExported_label": {
+		"string": "Warteschlange nach \"{0}\" exportiert.",
+		"comment": "0: File name"
+	},
     "msg_configFileLoaded": {
         "string": "Konfigurationsdatei geladen!",
         "comment": ""
