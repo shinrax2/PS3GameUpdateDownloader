@@ -211,6 +211,14 @@
         "string": "Gesamtgröße: {0}",
         "comment": "0: Total download size of queue"
     },
+	"window_queue_export_label": {
+        "string": "Exportiere Warteschlange nach:",
+        "comment": ""
+    },
+    "window_queue_export_btn": {
+        "string": "Exportieren",
+        "comment": ""
+    },
     "window_keyring_support_info_label": {
         "string": "Kein brauchbares keyring backend gefunden.\nBesuche bitte die Website von keyring für eine Installationsanleitung.\n{0}",
         "comment": "0: Url of keyring homepage"
