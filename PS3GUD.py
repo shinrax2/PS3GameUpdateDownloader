@@ -71,7 +71,14 @@ class PS3GUD():
         if os.path.exists(self.configFile) and os.path.isfile(self.configFile):
             self.logger.log(self.loc.getKey("msg_configFileLoaded"))
             with open(self.configFile, "r", encoding="utf8") as f:
-                self.config = json.loads(f.read())
+                data = f.read()
+            try:
+                self.config = json.loads(data)
+            except json.decoder.JSONDecodeError:
+                self.logger.log(self.loc.getKey("msg_ConfigFileCorrupt"), "e")
+                os.remove("./config.json")
+                self.config = self.configDefaults
+                return
             self.useDefaultConfig = False
             if self.getConfig("use_proxy") == True:
                 self.config["proxy_pass"], self.config["proxy_user"] = self.getProxyCredentials()

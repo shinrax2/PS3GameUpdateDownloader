@@ -10,6 +10,7 @@ future release (aka current master branch):
 -  added two japanese psn titleid to titledb
 +  added updater for titledb
 +  added download verification to auto updater
+-  prevent crashes with corrupted config files
 
 v010:
 -  fix a crash when checking updates

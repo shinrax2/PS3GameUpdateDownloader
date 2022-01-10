@@ -109,9 +109,8 @@ class UpdaterGithubRelease():
         self.resp = {}
         with open(self.rF, "r", encoding="utf8") as f:
             self.release = json.loads(f.read())
-        l = Loc()
         ps3 = PS3GUD.PS3GUD()
-        ps3.setLoc(l)
+        ps3.setLoc(Loc())
         ps3.loadConfig()
         self.proxies = ps3.proxies
             

@@ -27,11 +27,11 @@ class Gui():
         utils.cleanupAfterUpdate()
         
         #setup main classes
-        self.rel = utils.UpdaterGithubRelease("release.json")
         self.loc = utils.Loc()
         self.ps3 = PS3GUD.PS3GUD()
         self.ps3.setLoc(self.loc)
         self.ps3.loadConfig()
+        self.rel = utils.UpdaterGithubRelease("release.json")
         self.loc.setLoc(self.ps3.getConfig("currentLoc"))
         self.ps3.loadTitleDb()
         
