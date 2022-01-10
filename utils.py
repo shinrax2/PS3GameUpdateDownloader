@@ -259,12 +259,12 @@ class UpdaterGithubRelease():
         
 
 def formatSize(size):
-    if float(size) > 1024-1 and float(size) < 1024*1024 : #KB
-        return str(format(float(size)/1024, '.2f'))+"KB"
-    elif float(size) > 1024*1024-1 and float(size) < 1024*1024*1024: #MB
-        return str(format(float(size)/1024/1024, '.2f'))+"MB"
-    elif float(size) > 1024*1024*1024-1: #GB
-        return str(format(float(size)/1024/1024/1024, '.2f'))+"GB"
+    if float(size) > 1024-1 and float(size) < 1024*1024 : #KiB
+        return str(format(float(size)/1024, '.2f'))+"KiB"
+    elif float(size) > 1024*1024-1 and float(size) < 1024*1024*1024: #MiB
+        return str(format(float(size)/1024/1024, '.2f'))+"MiB"
+    elif float(size) > 1024*1024*1024-1: #GiB
+        return str(format(float(size)/1024/1024/1024, '.2f'))+"GiB"
     else: #Bytes
         return str(size)+"B"
         

@@ -55,10 +55,6 @@
         "string": "ตรวบจสอบเนื้อหาใหม่ขณะกำลังเริ่มต้น:",
         "comment": ""
     },
-    "window_config_storageThreshold_label": {
-        "string": "เกณฑ์การจัดเก็บ (ในรูปแบบ %):",
-        "comment": ""
-    },
     "window_config_currentLoc_label": {
         "string": "ภาษา:",
         "comment": ""
@@ -268,7 +264,7 @@
         "comment": ""
     },
     "msg_spaceBelowThreshold": {
-        "string": "ขนาดที่ว่างมีน้อยกว่า {0}%",
+        "string": "ขนาดที่ว่างมีน้อยกว่า {0}",
         "comment": "0: Storage threshold"
     },
     "msg_relCheckError": {

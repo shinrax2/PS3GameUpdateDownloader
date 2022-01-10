@@ -189,7 +189,7 @@ class Gui():
             [sg.Text(self.loc.getKey("window_config_verify_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("verify"), key="verify")],
             [sg.Text(self.loc.getKey("window_config_checkIfAlreadyDownloaded_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("checkIfAlreadyDownloaded"), key="checkIfAlreadyDownloaded")],
             [sg.Text(self.loc.getKey("window_config_checkForNewRelease_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("checkForNewRelease"), key="checkForNewRelease")],
-            [sg.Text(self.loc.getKey("window_config_storageThreshold_label"), size=(40,1)), sg.Spin([i for i in range(1, 100)], initial_value=self.ps3.getConfig("storageThreshold"), key="storageThreshold")],
+            [sg.Text(self.loc.getKey("window_config_storageThreshold_label"), size=(40,1)), sg.In(self.ps3.getConfig("storageThresholdNew"), key="storageThreshold")],
             [sg.Text(self.loc.getKey("window_config_currentLoc_label"), size=(40,1)), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=self.loc.getKey("language_name"))],
             [sg.Text(self.loc.getKey("window_config_renamepkgs_label"), size=(40,1), tooltip=self.loc.getKey("window_config_renamepkgs_tooltip")), sg.Checkbox("", default=self.ps3.getConfig("rename_pkgs"), key="rename_pkgs", tooltip=self.loc.getKey("window_config_renamepkgs_tooltip"))],
             [sg.Text(self.loc.getKey("window_config_updatetitledb_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("update_titledb"), key="update_titledb")],
@@ -236,7 +236,7 @@ class Gui():
                 for l in ll:
                     if cL == l["language_name"]:
                         cL = l["language_short"]
-                config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThreshold": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "use_proxy": valConfig["use_proxy"], "rename_pkgs": valConfig["rename_pkgs"], "update_titledb": valConfig["update_titledb"]}
+                config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThresholdNew": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "use_proxy": valConfig["use_proxy"], "rename_pkgs": valConfig["rename_pkgs"], "update_titledb": valConfig["update_titledb"]}
                 self.ps3.setConfig(config)
                 if self.ps3.getConfig("use_proxy") == True:
                     self.ps3.setProxyCredentials(valConfig["proxy_pass"], valConfig["proxy_user"])
@@ -362,7 +362,6 @@ class Gui():
                 break
             if evQueue == "export" and valQueue["exportFile"] != "":
                 self.ps3.DlList.exportQueue(valQueue["exportFile"])
-                self.msgBox(self.loc.getKey("window_msgBox_queueExported_label", [valQueue["exportFile"]]), self.loc.getKey("window_msgBox_queueExported_title"))
             if evQueue in (None, "Exit"):
                 self.queueWindow.Close()
                 self.mainWindow.UnHide()
@@ -397,12 +396,10 @@ class Gui():
                 self.mainWindow.UnHide()
                 break
                 
-    def msgBox(self, text, title):
         layout = [
             [sg.Text(text)],
             [sg.Button(self.loc.getKey("window_msgBox_ok_btn"), key="ok")]
         ]
-        win = sg.Window(title, layout)
         while True:
             ev, val = win.read()
             if ev == "ok":
@@ -411,4 +408,4 @@ class Gui():
             if ev in (None, "Exit"):
                 win.Close()
                 break
-    
+        parent.UnHide()

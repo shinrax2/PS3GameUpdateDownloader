@@ -55,10 +55,6 @@
         "string": "Cerca una nuova versione all'avvio:",
         "comment": ""
     },
-    "window_config_storageThreshold_label": {
-        "string": "Limite di archiviazione (in %):",
-        "comment": ""
-    },
     "window_config_currentLoc_label": {
         "string": "Lingua:",
         "comment": ""
@@ -268,7 +264,7 @@
         "comment": ""
     },
     "msg_spaceBelowThreshold": {
-        "string": "Lo spazio su disco disponibile è inferiore al {0}%",
+        "string": "Lo spazio su disco disponibile è inferiore al {0}",
         "comment": "0: Storage threshold"
     },
     "msg_relCheckError": {

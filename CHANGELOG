@@ -11,6 +11,7 @@ future release (aka current master branch):
 +  added updater for titledb
 +  added download verification to auto updater
 -  prevent crashes with corrupted config files
++  changed storage treshold from percentage to absolute
 
 v010:
 -  fix a crash when checking updates

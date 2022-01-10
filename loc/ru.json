@@ -55,10 +55,6 @@
         "string": "Проверять обновления при запуске:",
         "comment": ""
     },
-    "window_config_storageThreshold_label": {
-        "string": "Лимит диска (в %):",
-        "comment": ""
-    },
     "window_config_currentLoc_label": {
         "string": "Язык:",
         "comment": ""
@@ -268,7 +264,7 @@
         "comment": ""
     },
     "msg_spaceBelowThreshold": {
-        "string": "На диске менее {0}% свободного места",
+        "string": "На диске менее {0} свободного места",
         "comment": "0: Storage threshold"
     },
     "msg_relCheckError": {

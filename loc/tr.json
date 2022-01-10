@@ -55,10 +55,6 @@
         "string": "Başlangıçta yeni sürüm olup olmadığını kontrol et:",
         "comment": ""
     },
-    "window_config_storageThreshold_label": {
-        "string": "Depo limiti (% olarak):",
-        "comment": ""
-    },
     "window_config_currentLoc_label": {
         "string": "Dil:",
         "comment": ""
@@ -288,7 +284,7 @@
         "comment": ""
     },
     "msg_spaceBelowThreshold": {
-        "string": "Depo alanı %{0} altında",
+        "string": "Depo alanı {0} altında",
         "comment": "0: Storage threshold"
     },
     "msg_relCheckError": {

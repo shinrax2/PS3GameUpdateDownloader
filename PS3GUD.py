@@ -40,7 +40,7 @@ class PS3GUD():
         self.configDefaults["dldir"] = "./downloadedPKGs"
         self.configDefaults["verify"] = True
         self.configDefaults["checkIfAlreadyDownloaded"] = True
-        self.configDefaults["storageThreshold"] = 95
+        self.configDefaults["storageThresholdNew"] = 5
         self.configDefaults["currentLoc"] = "en"
         self.configDefaults["checkForNewRelease"] = True
         self.configDefaults["use_proxy"] = False
@@ -266,7 +266,7 @@ class PS3GUD():
                                 self.logger.log(self.loc.getKey("msg_alreadyDownloadedVerify", [os.path.basename(url)]))
                                 skip = True
             if skip == False:
-                if used / total * 100 <= self.getConfig("storageThreshold"):
+                if free >= int(self.getConfig("storageThresholdNew"))*1024*1024*1024:
                     if free > int(size):
                         self.logger.log(self.loc.getKey("msg_startSingleDownload", [i, ql]))
                         self._download_file(url, fname, size, window, i)
@@ -275,7 +275,7 @@ class PS3GUD():
                         self.logger.log(self.loc.getKey("msg_notEnoughDiskSpace"), "e")
                         skip = True
                 else:
-                    self.logger.log(self.loc.getKey("msg_spaceBelowThreshold", [self.getConfig("storageThreshold")]), "e")
+                    self.logger.log(self.loc.getKey("msg_spaceBelowThreshold", [str(self.getConfig("storageThresholdNew"))+"GiB"]), "e")
                     skip = True
             if self.getConfig("verify") == True and skip == False:
                 if sha1 == self._sha1File(fname):
