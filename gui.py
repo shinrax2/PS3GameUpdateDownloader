@@ -362,6 +362,7 @@ class Gui():
                 break
             if evQueue == "export" and valQueue["exportFile"] != "":
                 self.ps3.DlList.exportQueue(valQueue["exportFile"])
+                self.msgBox(self.loc.getKey("window_msgBox_queueExported_label", [valQueue["exportFile"]]), self.loc.getKey("window_msgBox_queueExported_title"), self.queueWindow)
             if evQueue in (None, "Exit"):
                 self.queueWindow.Close()
                 self.mainWindow.UnHide()
@@ -396,10 +397,13 @@ class Gui():
                 self.mainWindow.UnHide()
                 break
                 
+    def msgBox(self, text, title, parent):
         layout = [
             [sg.Text(text)],
             [sg.Button(self.loc.getKey("window_msgBox_ok_btn"), key="ok")]
         ]
+        parent.hide()
+        win = sg.Window(title, layout, icon=self.iconpath)
         while True:
             ev, val = win.read()
             if ev == "ok":
