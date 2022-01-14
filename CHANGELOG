@@ -3,6 +3,8 @@
 - bugfix
 
 future release (aka current master branch):
+
+v011:
 -  fix crash when proxy is enabled but no proper proxy settings are set
 -  fix typo in download speed display
 +  moved proxy user to keyring
