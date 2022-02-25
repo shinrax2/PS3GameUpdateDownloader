@@ -11,6 +11,7 @@ import os
 import platform
 import json
 import logging
+import subprocess
 
 #local files
 import utils
@@ -108,7 +109,6 @@ parser.add_argument("-r", action="store_true", help="building a release version"
 parser.add_argument("-d", action="store_true", help="building a debug version")
 parser.add_argument("-z", action="store_true", help="pack the build to a .zip file")
 parser.add_argument("-upx", action="store_true", help="use UPX to shrink executables")
-parser.add_argument("-nogit", action="store_true", help="dont use git in the buildscript")
 args = parser.parse_args()
 
 #constants
@@ -158,12 +158,11 @@ if args.c == True and args.upx == True:
 if args.z == True:
     zip_check = True
     zipname = "dist/PS3GameUpdateDownloader-"+version
-if args.nogit == True:
-    gitver = "None"
+if (shutil.which("git") is not None) == True:
+    p = subprocess.Popen([shutil.which("git"), "rev-parse", "HEAD"], stdout=subprocess.PIPE)
+    gitver = p.communicate()[0].decode("ascii").replace("\n", "")
 else:
-    import git
-    repo = git.Repo()
-    gitver = repo.head.object.hexsha
+    gitver = "None"
 
 if action == "sourcerelease":
     #release running from source

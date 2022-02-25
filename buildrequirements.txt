@@ -1,3 +1,2 @@
 pyinstaller==4.8
-GitPython== 3.1.27
 pyinstaller-hooks-contrib==2021.4
