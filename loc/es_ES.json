@@ -1,0 +1,362 @@
+{
+    "language_name": {
+        "string": "Castellano",
+        "comment": "Name of the language"
+    },
+    "language_short": {
+        "string": "es_ES",
+        "comment": "Name of the language file"
+    },
+    "window_main_title": {
+        "string": "PS3 Game Update Downloader",
+        "comment": "Main window title (don't translate)"
+    },
+    "window_main_titleid_label": {
+        "string": "Introduce un TitleID",
+        "comment": ""
+    },
+    "window_main_enter_btn": {
+        "string": "Buscar",
+        "comment": ""
+    },
+    "window_main_progress_label": {
+        "string": "Descargando archivo {0}:\n{1}/{2}({3}%)\nVelocidad: {4}",
+        "comment": "0: Number of download, 1: Amount of downloaded data, 2: Total file size, 3: Amount of downloaded data in %, 4: Download speed"
+    },
+    "window_main_config_btn": {
+        "string": "Configuración",
+        "comment": ""
+    },
+    "window_main_exit_btn": {
+        "string": "Salir",
+        "comment": ""
+    },
+    "window_main_queue_btn": {
+        "string": "Cola",
+        "comment": ""
+    },
+    "window_config_title": {
+        "string": "Configuración",
+        "comment": ""
+    },
+    "window_config_dldir_label": {
+        "string": "Directorio de descargas:",
+        "comment": ""
+    },
+    "window_config_verify_label": {
+        "string": "Verificar archivos:",
+        "comment": ""
+    },
+    "window_config_checkIfAlreadyDownloaded_label": {
+        "string": "Comprobar si los archivos ya han sido descargados:",
+        "comment": ""
+    },
+    "window_config_checkForNewRelease_label": {
+        "string": "Buscar nuevas versiones del programa al iniciar:",
+        "comment": ""
+    },
+    "window_config_storageThreshold_label": {
+        "string": "Límite de almacenamiento (en GB):",
+        "comment": ""
+    },
+    "window_config_currentLoc_label": {
+        "string": "Idioma/Language:",
+        "comment": ""
+    },
+    "window_config_renamepkgs_label": {
+        "string": "Renombrar archivos PKG:",
+        "comment": ""
+    },
+    "window_config_renamepkgs_tooltip": {
+        "string": "Renombra los archivos PKGs a $NOMBRDEJUEGO_[$IDDEJUEGO]_$VERSIONDEJUEGO",
+        "comment": ""
+    },
+    "window_config_updatetitledb_label": {
+        "string": "Actualizar TitleDB al iniciar:",
+        "comment": ""
+    },
+    "window_config_useproxy_label": {
+        "string": "¿Utilizar un servidor proxy? (¡SOLO SOCKS5!)",
+        "comment": ""
+    },
+    "window_config_proxyip_label": {
+        "string": "IP del servidor proxy:",
+        "comment": ""
+    },
+    "window_config_proxyport_label": {
+        "string": "Puerto del servidor proxy:",
+        "comment": ""
+    },
+    "window_config_proxyuser_laber": {
+        "string": "Nombre de usuario del servidor proxy:",
+        "comment": ""
+    },
+    "window_config_proxypass_label": {
+        "string": "Contraseña del servidor proxy:",
+        "comment": ""
+    },
+    "window_config_cancel_btn": {
+        "string": "Cancelar",
+        "comment": ""
+    },
+    "window_config_save_btn": {
+        "string": "Guardar",
+        "comment": ""
+    },
+    "window_select_title": {
+        "string": "Selección de actualizaciones",
+        "comment": ""
+    },
+    "window_select_text_label": {
+        "string": "Juego: {0}\tTitleID: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "window_select_table_ver": {
+        "string": "Versión",
+        "comment": ""
+    },
+    "window_select_table_size": {
+        "string": "Tamaño del archivo",
+        "comment": ""
+    },
+    "window_select_table_sysver": {
+        "string": "Versión de firmware de PS3",
+        "comment": ""
+    },
+    "window_select_download_btn": {
+        "string": "Descargar",
+        "comment": ""
+    },
+    "window_select_cancel_btn": {
+        "string": "Cancelar",
+        "comment": ""
+    },
+    "window_select_queue_btn": {
+        "string": "Añadir a la cola de descargas",
+        "comment": ""
+    },
+    "window_select_help_label": {
+        "string": "Mantén pulsada la tecla Ctrl y haz clic en las actualizaciones que quieras seleccionar.",
+        "comment": ""
+    },
+    "window_relNotify_title": {
+        "string": "¡Nueva versión encontrada!",
+        "comment": ""
+    },
+    "window_relNotify_version_label": {
+        "string": "Versión actual: {0}\nVersión más reciente: {1}",
+        "comment": "0: Current programm version, 1: New programm version"
+    },
+    "window_relNotify_changelog_label": {
+        "string": "Historial de cambios:",
+        "comment": ""
+    },
+    "window_relNotify_web_btn": {
+        "string": "Abrir web en navegador",
+        "comment": ""
+    },
+    "window_relNotify_dl_btn": {
+        "string": "Descargar e instalar actualización",
+        "comment": ""
+    },
+    "window_relNotify_close_btn": {
+        "string": "Cerrar",
+        "comment": ""
+    },
+    "window_queue_title": {
+        "string": "Cola de descargas",
+        "comment": ""
+    },
+    "window_queue_table_num": {
+        "string": "N.º",
+        "comment": ""
+    },
+    "window_queue_table_game": {
+        "string": "Juego",
+        "comment": ""
+    },
+    "window_queue_table_titleid": {
+        "string": "TitleID",
+        "comment": ""
+    },
+    "window_queue_table_ver": {
+        "string": "Versión",
+        "comment": ""
+    },
+    "window_queue_table_size": {
+        "string": "Tamaño",
+        "comment": ""
+    },
+    "window_queue_download_btn": {
+        "string": "Iniciar descarga",
+        "comment": ""
+    },
+    "window_queue_close_btn": {
+        "string": "Cerrar",
+        "comment": ""
+    },
+    "window_queue_moveup_btn": {
+        "string": "Subir",
+        "comment": ""
+    },
+    "window_queue_movedown_btn": {
+        "string": "Bajar",
+        "comment": ""
+    },
+    "window_queue_remove_btn": {
+        "string": "Quitar",
+        "comment": ""
+    },
+    "window_queue_totalsize_label": {
+        "string": "Tamaño total: {0}",
+        "comment": "0: Total download size of queue"
+    },
+    "window_queue_export_label": {
+        "string": "Exportar cola a:",
+        "comment": ""
+    },
+    "window_queue_export_btn": {
+        "string": "Exportar",
+        "comment": ""
+    },
+    "window_keyring_support_info_label": {
+        "string": "No se han encontrado backends de keyrings viables.\nBusca una guía de instalación en la página web del keyring.\n{0}",
+        "comment": "0: Url of keyring homepage"
+    },
+    "window_keyring_support_dont_show_again_label": {
+        "string": "No volver a mostrar",
+        "comment": ""
+    },
+    "window_keyring_support_ok_btn": {
+        "string": "Aceptar",
+        "comment": ""
+    },
+    "window_keyring_support_browser_btn": {
+        "string": "Abrir en navegador",
+        "comment": ""
+    },
+    "window_keyring_support_title": {
+        "string": "¡Aviso! ¡El soporte de servidores proxy está desactivado!",
+        "comment": ""
+    },
+	"window_msgBox_ok_btn": {
+		"string": "Aceptar",
+		"comment": ""
+	},
+	"window_msgBox_queueExported_title": {
+		"string": "Cola exportada",
+		"comment": ""
+	},
+	"window_msgBox_queueExported_label": {
+		"string": "Cola exportada a «{0}».",
+		"comment": "0: File name"
+	},
+    "msg_configFileLoaded": {
+        "string": "¡Archivo de configuración cargado!",
+        "comment": ""
+    },
+    "msg_noConfigFile": {
+        "string": "¡No se ha encontrado un archivo de configuración! ¡Se utilizará la configuración predeterminada!",
+        "comment": ""
+    },
+    "msg_configFileSaved": {
+        "string": "¡Archivo de configuración guardado!",
+        "comment": ""
+    },
+    "msg_loadedTitledb": {
+        "string": "TitleDB cargado: «{0}»",
+        "comment": "0: Path to TitleDB"
+    },
+    "msg_titleIDIs": {
+        "string": "Juego: {0}\t TitleID: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "msg_titleIDNotValid": {
+        "string": "¡El TitleID no es válido!",
+        "comment": ""
+    },
+    "msg_metaNotAvailable": {
+        "string": "¡No está disponible el archivo de metadatos de este TitleID!",
+        "comment": ""
+    },
+    "msg_metaFileEmpty": {
+        "string": "¡El archivo de metadatos de este TitleID no contiene información!",
+        "comment": ""
+    },
+    "msg_startingDownloads": {
+        "string": "Iniciando descarga de actualizaciones",
+        "comment": ""
+    },
+    "msg_alreadyDownloadedNoVerify": {
+        "string": "¡El archivo «{0}» ya se ha descargado, omitiendo! ¡Archivo sin verificar!",
+        "comment": "0: File name"
+    },
+    "msg_alreadyDownloadedVerify": {
+        "string": "¡El archivo «{0}» ya se ha descargado, omitiendo! ¡SHA-1 verificado!",
+        "comment": "0: File name"
+    },
+    "msg_startSingleDownload": {
+        "string": "Iniciando descarga {0} de {1}",
+        "comment": "0: Number of download, 1: Total number of downloads in queue"
+    },
+    "msg_verifySuccess": {
+        "string": "¡La verificación de «{0}» ha tenido éxito!",
+        "comment": "0: File name"
+    },
+    "msg_verifyFailure": {
+        "string": "¡La verificación de «{0}» ha fallado!\t¡Eliminando el archivo!",
+        "comment": "0: File name"
+    },
+    "msg_noVerify": {
+        "string": "¡El archivo «{0}» no ha sido verificado!",
+        "comment": "0: File name"
+    },
+    "msg_finishedDownload": {
+        "string": "¡Se han terminado de descargar {0} archivos!",
+        "comment": "0: Number of files downloaded"
+    },
+    "msg_notEnoughDiskSpace": {
+        "string": "¡No queda espacio en el disco!",
+        "comment": ""
+    },
+    "msg_spaceBelowThreshold": {
+        "string": "El espacio en disco está por debajo de {0}",
+        "comment": "0: Storage threshold"
+    },
+    "msg_relCheckError": {
+        "string": "¡No se ha podido comprobar si hay versiones nuevas!",
+        "comment": ""
+    },
+    "msg_alreadyUpToDate": {
+        "string": "¡Ya tienes la última versión!",
+        "comment": ""
+    },
+    "msg_foundNewRelease": {
+        "string": "Se ha encontrado una versión nueva: «{0}»",
+        "comment": "0: New programm version"
+    },
+    "msg_NoReleaseArchiveForPlatformOrArch": {
+        "string": "No se ha podido encontrar un archivo de esta versión para tu arquitectura o plataforma. Platforma: «{0}» Arquitectura: «{1}» Compilación: «{2}»",
+        "comment": "0: Platform, 1: Architecture, 2: App is compiled(True|False)"
+    },
+    "msg_dldirNotWriteable": {
+        "string": "¡La carpeta de descargas «{0}» no tiene permisos de escritura!",
+        "comment": "0: Directory name"
+    },
+    "msg_checkProxySettings": {
+        "string": "¡Comprueba que tu configuración del servidor proxy sea correcta!",
+        "comment": ""
+    },
+    "msg_metaFileBrokenSyntax": {
+        "string": "El archivo de metadatos solicitado para «{0}» contiene una sintaxis errónea. Probablemente el motivo es que Sony se está preparando para desconectar los servidores de actualización.",
+        "comment": "0: TitleID"
+    },
+    "msg_sonyPS3StoreShutdownNotice": {
+        "string": "¡¡¡IMPORTANTE!!! Sony anunció el 07/02/21 que cerrarían la Store de PS3, pero más tarde cancelaron esa decisión. Parece ser que entre anuncios se eliminaron algunas actualizaciones de juegos. Recomiendo guardar una copia de seguridad de las actualizaciones descargadas.",
+        "comment": ""
+    },
+    "msg_newTitleDbVersion": {
+        "string": "Se ha descargado una nueva versión del TitleDB",
+        "comment": ""
+    }
+}
