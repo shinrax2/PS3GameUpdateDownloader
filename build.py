@@ -51,7 +51,11 @@ class Upx():
             self.ask_for_uxp_path(arch)
             return self.upx[arch]
     
-    def ask_for_uxp_path(self, arch):
+    def set_upx_dir(self, path, arch=("win" if platform.system() == "Windows" else "linux")+("64" if platform.architecture()[0] == "64bit" else "32")):
+        self.upx[arch] = os.path.abspath(path)
+        self.save_upx_paths()
+    
+    def ask_for_uxp_path(self, arch=("win" if platform.system() == "Windows" else "linux")+("64" if platform.architecture()[0] == "64bit" else "32")):
         check = False
         while check == False:
             upx = input("Please enter the path to your UPX("+arch+" version) installation:")
@@ -108,7 +112,8 @@ parser.add_argument("-c", action="store_true", help="building a compiled version
 parser.add_argument("-r", action="store_true", help="building a release version")
 parser.add_argument("-d", action="store_true", help="building a debug version")
 parser.add_argument("-z", action="store_true", help="pack the build to a .zip file")
-parser.add_argument("-upx", action="store_true", help="use UPX to shrink executables")
+parser.add_argument("--upx", "-u", action="store_true", help="use UPX to shrink executables")
+parser.add_argument("-up", action="store", help="path to upx")
 args = parser.parse_args()
 
 #constants
@@ -155,6 +160,11 @@ if args.c == True and args.upx == True:
     # setting up UPX
     upx_check = True
     upx_paths = Upx()
+if args.c == True and args.up is not None:
+    if os.path.isdir(args.up):
+        upx_check = True
+        upx_paths = Upx()
+        upx_paths.set_upx_dir(args.up)
 if args.z == True:
     zip_check = True
     zipname = "dist/PS3GameUpdateDownloader-"+version
@@ -297,7 +307,6 @@ if action == "compiledebug":
     else:
         os.makedirs(builddir)
     with open(buildlog, "w") as f:
-        #build main executable
         import PyInstaller.__main__
         import PyInstaller.__init__
         fh = logging.FileHandler(os.path.join(builddir, "build.log"))
@@ -305,6 +314,8 @@ if action == "compiledebug":
         fh.setFormatter(logging.Formatter('%(relativeCreated)d %(levelname)s: %(message)s'))
         log = logging.getLogger("PyInstaller")
         log.addHandler(fh)
+        
+        #build main executable
         arg_main = [
             "--name=ps3gud",
             "--clean",
