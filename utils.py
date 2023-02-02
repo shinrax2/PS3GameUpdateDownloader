@@ -15,7 +15,7 @@ import shutil
 import zipfile
 import subprocess
 import sys
-import distutils.core
+import setuptools
 import shlex
 import traceback
 import hashlib
@@ -215,7 +215,7 @@ class UpdaterGithubRelease():
                     copysrc = tzipdir
                 text.Update("Installing update")
                 window.Refresh()
-                distutils.dir_util.copy_tree(copysrc, cwd)
+                setuptools.distutils.dir_util.copy_tree(copysrc, cwd)
                             
                 text.Update("Restoring backedup stuff and cleaning up")
                 window.Refresh()
