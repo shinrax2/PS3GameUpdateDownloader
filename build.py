@@ -243,7 +243,6 @@ if (shutil.which("git") is not None) == True:
 
 if action == "sourcerelease":
     #release running from source
-    zipname += "-source"
     if os.path.exists(builddir):
         #delete old build
         shutil.rmtree(builddir)
@@ -275,6 +274,7 @@ if action == "sourcerelease":
         minifyJSON(getJSONFiles())
         #build zip
         if zip_check == True:
+            zipname += "-source"
             print(f"creating archive '{zipname}.{ARCHIVEFORMAT}'")
             shutil.make_archive(zipname, ARCHIVEFORMAT, "dist", os.path.relpath(builddir, "dist"))
             print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
@@ -283,7 +283,6 @@ if action == "sourcerelease":
    
 if action == "sourcedebug":
     #debug running from source
-    zipname += "-source-debug"
     builddir += "Debug"
     buildlog = os.path.join(builddir, "build.log")
     if os.path.exists(builddir):
@@ -303,7 +302,7 @@ if action == "sourcedebug":
         shutil.copy2("gui.py", os.path.join(builddir, "gui.py"))
         #copy data
         shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
-        shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
+        shutil.copy2("titledb.debug.json", os.path.join(builddir, "titledb.json"))
         shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
         shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
         shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
@@ -318,6 +317,7 @@ if action == "sourcedebug":
             validateJSON(file)
         #build zip
         if zip_check == True:
+            zipname += "-source-debug"
             print(f"creating archive '{zipname}.{ARCHIVEFORMAT}'")
             shutil.make_archive(zipname, ARCHIVEFORMAT, "dist", os.path.relpath(builddir, "dist"))
             print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
@@ -326,7 +326,6 @@ if action == "sourcedebug":
         
 if action == "compilerelease":
     #compiled release
-    zipname += "-"+arch
     #delete old build
     if os.path.exists(builddir):
         shutil.rmtree(builddir)
@@ -388,6 +387,7 @@ if action == "compilerelease":
     minifyJSON(getJSONFiles())
     #build zip
     if zip_check == True:
+        zipname += "-"+arch
         print(f"creating archive '{zipname}.{ARCHIVEFORMAT}'")
         shutil.make_archive(zipname, ARCHIVEFORMAT, "dist", os.path.relpath(builddir, "dist"))
         print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
@@ -396,7 +396,6 @@ if action == "compilerelease":
 
 if action == "compiledebug":
     #compiled debug
-    zipname += "-"+arch+"-debug"
     builddir += "Debug"
     buildlog = os.path.join(builddir, "build.log")
     #delete old build
@@ -447,7 +446,7 @@ if action == "compiledebug":
         shutil.move("dist/PS3GUDup"+suffix, os.path.join(builddir, "PS3GUDup"+suffix))
         #copy data
         shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
-        shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
+        shutil.copy2("titledb.debug.json", os.path.join(builddir, "titledb.json"))
         shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
         shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
         shutil.copytree(locdirname, os.path.join(builddir, locdirname))
@@ -463,6 +462,7 @@ if action == "compiledebug":
             validateJSON(file)
         #build zip
         if zip_check == True:
+            zipname += "-"+arch+"-debug"
             print(f"creating archive '{zipname}.{ARCHIVEFORMAT}'")
             shutil.make_archive(zipname, ARCHIVEFORMAT, "dist", os.path.relpath(builddir, "dist"))
             print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
