@@ -4,6 +4,7 @@
 
 future release (aka current master branch):
 +  added european spanish translation thanks to https://github.com/IlDucci
++  improved sha1 verification of downloaded PKGs
 
 v011:
 -  fix crash when proxy is enabled but no proper proxy settings are set

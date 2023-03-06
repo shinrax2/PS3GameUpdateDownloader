@@ -315,19 +315,29 @@ class PS3GUD():
                         window.Refresh()
 
     def _sha1File(self, fname):
+        # get hash from EOF
+        with open(fname, "rb") as f:
+            fhash = f.read()[-32:].hex()[:40]
         #copy file
         f2 = fname+"~"
         shutil.copy(fname, f2)
+        #remove last 32 bytes because the PKG hash is at EOF 
         with open(f2, "ab") as f:
-            #remove last 32 bytes
             f.seek(-32, os.SEEK_END)
             f.truncate()
+        #calculate hash from file - last 32 bytes
         fsha = hashlib.sha1()
         with open(f2, "rb") as f:
             for line in iter(lambda: f.read(fsha.block_size), b''):
                 fsha.update(line)
         os.remove(f2)
-        return fsha.hexdigest()
+        #check calculated hash against EOF hash
+        if fhash == fsha.hexdigest():
+            #return correct hash
+            return fsha.hexdigest()
+        else:
+            #return fake hash
+            return "DEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF"
     
     def __del__(self):
         del self.logger
