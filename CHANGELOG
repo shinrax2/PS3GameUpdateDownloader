@@ -6,6 +6,12 @@ future release (aka current master branch):
 +  added european spanish translation thanks to https://github.com/IlDucci
 +  improved sha1 verification of downloaded PKGs
 -  remove github formatting characters from changelog
++  various build improvements including:
+      +validate & minify json files for slightly smaller releases
+      -disabled UPX for non windows platforms since that sometimes leads to corrupted binaries
+      +name release archives for python version they were built on e.g. "PS3GameUpdateDownloader-v011-CPython3.11.1final-win64.zip"
+      +(Linux Only)name release archives for glibc version they were built on e.g. "PS3GameUpdateDownloader-v011-CPython3.11.1final-glibc2.31-linux64.zip"
++  save git commit id at buildtime and show it in the main window
 
 v011:
 -  fix crash when proxy is enabled but no proper proxy settings are set

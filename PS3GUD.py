@@ -13,6 +13,7 @@ import sys
 import shutil
 import json
 import time
+import platform
 
 #local files
 import utils
@@ -59,13 +60,13 @@ class PS3GUD():
         self.loc = loc
 
     def logHeader(self, version, psgversion):
-        self.logger.log("PS3GameUpdateDownloader "+version)
-        self.logger.log("Config File: "+self.configFile)
-        self.logger.log("Language: "+ self.loc.getLoc())
-        self.logger.log("Current working directory: "+os.getcwd())
-        self.logger.log("Compiled: "+str(utils.isAppFrozen()))
-        self.logger.log("PySimpleGUI version: "+psgversion)
-        self.logger.log("Python version: "+sys.version+"\n")
+        self.logger.log(f"PS3GameUpdateDownloader {version}")
+        self.logger.log(f"Config File: {self.configFile}")
+        self.logger.log(f"Language: {self.loc.getLoc()}")
+        self.logger.log(f"Current working directory: {os.getcwd()}")
+        self.logger.log(f"Compiled: {str(utils.isAppFrozen())}")
+        self.logger.log(f"PySimpleGUI version: {psgversion}")
+        self.logger.log(f"Python version: {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}{sys.version_info.releaselevel} ({platform.python_implementation()})\n")
         
     def loadConfig(self):
         if os.path.exists(self.configFile) and os.path.isfile(self.configFile):
@@ -137,7 +138,7 @@ class PS3GUD():
             except requests.exceptions.ConnectionError:
                 if self.getConfig("use_proxy"):
                     self.logger.log(self.loc.getKey("msg_checkProxySettings"))
-                    return
+                return
             
             if self.titledbver < data["version"]:
                 self.logger.log(self.loc.getKey("msg_newTitleDbVersion"))

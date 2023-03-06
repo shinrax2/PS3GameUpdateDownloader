@@ -98,7 +98,7 @@ class Gui():
         translateMainItems["Queue"] = "window_main_queue_btn"
         translateMainItems["Exit"] = "window_main_exit_btn"
         self.TranslationItems["mainWindow"] = translateMainItems
-        self.mainWindow = sg.Window(self.loc.getKey("window_main_title")+" "+self.rel.getVersion(), layout, finalize=True, icon=self.iconpath)
+        self.mainWindow = sg.Window(f"{self.loc.getKey('window_main_title')} {self.rel.getVersion()} (Git: {self.rel.getCommitID()})", layout, finalize=True, icon=self.iconpath)
         self.tryDl = False
         self.titledb_updated = False
         self.ps3.setWindow(self.mainWindow)

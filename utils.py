@@ -117,7 +117,14 @@ class UpdaterGithubRelease():
     def getVersion(self):
         return self.release["version"]
         
+    def getCommitID(self):
+        try:
+            return self.release["commitid"]
+        except KeyError:
+            return "None"
+
     def getChangelog(self):
+        #returns text body from latest github release without formatting characters 
         return massReplace(["```"], "", self.resp["body"])
         
     def getRightAssetNum(self):
