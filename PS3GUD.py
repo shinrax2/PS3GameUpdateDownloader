@@ -138,17 +138,29 @@ class PS3GUD():
     
     def checkTitleDbVersion(self):
         if self.getConfig("update_titledb") == True:
+            file = "https://raw.githubusercontent.com/shinrax2/PS3GameUpdateDownloader/master/titledb.json"
+            meta = "https://raw.githubusercontent.com/shinrax2/PS3GameUpdateDownloader/master/release.json"
             try:
+                data = json.loads(requests.get(meta, proxies=self.proxies).content)
             except requests.exceptions.ConnectionError:
                 if self.getConfig("use_proxy"):
                     self.logger.log(self.loc.getKey("msg_checkProxySettings"))
                 return
             
+            if self.titledbver < data["tdb_version"]:
                 self.logger.log(self.loc.getKey("msg_newTitleDbVersion"))
                 if os.path.exists(self.titledbFile+".bak"):
                     os.remove(self.titledbFile+".bak")
                 os.rename(self.titledbFile, self.titledbFile+".bak")
+                try:
+                    newtdb = json.loads(requests.get(file, proxies=self.proxies).content)
+                except requests.exceptions.ConnectionError:
+                    if self.getConfig("use_proxy"):
+                        self.logger.log(self.loc.getKey("msg_checkProxySettings"))
+                    return
                 with open(self.titledbFile, "w", encoding="utf8") as f:
+                    f.write(json.dumps(newtdb, ensure_ascii=False))
+                    f.flush()
                 self.loadTitleDb()
         
     

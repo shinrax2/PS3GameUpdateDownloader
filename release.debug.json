@@ -1,5 +1,6 @@
 {
     "version": "v000",
     "author": "shinrax2",
-    "repo": "test-repo"
+    "repo": "test-repo",
+    "tdb_version": 0
 }
