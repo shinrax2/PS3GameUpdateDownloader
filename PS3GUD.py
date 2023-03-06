@@ -59,8 +59,9 @@ class PS3GUD():
     def setLoc(self, loc):
         self.loc = loc
 
-    def logHeader(self, version, psgversion):
+    def logHeader(self, version, psgversion, commit):
         self.logger.log(f"PS3GameUpdateDownloader {version}")
+        self.logger.log(f"Git Commit: {commit}")
         self.logger.log(f"Config File: {self.configFile}")
         self.logger.log(f"Language: {self.loc.getLoc()}")
         self.logger.log(f"Current working directory: {os.getcwd()}")

@@ -102,7 +102,7 @@ class Gui():
         self.tryDl = False
         self.titledb_updated = False
         self.ps3.setWindow(self.mainWindow)
-        self.ps3.logHeader(self.rel.getVersion(), sg.version)
+        self.ps3.logHeader(self.rel.getVersion(), sg.version, self.rel.getCommitID())
         self.ps3.logger.log(self.loc.getKey("msg_sonyPS3StoreShutdownNotice"))
         
         #main loop
