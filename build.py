@@ -18,11 +18,11 @@ import shlex
 #local files
 import utils
 
-def buildheader(version, commitid , filepath , pyiver="None"):
+def buildheader(release, filepath , pyiver="None"):
     lines = [   "Building PS3GameUpdateDownloader",
                 "Build script arguments: "+str(sys.argv[1:]),
-                "Version: "+version,
-                "Git Commit: "+commitid,
+                "Version: "+release["version"],
+                "Git Commit: "+release["commitid"],
                 "Date/Time: "+str(NOW)
             ]
     if pyiver != "None":
@@ -43,7 +43,9 @@ def buildheader(version, commitid , filepath , pyiver="None"):
 
 def createDigest(file):
     with open(file+".sha256", "w") as f:
-        f.write(utils.sha256File(file))
+        digest = utils.sha256File(file)
+        f.write(digest)
+        return digest
 
 def validateJSON(filename):
     try:
@@ -170,6 +172,7 @@ locdirbuildpath = os.path.join(builddir, locdirname)
 imagedirname = "images"
 iconpath = os.path.abspath(os.path.join(imagedirname, "icon.ico"))
 NOW = datetime.datetime.now()
+ARCHIVEFORMAT = "zip"
 #get data from release.json
 with open("release.json", "r", encoding="utf8") as f:
     release = json.loads(f.read())
@@ -209,7 +212,7 @@ else:
 
 if args.zip == True:
     zip_check = True
-    zipname = "dist/PS3GameUpdateDownloader-"+version
+    zipname = "dist/PS3GameUpdateDownloader-"+release["version"]
 
 #auto config for build
 
@@ -240,6 +243,7 @@ if (shutil.which("git") is not None) == True:
 
 if action == "sourcerelease":
     #release running from source
+    zipname += "-source"
     if os.path.exists(builddir):
         #delete old build
         shutil.rmtree(builddir)
@@ -248,7 +252,7 @@ if action == "sourcerelease":
         os.makedirs(builddir)
     with open(buildlog, "w") as f:
         #write header to buildlog
-        buildheader(release["version"], gitver, buildlog)
+        buildheader(release, buildlog)
         #copy scripts
         shutil.copy2("main.py", os.path.join(builddir, "main.py"))
         shutil.copy2("utils.py", os.path.join(builddir, "utils.py"))
@@ -271,11 +275,15 @@ if action == "sourcerelease":
         minifyJSON(getJSONFiles())
         #build zip
         if zip_check == True:
-            shutil.make_archive(zipname+"-source", "zip", "dist", os.path.relpath(builddir, "dist"))
-            createDigest(zipname+"-source.zip")
+            print(f"creating archive '{zipname}.{ARCHIVEFORMAT}'")
+            shutil.make_archive(zipname, ARCHIVEFORMAT, "dist", os.path.relpath(builddir, "dist"))
+            print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
+            digest = createDigest(zipname+"."+ARCHIVEFORMAT)
+            print(f"checksum written to '{zipname}.{ARCHIVEFORMAT}.sha256'\nchecksum: '{digest}'")
    
 if action == "sourcedebug":
     #debug running from source
+    zipname += "-source-debug"
     builddir += "Debug"
     buildlog = os.path.join(builddir, "build.log")
     if os.path.exists(builddir):
@@ -286,7 +294,7 @@ if action == "sourcedebug":
         os.makedirs(builddir)
     with open(buildlog, "w") as f:
         #write header to buildlog
-        buildheader(release["version"], gitver, buildlog)
+        buildheader(release, buildlog)
         #copy scripts
         shutil.copy2("main.py", os.path.join(builddir, "main.py"))
         shutil.copy2("utils.py", os.path.join(builddir, "utils.py"))
@@ -310,11 +318,15 @@ if action == "sourcedebug":
             validateJSON(file)
         #build zip
         if zip_check == True:
-            shutil.make_archive(zipname+"-source-debug", "zip", "dist", os.path.relpath(builddir, "dist"))
-            createDigest(zipname+"-source-debug.zip")
+            print(f"creating archive '{zipname}.{ARCHIVEFORMAT}'")
+            shutil.make_archive(zipname, ARCHIVEFORMAT, "dist", os.path.relpath(builddir, "dist"))
+            print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
+            digest = createDigest(zipname+"."+ARCHIVEFORMAT)
+            print(f"checksum written to '{zipname}.{ARCHIVEFORMAT}.sha256'\nchecksum: '{digest}'")
         
 if action == "compilerelease":
     #compiled release
+    zipname += "-"+arch
     #delete old build
     if os.path.exists(builddir):
         shutil.rmtree(builddir)
@@ -367,7 +379,7 @@ if action == "compilerelease":
     shutil.copytree(locdirname, os.path.join(builddir, locdirname))
     shutil.copytree(imagedirname, os.path.join(builddir, imagedirname), ignore=shutil.ignore_patterns("*.xcf"))
     #write header to buildlog
-    buildheader(release["version"], gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
+    buildheader(release, buildlog, pyiver=PyInstaller.__init__.__version__)
     #save commitid
     if release["commitid"] is not None:
         with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
@@ -376,11 +388,15 @@ if action == "compilerelease":
     minifyJSON(getJSONFiles())
     #build zip
     if zip_check == True:
-        shutil.make_archive(zipname+"-"+arch, "zip", "dist", os.path.relpath(builddir, "dist"))
-        createDigest(zipname+"-"+arch+".zip")
+        print(f"creating archive '{zipname}.{ARCHIVEFORMAT}'")
+        shutil.make_archive(zipname, ARCHIVEFORMAT, "dist", os.path.relpath(builddir, "dist"))
+        print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
+        digest = createDigest(zipname+"."+ARCHIVEFORMAT)
+        print(f"checksum written to '{zipname}.{ARCHIVEFORMAT}.sha256'\nchecksum: '{digest}'")
 
 if action == "compiledebug":
     #compiled debug
+    zipname += "-"+arch+"-debug"
     builddir += "Debug"
     buildlog = os.path.join(builddir, "build.log")
     #delete old build
@@ -437,7 +453,7 @@ if action == "compiledebug":
         shutil.copytree(locdirname, os.path.join(builddir, locdirname))
         shutil.copytree(imagedirname, os.path.join(builddir, imagedirname), ignore=shutil.ignore_patterns("*.xcf"))
         #write header to buildlog
-        buildheader(release["version"], gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
+        buildheader(release, buildlog, pyiver=PyInstaller.__init__.__version__)
         #save commitid
         if release["commitid"] is not None:
             with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
@@ -447,5 +463,8 @@ if action == "compiledebug":
             validateJSON(file)
         #build zip
         if zip_check == True:
-            shutil.make_archive(zipname+"-"+arch+"-debug", "zip", "dist", os.path.relpath(builddir, "dist"))
-            createDigest(zipname+"-"+arch+"-debug.zip")
+            print(f"creating archive '{zipname}.{ARCHIVEFORMAT}'")
+            shutil.make_archive(zipname, ARCHIVEFORMAT, "dist", os.path.relpath(builddir, "dist"))
+            print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
+            digest = createDigest(zipname+"."+ARCHIVEFORMAT)
+            print(f"checksum written to '{zipname}.{ARCHIVEFORMAT}.sha256'\nchecksum: '{digest}'")
