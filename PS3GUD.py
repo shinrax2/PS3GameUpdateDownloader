@@ -14,12 +14,14 @@ import shutil
 import json
 import time
 import platform
+import ssl
 
 #local files
 import utils
 
 #pip packages
 import requests
+import requests.adapters
 import keyring
 
 class PS3GUD():
@@ -35,6 +37,9 @@ class PS3GUD():
         self.DlList = Queue(self)
         self.titleid = ""
         self.proxies = {}
+        #handle sonys weak cert for their https server
+        self.https_session = requests.Session()
+        self.https_session.mount('https://a0.ww.np.dl.playstation.net', SonySSLContextAdapter())
         
         self.useDefaultConfig = True
         self.configDefaults = {}
@@ -133,21 +138,17 @@ class PS3GUD():
     
     def checkTitleDbVersion(self):
         if self.getConfig("update_titledb") == True:
-            url = "https://raw.githubusercontent.com/shinrax2/PS3GameUpdateDownloader/master/titledb.json"
             try:
-                data = json.loads(requests.get(url, proxies=self.proxies).content)
             except requests.exceptions.ConnectionError:
                 if self.getConfig("use_proxy"):
                     self.logger.log(self.loc.getKey("msg_checkProxySettings"))
                 return
             
-            if self.titledbver < data["version"]:
                 self.logger.log(self.loc.getKey("msg_newTitleDbVersion"))
                 if os.path.exists(self.titledbFile+".bak"):
                     os.remove(self.titledbFile+".bak")
                 os.rename(self.titledbFile, self.titledbFile+".bak")
                 with open(self.titledbFile, "w", encoding="utf8") as f:
-                    f.write(json.dumps(data, ensure_ascii=False))
                 self.loadTitleDb()
         
     
@@ -186,19 +187,14 @@ class PS3GUD():
         #check for updates
         updates = []
         url = urllib.parse.urljoin(urllib.parse.urljoin("https://a0.ww.np.dl.playstation.net/tpl/np/", self.titleid+"/"), self.titleid+"-ver.xml")
-        requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.SubjectAltNameWarning)
-        requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
         try:
-            resp = requests.get(url, verify="sony.pem", proxies=self.proxies)
+            resp = self.https_session.get(url, verify="sony.pem", proxies=self.proxies)
         except requests.exceptions.ConnectionError:
-            try:
-                resp = requests.get(url, verify=False, proxies=self.proxies)
-            except requests.exceptions.ConnectionError:
-                self.logger.log(self.loc.getKey("msg_metaNotAvailable"), "e")
-                if self.getConfig("use_proxy"):
-                    self.logger.log(self.loc.getKey("msg_checkProxySettings"))
-                self.titleid = ""
-                return
+            self.logger.log(self.loc.getKey("msg_metaNotAvailable"), "e")
+            if self.getConfig("use_proxy"):
+                self.logger.log(self.loc.getKey("msg_checkProxySettings"))
+            self.titleid = ""
+            return
         
         info = resp.content
         #check file length for titles like BCAS20074
@@ -445,3 +441,10 @@ class Queue():
             s += "\n"
         with open(exportFile, "w", encoding="utf8") as f:
             f.write(s)
+
+class SonySSLContextAdapter(requests.adapters.HTTPAdapter):
+    def init_poolmanager(self, *args, **kwargs):
+        context = ssl.create_default_context()
+        context.set_ciphers('DEFAULT:@SECLEVEL=1')
+        kwargs['ssl_context'] = context
+        return super(SonySSLContextAdapter, self).init_poolmanager(*args, **kwargs)
