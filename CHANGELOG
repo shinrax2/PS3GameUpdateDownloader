@@ -13,6 +13,7 @@ future release (aka current master branch):
       +(Linux Only)name release archives for the c libary & version they were built on e.g. "PS3GameUpdateDownloader-v011-CPython3.11.1final-glibc2.31-linux64.zip"
 +  save git commit id at buildtime and show it in the main window
 !  proper handling of sonys weak certificate
++  faster search for new titledb versions
 
 v011:
 -  fix crash when proxy is enabled but no proper proxy settings are set
