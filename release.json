@@ -1,5 +1,6 @@
 {
     "version": "v011",
     "author": "shinrax2",
-    "repo": "PS3GameUpdateDownloader"
+    "repo": "PS3GameUpdateDownloader",
+    "tdb_version": 1
 }
