@@ -118,7 +118,7 @@ class UpdaterGithubRelease():
         return self.release["version"]
         
     def getChangelog(self):
-        return self.resp["body"]
+        return massReplace(["```"], "", self.resp["body"])
         
     def getRightAssetNum(self):
         num = 0
