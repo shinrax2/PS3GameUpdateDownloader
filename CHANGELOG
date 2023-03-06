@@ -10,7 +10,7 @@ future release (aka current master branch):
       +validate & minify json files for slightly smaller releases
       -disabled UPX for non windows platforms since that sometimes leads to corrupted binaries
       +name release archives for python version they were built on e.g. "PS3GameUpdateDownloader-v011-CPython3.11.1final-win64.zip"
-      +(Linux Only)name release archives for glibc version they were built on e.g. "PS3GameUpdateDownloader-v011-CPython3.11.1final-glibc2.31-linux64.zip"
+      +(Linux Only)name release archives for the c libary & version they were built on e.g. "PS3GameUpdateDownloader-v011-CPython3.11.1final-glibc2.31-linux64.zip"
 +  save git commit id at buildtime and show it in the main window
 
 v011:

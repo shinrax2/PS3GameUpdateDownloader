@@ -322,7 +322,7 @@ class PS3GUD():
         #copy file
         f2 = fname+"~"
         shutil.copy(fname, f2)
-        #remove last 32 bytes because the PKG hash is at EOF 
+        #remove last 32 bytes because the PKG hash is at EOF and not part of the PKG data
         with open(f2, "ab") as f:
             f.seek(-32, os.SEEK_END)
             f.truncate()

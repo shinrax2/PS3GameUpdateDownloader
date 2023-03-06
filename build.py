@@ -301,6 +301,10 @@ if action == "sourcedebug":
         shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
         shutil.copytree(locdirname, os.path.join(builddir, locdirname))
         shutil.copytree(imagedirname, os.path.join(builddir, imagedirname), ignore=shutil.ignore_patterns("*.xcf"))
+        #save commitid
+        if release["commitid"] is not None:
+            with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
+                f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
         #validate json files
         for file in getJSONFiles():
             validateJSON(file)
@@ -364,6 +368,10 @@ if action == "compilerelease":
     shutil.copytree(imagedirname, os.path.join(builddir, imagedirname), ignore=shutil.ignore_patterns("*.xcf"))
     #write header to buildlog
     buildheader(release["version"], gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
+    #save commitid
+    if release["commitid"] is not None:
+        with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
+            f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
     #validate & minify json files
     minifyJSON(getJSONFiles())
     #build zip
@@ -430,6 +438,11 @@ if action == "compiledebug":
         shutil.copytree(imagedirname, os.path.join(builddir, imagedirname), ignore=shutil.ignore_patterns("*.xcf"))
         #write header to buildlog
         buildheader(release["version"], gitver, buildlog, pyiver=PyInstaller.__init__.__version__)
+        #save commitid
+        if release["commitid"] is not None:
+            with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
+                f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
+        #validate json files
         for file in getJSONFiles():
             validateJSON(file)
         #build zip
