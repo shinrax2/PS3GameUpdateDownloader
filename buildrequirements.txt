@@ -1,2 +1,2 @@
 pyinstaller==5.10.1
-pyinstaller-hooks-contrib==2023.0
+pyinstaller-hooks-contrib==2023.3
