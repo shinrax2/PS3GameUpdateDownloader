@@ -282,16 +282,7 @@ def massReplace(find, replace, stri):
     return out
     
 def massFormat(stri, args):
-    #basically str.format() that takes a list of arguments
-    #!!very hacky, please tell me if you know a better way!!
-    call = "stri.format( "
-    for a in args:
-        call = call+"'"+massReplace(["\"", "'"], "", str(a))+"', "
-    if call.endswith(","):
-        call = call[:-1]+")"
-    else:
-        call = call+")"
-    return eval(call, {}, locals())
+    return stri.format(*args)
 
 def filterIllegalCharsFilename(path):
     if platform.system() == "Windows":
