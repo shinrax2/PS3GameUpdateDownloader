@@ -230,7 +230,11 @@ class PS3GUD():
                     pack["size"] = attr["size"]
                     pack["sha1"] = attr["sha1sum"]
                     pack["url"] = attr["url"]
-                    pack["sysver"] = attr["ps3_system_ver"]
+                    try:
+                        pack["sysver"] = attr["ps3_system_ver"]
+                    except KeyError:
+                        #some games like BCUS98132 dont have ps3_system_ver set for their packages, using 1.1000 as replacement
+                        pack["sysver"] = "1.1000"
                     updates.append(pack)
         self.Updates[titleid] = updates
     
