@@ -3,6 +3,8 @@
 - bugfix
 
 future release (aka current master branch):
+
+v012:
 +  added european spanish translation thanks to https://github.com/IlDucci
 +  improved sha1 verification of downloaded PKGs
 -  remove github formatting characters from changelog
