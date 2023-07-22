@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 #
-# build.py for PS3GameUpdateDownloader by shinrax2
+#PS3GameUpdateDownloader downloads PS3 game updates from official Sony servers
+#Copyright (C) 2023 shinrax2
+#
+#This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #built-in
 import argparse
@@ -77,12 +84,47 @@ def getJSONFiles():
     jsonfiles =  []
     for root, dirs, files in os.walk(locdirbuildpath):
         for file in files:
-            if os.path.isfile(os.path.join(root, file)):
+            if os.path.isfile(os.path.join(root, file)) and os.path.join(root, file).lower().endswith(".json"):
                 jsonfiles.append(os.path.join(root, file))
     #other files
     jsonfiles.append(os.path.join(builddir, "release.json"))
     jsonfiles.append(os.path.join(builddir, "titledb.json"))
     return jsonfiles
+
+def copyData(builddir, locdirname, imagedirname, debug=False, source=False):
+    if debug == True: #debug specific files
+        shutil.copy2("titledb.debug.json", os.path.join(builddir, "titledb.json"))
+        shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
+    else: #release specific files
+        shutil.copy2("LICENSE", os.path.join(builddir, "LICENSE"))
+        shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
+        shutil.copy2("release.json", os.path.join(builddir, "release.json"))
+        shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
+        copySource(builddir)
+    if source == True: # source specific files
+        shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
+    # general files
+    shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
+    shutil.copytree(locdirname, os.path.join(builddir, locdirname))
+    shutil.copytree(imagedirname, os.path.join(builddir, imagedirname), ignore=shutil.ignore_patterns("*.xcf"))
+
+def copySource(builddir):
+    sourcedir = os.path.join(builddir, "src")
+    files = ["build.py", "buildrequirements.txt", "CHANGELOG", "gui.py", "LICENSE", "main.py", "missingstrings.py", "PS3GUD.py", "README.md", "release.debug.json", "release.debug.json", "release.json", "requirements.txt", "sony.pem", "titledb.json", "titledb.debug.json", "updater.py", "utils.py"]
+    dirs = {
+        "images": {
+            "ignore": []
+        },
+        "loc": {
+            "ignore": []
+        }
+    }
+    #copy files
+    os.mkdir(sourcedir)
+    for file in files:
+        shutil.copy2(file, os.path.join(sourcedir, file))
+    for dir, options in dirs.items():
+        shutil.copytree(dir, os.path.join(sourcedir, dir), ignore=shutil.ignore_patterns(*options["ignore"]))
 
 class Upx():
     def __init__(self, build_config="build_config.json"):
@@ -163,7 +205,6 @@ parser.add_argument("-z", "--zip", action="store_true", help="pack the build to 
 parser.add_argument("-u", "--upx", action="store_true", help="use UPX to shrink executables")
 parser.add_argument("-up", "--upxpath", action="store", help="path to upx directory")
 args = parser.parse_args()
-
 #constants
 builddir = "dist/PS3GameUpdateDownloader"
 buildlog = os.path.join(builddir, "build.log")
@@ -176,11 +217,13 @@ ARCHIVEFORMAT = "zip"
 #get data from release.json
 with open("release.json", "r", encoding="utf8") as f:
     release = json.loads(f.read())
+release["commitid"] = None
 
 #check parameters
 action = ""
 zip_check = False
 upx_check = False
+upx_pathstr = ""
 if args.compiled == True and args.source == True:
     print("You cant pass \"-c\" and \"-s\" to the buildscript.")
     sys.exit()
@@ -209,6 +252,7 @@ else:
         upx_paths = Upx()
         if args.upxpath is not None and os.path.isdir(args.upxpath) == True:
             upx_paths.set_upx_dir(args.upxpath)
+        upx_pathstr = ", "+upx_paths.get_upx_dir()
 
 if args.zip == True:
     zip_check = True
@@ -234,12 +278,16 @@ if args.compiled == True and args.zip == True:
 arch = py + libc + ostype + bits
 
 #get git commit id if git is found on path
-gitver = "None"
 if (shutil.which("git") is not None) == True:
-    call = shutil.which("git") + " rev-parse HEAD"
+    call = shutil.which("git") + " rev-parse --short HEAD"
     call = call if platform.system() == "Windows" else shlex.split(call)
-    gitver = subprocess.Popen(call, stdout=subprocess.PIPE).communicate()[0].decode("ascii").replace("\n", "")
-    release["commitid"] = gitver
+    release["commitid"] = subprocess.Popen(call, stdout=subprocess.PIPE).communicate()[0].decode("ascii").replace("\n", "")
+
+print("build script for PS3GameUpdateDownloader")
+if action == "":
+    print("use '-h' for help")
+else:
+    print(f"build options:\nmode: {action}\narch: {arch}\n git commit: {release['commitid']}\nupx: {upx_check}{upx_pathstr}\nzip: {zip_check}")
 
 if action == "sourcerelease":
     #release running from source
@@ -253,24 +301,21 @@ if action == "sourcerelease":
         #write header to buildlog
         buildheader(release, buildlog)
         #copy scripts
+        print(f"copying scripts to '{builddir}'")
         shutil.copy2("main.py", os.path.join(builddir, "main.py"))
         shutil.copy2("utils.py", os.path.join(builddir, "utils.py"))
         shutil.copy2("updater.py", os.path.join(builddir, "updater.py"))
         shutil.copy2("PS3GUD.py", os.path.join(builddir, "PS3GUD.py"))
         shutil.copy2("gui.py", os.path.join(builddir, "gui.py"))
         #copy data
-        shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
-        shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
-        shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
-        shutil.copy2("release.json", os.path.join(builddir, "release.json"))
-        shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
-        shutil.copytree(locdirname, os.path.join(builddir, locdirname))
-        shutil.copytree(imagedirname, os.path.join(builddir, imagedirname), ignore=shutil.ignore_patterns("*.xcf"))
+        print(f"copying data to '{builddir}'")
+        copyData(builddir, locdirname, imagedirname, source=True)
         #save commitid
         if release["commitid"] is not None:
             with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
                 f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
         #validate & minify json files
+        print("minifying & validating JSON files")
         minifyJSON(getJSONFiles())
         #build zip
         if zip_check == True:
@@ -295,24 +340,21 @@ if action == "sourcedebug":
         #write header to buildlog
         buildheader(release, buildlog)
         #copy scripts
+        print(f"copying scripts to '{builddir}'")
         shutil.copy2("main.py", os.path.join(builddir, "main.py"))
         shutil.copy2("utils.py", os.path.join(builddir, "utils.py"))
         shutil.copy2("updater.py", os.path.join(builddir, "updater.py"))
         shutil.copy2("PS3GUD.py", os.path.join(builddir, "PS3GUD.py"))
         shutil.copy2("gui.py", os.path.join(builddir, "gui.py"))
         #copy data
-        shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
-        shutil.copy2("titledb.debug.json", os.path.join(builddir, "titledb.json"))
-        shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
-        shutil.copy2("requirements.txt", os.path.join(builddir, "requirements.txt"))
-        shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
-        shutil.copytree(locdirname, os.path.join(builddir, locdirname))
-        shutil.copytree(imagedirname, os.path.join(builddir, imagedirname), ignore=shutil.ignore_patterns("*.xcf"))
+        print(f"copying data to '{builddir}'")
+        copyData(builddir, locdirname, imagedirname, source=True, debug=True)
         #save commitid
         if release["commitid"] is not None:
             with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
                 f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
         #validate json files
+        print("validating JSON files")
         for file in getJSONFiles():
             validateJSON(file)
         #build zip
@@ -333,6 +375,7 @@ if action == "compilerelease":
     else:
         os.makedirs(builddir)
     #build main executable
+    print("building main executable")
     import PyInstaller.__main__
     import PyInstaller.__init__
     fh = logging.FileHandler(buildlog)
@@ -354,6 +397,7 @@ if action == "compilerelease":
     arg_main.append("main.py")
     PyInstaller.__main__.run(arg_main)
     #build updater executable
+    print("building updater executable")
     arg_updater = [
         "--name=PS3GUDup",
         "--clean",
@@ -368,15 +412,12 @@ if action == "compilerelease":
     arg_updater.append("updater.py")
     PyInstaller.__main__.run(arg_updater)
     #move executables to buildir
+    print(f"copying executables to '{builddir}'")
     shutil.move("dist/ps3gud"+suffix, os.path.join(builddir, "ps3gud"+suffix))
     shutil.move("dist/PS3GUDup"+suffix, os.path.join(builddir, "PS3GUDup"+suffix))
     #copy data
-    shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
-    shutil.copy2("titledb.json", os.path.join(builddir, "titledb.json"))
-    shutil.copy2("release.json", os.path.join(builddir, "release.json"))
-    shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
-    shutil.copytree(locdirname, os.path.join(builddir, locdirname))
-    shutil.copytree(imagedirname, os.path.join(builddir, imagedirname), ignore=shutil.ignore_patterns("*.xcf"))
+    print(f"copying data to '{builddir}'")
+    copyData(builddir, locdirname, imagedirname)
     #write header to buildlog
     buildheader(release, buildlog, pyiver=PyInstaller.__init__.__version__)
     #save commitid
@@ -384,6 +425,7 @@ if action == "compilerelease":
         with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
             f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
     #validate & minify json files
+    print("minifying & validating JSON files")
     minifyJSON(getJSONFiles())
     #build zip
     if zip_check == True:
@@ -414,6 +456,7 @@ if action == "compiledebug":
         log.addHandler(fh)
         
         #build main executable
+        print("building main executable")
         arg_main = [
             "--name=ps3gud",
             "--clean",
@@ -423,11 +466,12 @@ if action == "compiledebug":
         ]
         if upx_check == True:
             arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
-            if platform.system() == "Windows": # fix for UPXed executeables not starting
+            if platform.system() == "Windows": # fix for UPXed executables not starting
                 arg_main.append("--upx-exclude=vcruntime140.dll")
         arg_main.append("main.py")
         PyInstaller.__main__.run(arg_main)
         #build updater executable
+        print("building updater executable")
         arg_updater = [
             "--name=PS3GUDup",
             "--clean",
@@ -437,20 +481,17 @@ if action == "compiledebug":
         ]
         if upx_check == True:
             arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())
-            if platform.system() == "Windows": # fix for UPXed executeables not starting
+            if platform.system() == "Windows": # fix for UPXed executables not starting
                 arg_updater.append("--upx-exclude=vcruntime140.dll")
         arg_updater.append("updater.py") 
         PyInstaller.__main__.run(arg_updater)
         #move executables to buildir
+        print(f"copying executables to '{builddir}'")
         shutil.move("dist/ps3gud"+suffix, os.path.join(builddir, "ps3gud"+suffix))
         shutil.move("dist/PS3GUDup"+suffix, os.path.join(builddir, "PS3GUDup"+suffix))
         #copy data
-        shutil.copy2("CHANGELOG", os.path.join(builddir, "CHANGELOG"))
-        shutil.copy2("titledb.debug.json", os.path.join(builddir, "titledb.json"))
-        shutil.copy2("release.debug.json", os.path.join(builddir, "release.json"))
-        shutil.copy2("sony.pem", os.path.join(builddir, "sony.pem"))
-        shutil.copytree(locdirname, os.path.join(builddir, locdirname))
-        shutil.copytree(imagedirname, os.path.join(builddir, imagedirname), ignore=shutil.ignore_patterns("*.xcf"))
+        print(f"copying data to '{builddir}'")
+        copyData(builddir, locdirname, imagedirname, debug=True)
         #write header to buildlog
         buildheader(release, buildlog, pyiver=PyInstaller.__init__.__version__)
         #save commitid
@@ -458,6 +499,7 @@ if action == "compiledebug":
             with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
                 f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
         #validate json files
+        print("validating JSON files")
         for file in getJSONFiles():
             validateJSON(file)
         #build zip

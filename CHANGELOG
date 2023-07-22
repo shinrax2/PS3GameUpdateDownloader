@@ -14,6 +14,8 @@ future release (aka current master branch):
 +  save git commit id at buildtime and show it in the main window
 !  proper handling of sonys weak certificate
 +  faster search for new titledb versions
+!  add GPL3 license to this project
+-  fix update searching for games with no ps3_system_ver set like BCUS98132
 
 v011:
 -  fix crash when proxy is enabled but no proper proxy settings are set
