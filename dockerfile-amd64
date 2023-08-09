@@ -1,0 +1,19 @@
+FROM amd64/python:3.11-bookworm
+
+WORKDIR ./
+VOLUME /dist
+#setup requirements
+RUN apt update -y
+
+#setup binutils for PyInstaller
+RUN apt install -y binutils
+
+COPY requirements.txt ./
+COPY buildrequirements.txt ./
+
+RUN pip install --disable-pip-version-check --no-cache-dir -U setuptools wheel pip
+RUN pip install --disable-pip-version-check --no-cache-dir -r requirements.txt
+RUN pip install --disable-pip-version-check --no-cache-dir -r buildrequirements.txt
+
+COPY . .
+CMD [ "python", "./build.py", "-c", "-r", "-z" ]
