@@ -110,7 +110,7 @@ def copyData(builddir, locdirname, imagedirname, debug=False, source=False):
 
 def copySource(builddir):
     sourcedir = os.path.join(builddir, "src")
-    files = ["build.py", "buildrequirements.txt", "CHANGELOG", "gui.py", "LICENSE", "main.py", "missingstrings.py", "PS3GUD.py", "README.md", "release.debug.json", "release.debug.json", "release.json", "requirements.txt", "sony.pem", "titledb.json", "titledb.debug.json", "updater.py", "utils.py"]
+    files = ["build.py", "buildrequirements.txt", "CHANGELOG", "gui.py", "LICENSE", "main.py", "missingstrings.py", "PS3GUD.py", "README.md", "release.debug.json", "release.debug.json", "release.json", "requirements.txt", "sony.pem", "titledb.json", "titledb.debug.json", "updater.py", "utils.py", "dockerfile-amd64", "docker_build.sh"]
     dirs = {
         "images": {
             "ignore": []
