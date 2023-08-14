@@ -126,6 +126,14 @@ def copySource(builddir):
     for dir, options in dirs.items():
         shutil.copytree(dir, os.path.join(sourcedir, dir), ignore=shutil.ignore_patterns(*options["ignore"]))
 
+def saveCommitId(release, builddir):
+    if release["commitid"] is not None:
+        with open(os.path.join(builddir, "release.json"), "r", encoding="utf8") as f:
+            data = json.loads(f.read())
+            data["commitid"] = release["commitid"]
+        with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
+            f.write(json.dumps(data, sort_keys=True, ensure_ascii=False, indent=4))
+
 class Upx():
     def __init__(self, build_config="build_config.json"):
         self.upx  = {}
@@ -311,9 +319,7 @@ if action == "sourcerelease":
         print(f"copying data to '{builddir}'")
         copyData(builddir, locdirname, imagedirname, source=True)
         #save commitid
-        if release["commitid"] is not None:
-            with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
-                f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
+        saveCommitId(release, builddir)
         #validate & minify json files
         print("minifying & validating JSON files")
         minifyJSON(getJSONFiles())
@@ -350,9 +356,7 @@ if action == "sourcedebug":
         print(f"copying data to '{builddir}'")
         copyData(builddir, locdirname, imagedirname, source=True, debug=True)
         #save commitid
-        if release["commitid"] is not None:
-            with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
-                f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
+        saveCommitId(release, builddir)
         #validate json files
         print("validating JSON files")
         for file in getJSONFiles():
@@ -421,9 +425,7 @@ if action == "compilerelease":
     #write header to buildlog
     buildheader(release, buildlog, pyiver=PyInstaller.__init__.__version__)
     #save commitid
-    if release["commitid"] is not None:
-        with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
-            f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
+    saveCommitId(release, builddir)
     #validate & minify json files
     print("minifying & validating JSON files")
     minifyJSON(getJSONFiles())
@@ -461,7 +463,6 @@ if action == "compiledebug":
             "--name=ps3gud",
             "--clean",
             "--onefile",
-            "--windowed",
             "--icon="+iconpath
         ]
         if upx_check == True:
@@ -476,7 +477,6 @@ if action == "compiledebug":
             "--name=PS3GUDup",
             "--clean",
             "--onefile",
-            "--windowed",
             "--icon=NONE"
         ]
         if upx_check == True:
@@ -495,9 +495,7 @@ if action == "compiledebug":
         #write header to buildlog
         buildheader(release, buildlog, pyiver=PyInstaller.__init__.__version__)
         #save commitid
-        if release["commitid"] is not None:
-            with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
-                f.write(json.dumps(release, sort_keys=True, ensure_ascii=False, indent=4))
+        saveCommitId(release, builddir)
         #validate json files
         print("validating JSON files")
         for file in getJSONFiles():
