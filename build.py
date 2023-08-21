@@ -21,6 +21,7 @@ import logging
 import subprocess
 import datetime
 import shlex
+import stat
 
 #local files
 import utils
@@ -110,14 +111,23 @@ def copyData(builddir, locdirname, imagedirname, debug=False, source=False):
 
 def copySource(builddir):
     sourcedir = os.path.join(builddir, "src")
-    files = ["build.py", "buildrequirements.txt", "CHANGELOG", "gui.py", "LICENSE", "main.py", "missingstrings.py", "PS3GUD.py", "README.md", "release.debug.json", "release.debug.json", "release.json", "requirements.txt", "sony.pem", "titledb.json", "titledb.debug.json", "updater.py", "utils.py", "dockerfile-amd64", "docker_build.sh"]
+    files = ["build.py", "buildrequirements.txt", "CHANGELOG", "gui.py", "LICENSE", "main_ps3gud.py", "missingstrings.py", "PS3GUD.py", "README.md", "release.debug.json", "release.debug.json", "release.json", "requirements.txt", "sony.pem", "titledb.json", "titledb.debug.json", "updater.py", "utils.py", "docker_build.sh", ".gitignore", ".gitattributes"]
     dirs = {
         "images": {
             "ignore": []
         },
         "loc": {
             "ignore": []
-        }
+        },
+        "dockerfiles": {
+            "ignore": []
+        },
+        ".git": {
+            "ignore": []
+        },
+        ".github": {
+            "ignore": []
+        },
     }
     #copy files
     os.mkdir(sourcedir)
@@ -133,6 +143,10 @@ def saveCommitId(release, builddir):
             data["commitid"] = release["commitid"]
         with open(os.path.join(builddir, "release.json"), "w", encoding="utf8") as f:
             f.write(json.dumps(data, sort_keys=True, ensure_ascii=False, indent=4))
+
+def remove_readonly(func, path, _):
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
 
 class Upx():
     def __init__(self, build_config="build_config.json"):
@@ -212,6 +226,8 @@ parser.add_argument("-d", "--debug",action="store_true", help="building a debug 
 parser.add_argument("-z", "--zip", action="store_true", help="pack the build to a .zip file")
 parser.add_argument("-u", "--upx", action="store_true", help="use UPX to shrink executables")
 parser.add_argument("-up", "--upxpath", action="store", help="path to upx directory")
+parser.add_argument("--docker", action="store_true", help='copy build zip to "./docker_output", requires --zip')
+
 args = parser.parse_args()
 #constants
 builddir = "dist/PS3GameUpdateDownloader"
@@ -222,6 +238,9 @@ imagedirname = "images"
 iconpath = os.path.abspath(os.path.join(imagedirname, "icon.ico"))
 NOW = datetime.datetime.now()
 ARCHIVEFORMAT = "zip"
+dockerdir = "./docker_output"
+mainpyifile = "main_ps3gud.py"
+updaterpyifile = "updater.py"
 #get data from release.json
 with open("release.json", "r", encoding="utf8") as f:
     release = json.loads(f.read())
@@ -232,6 +251,7 @@ action = ""
 zip_check = False
 upx_check = False
 upx_pathstr = ""
+docker = False
 if args.compiled == True and args.source == True:
     print("You cant pass \"-c\" and \"-s\" to the buildscript.")
     sys.exit()
@@ -265,6 +285,10 @@ else:
 if args.zip == True:
     zip_check = True
     zipname = "dist/PS3GameUpdateDownloader-"+release["version"]
+    if args.docker == True:
+        docker = True
+        if os.path.exists(dockerdir) == False:
+            os.makedirs(dockerdir)
 
 #auto config for build
 
@@ -295,13 +319,13 @@ print("build script for PS3GameUpdateDownloader")
 if action == "":
     print("use '-h' for help")
 else:
-    print(f"build options:\nmode: {action}\narch: {arch}\n git commit: {release['commitid']}\nupx: {upx_check}{upx_pathstr}\nzip: {zip_check}")
+    print(f"build options:\nmode: {action}\narch: {arch}\ngit commit: {release['commitid']}\nupx: {upx_check} {upx_pathstr}\nzip: {zip_check}\ndocker: {docker}")
 
 if action == "sourcerelease":
     #release running from source
     if os.path.exists(builddir):
         #delete old build
-        shutil.rmtree(builddir)
+        shutil.rmtree(builddir, onerror=remove_readonly)
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
@@ -310,7 +334,7 @@ if action == "sourcerelease":
         buildheader(release, buildlog)
         #copy scripts
         print(f"copying scripts to '{builddir}'")
-        shutil.copy2("main.py", os.path.join(builddir, "main.py"))
+        shutil.copy2("main_ps3gud.py", os.path.join(builddir, "main_ps3gud.py"))
         shutil.copy2("utils.py", os.path.join(builddir, "utils.py"))
         shutil.copy2("updater.py", os.path.join(builddir, "updater.py"))
         shutil.copy2("PS3GUD.py", os.path.join(builddir, "PS3GUD.py"))
@@ -331,6 +355,10 @@ if action == "sourcerelease":
             print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
             digest = createDigest(zipname+"."+ARCHIVEFORMAT)
             print(f"checksum written to '{zipname}.{ARCHIVEFORMAT}.sha256'\nchecksum: '{digest}'")
+            if docker == True:
+                print(f'copied build zip to "{dockerdir}"')
+                shutil.copy2(zipname+"."+ARCHIVEFORMAT, os.path.join(dockerdir, os.path.basename(zipname)+"."+ARCHIVEFORMAT))
+                shutil.copy2(zipname+"."+ARCHIVEFORMAT+".sha256", os.path.join(dockerdir, os.path.basename(zipname)+"."+ARCHIVEFORMAT+".sha256"))
    
 if action == "sourcedebug":
     #debug running from source
@@ -338,7 +366,7 @@ if action == "sourcedebug":
     buildlog = os.path.join(builddir, "build.log")
     if os.path.exists(builddir):
         #delete old build
-        shutil.rmtree(builddir)
+        shutil.rmtree(builddir, onerror=remove_readonly)
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
@@ -347,7 +375,7 @@ if action == "sourcedebug":
         buildheader(release, buildlog)
         #copy scripts
         print(f"copying scripts to '{builddir}'")
-        shutil.copy2("main.py", os.path.join(builddir, "main.py"))
+        shutil.copy2("main_ps3gud.py", os.path.join(builddir, "main_ps3gud.py"))
         shutil.copy2("utils.py", os.path.join(builddir, "utils.py"))
         shutil.copy2("updater.py", os.path.join(builddir, "updater.py"))
         shutil.copy2("PS3GUD.py", os.path.join(builddir, "PS3GUD.py"))
@@ -369,12 +397,16 @@ if action == "sourcedebug":
             print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
             digest = createDigest(zipname+"."+ARCHIVEFORMAT)
             print(f"checksum written to '{zipname}.{ARCHIVEFORMAT}.sha256'\nchecksum: '{digest}'")
+            if docker == True:
+                print(f'copied build zip to "{dockerdir}"')
+                shutil.copy2(zipname+"."+ARCHIVEFORMAT, os.path.join(dockerdir, os.path.basename(zipname)+"."+ARCHIVEFORMAT))
+                shutil.copy2(zipname+"."+ARCHIVEFORMAT+".sha256", os.path.join(dockerdir, os.path.basename(zipname)+"."+ARCHIVEFORMAT+".sha256"))
         
 if action == "compilerelease":
     #compiled release
     #delete old build
     if os.path.exists(builddir):
-        shutil.rmtree(builddir)
+        shutil.rmtree(builddir, onerror=remove_readonly)
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
@@ -398,7 +430,7 @@ if action == "compilerelease":
         arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
         if platform.system() == "Windows": # fix for UPX
             arg_main.append("--upx-exclude=vcruntime140.dll")
-    arg_main.append("main.py")
+    arg_main.append(mainpyifile)
     PyInstaller.__main__.run(arg_main)
     #build updater executable
     print("building updater executable")
@@ -413,7 +445,7 @@ if action == "compilerelease":
         arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())
         if platform.system() == "Windows": # fix for UPX
             arg_updater.append("--upx-exclude=vcruntime140.dll")
-    arg_updater.append("updater.py")
+    arg_updater.append(updaterpyifile)
     PyInstaller.__main__.run(arg_updater)
     #move executables to buildir
     print(f"copying executables to '{builddir}'")
@@ -437,6 +469,10 @@ if action == "compilerelease":
         print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
         digest = createDigest(zipname+"."+ARCHIVEFORMAT)
         print(f"checksum written to '{zipname}.{ARCHIVEFORMAT}.sha256'\nchecksum: '{digest}'")
+        if docker == True:
+                print(f'copied build zip to "{dockerdir}"')
+                shutil.copy2(zipname+"."+ARCHIVEFORMAT, os.path.join(dockerdir, os.path.basename(zipname)+"."+ARCHIVEFORMAT))
+                shutil.copy2(zipname+"."+ARCHIVEFORMAT+".sha256", os.path.join(dockerdir, os.path.basename(zipname)+"."+ARCHIVEFORMAT+".sha256"))
 
 if action == "compiledebug":
     #compiled debug
@@ -444,7 +480,7 @@ if action == "compiledebug":
     buildlog = os.path.join(builddir, "build.log")
     #delete old build
     if os.path.exists(builddir):
-        shutil.rmtree(builddir)
+        shutil.rmtree(builddir, onerror=remove_readonly)
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
@@ -469,7 +505,7 @@ if action == "compiledebug":
             arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
             if platform.system() == "Windows": # fix for UPXed executables not starting
                 arg_main.append("--upx-exclude=vcruntime140.dll")
-        arg_main.append("main.py")
+        arg_main.append(mainpyifile)
         PyInstaller.__main__.run(arg_main)
         #build updater executable
         print("building updater executable")
@@ -483,7 +519,7 @@ if action == "compiledebug":
             arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())
             if platform.system() == "Windows": # fix for UPXed executables not starting
                 arg_updater.append("--upx-exclude=vcruntime140.dll")
-        arg_updater.append("updater.py") 
+        arg_updater.append(updaterpyifile) 
         PyInstaller.__main__.run(arg_updater)
         #move executables to buildir
         print(f"copying executables to '{builddir}'")
@@ -508,3 +544,7 @@ if action == "compiledebug":
             print(f"calculating checksum for archive '{zipname}.{ARCHIVEFORMAT}'")
             digest = createDigest(zipname+"."+ARCHIVEFORMAT)
             print(f"checksum written to '{zipname}.{ARCHIVEFORMAT}.sha256'\nchecksum: '{digest}'")
+            if docker == True:
+                print(f'copied build zip to "{dockerdir}"')
+                shutil.copy2(zipname+"."+ARCHIVEFORMAT, os.path.join(dockerdir, os.path.basename(zipname)+"."+ARCHIVEFORMAT))
+                shutil.copy2(zipname+"."+ARCHIVEFORMAT+".sha256", os.path.join(dockerdir, os.path.basename(zipname)+"."+ARCHIVEFORMAT+".sha256"))

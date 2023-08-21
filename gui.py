@@ -94,7 +94,7 @@ class Gui():
             [sg.Text(self.loc.getKey("window_main_titleid_label"), key="window_main_titleid_label", size=(50,1))],
             [sg.Input(key="titleid"),sg.Button(self.loc.getKey("window_main_enter_btn"), key="Enter", bind_return_key=True), sg.Button(self.loc.getKey("window_main_queue_btn"), key="Queue"), sg.Button(self.loc.getKey("window_main_config_btn") ,key="Config")],
             [sg.Text("", size=(30, 3), key="window_main_progress_label")],
-            [sg.ProgressBar(100, orientation="h", size=(52.85, 20), key="window_main_progress_bar")],
+            [sg.ProgressBar(0, orientation="h", size=(52.85, 20), key="window_main_progress_bar")],
             [sg.Output(size=(80,20), key="Out")],
             [sg.Button(self.loc.getKey("window_main_exit_btn"), key="Exit")]
         ]

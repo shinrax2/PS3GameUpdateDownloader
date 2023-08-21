@@ -1,7 +1,7 @@
 FROM amd64/python:3.11-bookworm
 
 WORKDIR ./
-VOLUME /dist
+VOLUME /docker_output
 #setup requirements
 RUN apt update -y
 
@@ -16,4 +16,4 @@ RUN pip install --disable-pip-version-check --no-cache-dir -r requirements.txt
 RUN pip install --disable-pip-version-check --no-cache-dir -r buildrequirements.txt
 
 COPY . .
-CMD [ "python", "./build.py", "-c", "-r", "-z" ]
+CMD [ "python", "./build.py", "-c", "-r", "-z", "--docker" ]

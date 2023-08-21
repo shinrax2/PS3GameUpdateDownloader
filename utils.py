@@ -28,6 +28,7 @@ import hashlib
 
 #pip packages
 import requests
+import psutil
 
 #local files
 import PS3GUD
@@ -191,8 +192,8 @@ class UpdaterGithubRelease():
                         already_loaded = count * chunk_size
                         if already_loaded / size > 1:
                             already_loaded = size
-                        label = "Downloading update: "+formatSize(already_loaded)+"/"+formatSize(size)
                         percentage = already_loaded / size * 100
+                        label = f"Downloading update: {formatSize(already_loaded)}/{formatSize(size)} ({percentage}%)"
                         text.Update(label)
                         bar.UpdateBar(percentage)
                         window.Refresh()
@@ -251,7 +252,10 @@ class UpdaterGithubRelease():
             file = "updater"+suffix
         
         #write current install dir to tempfile
-        data = {"dir": os.getcwd()}
+        data = {
+            "dir": os.getcwd(),
+            "pid": os.getpid()
+        }
         with open(os.path.join(tempfile.gettempdir(), "PS3GUDUpdate.json"), "w", encoding="utf8") as f:
             f.write(json.dumps(data, sort_keys=True, indent=4))
         #copy updater
@@ -263,7 +267,7 @@ class UpdaterGithubRelease():
         
         if isAppFrozen() == False:
             if platform.system() == "Windows":
-                subprocess.Popen("py "+os.path.join(tempfile.gettempdir(), file))
+                subprocess.Popen("python3 "+os.path.join(tempfile.gettempdir(), file))
             if platform.system() == "Linux":
                 subprocess.Popen(shlex.split("python3 "+os.path.join(tempfile.gettempdir(), file)))
         else:
@@ -366,3 +370,37 @@ def sha256File(file):
         for block in iter(lambda: f.read(4096), b""):
             hash.update(block)
     return hash.hexdigest()
+
+def getMainExecutableBasename():
+    name = ""
+    if isAppFrozen():
+        name = "PS3GUD"
+    else:
+        name = "main_ps3gud"
+    return name
+
+def waitForMainAppExit(pid = None, window = None):
+    exename = (getMainExecutableBasename()+getExecutableSuffix()).lower()
+    print(f"looking for {exename} (PID: {pid if pid is not None else 'No PID given'})")
+    sleep_interval = 0.05
+    if pid == None:
+        for p in psutil.process_iter(attrs=["pid", "name", "cmdline"]):
+            if window is not None:
+                window.Refresh()
+            if exename in p.info["name"].lower() or exename in (' '.join(p.info["cmdline"])).lower():
+                pid = p.info["pid"]
+                print(f"found {exename} with pid: {pid}")
+            
+    if pid is not None:
+        try:
+            proc = psutil.Process(pid)
+        except psutil.NoSuchProcess:
+            return
+        print(f"waiting for {exename}(PID: {pid}) with interval of {sleep_interval}s")
+        while True:
+            if psutil.pid_exists(pid) and (proc.name().lower() == exename or exename in (' '.join(proc.cmdline())).lower()):
+                if window is not None:
+                    window.Refresh()
+                time.sleep(sleep_interval)
+            else:
+                break
