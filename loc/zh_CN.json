@@ -1,0 +1,362 @@
+{
+    "language_name": {
+        "string": "简体中文",
+        "comment": "Name of the language"
+    },
+    "language_short": {
+        "string": "zh_CN",
+        "comment": "Name of the language file"
+    },
+    "window_main_title": {
+        "string": "PS3 Game Update Downloader",
+        "comment": "Main window title (don't translate)"
+    },
+    "window_main_titleid_label": {
+        "string": "输入内容 ID",
+        "comment": ""
+    },
+    "window_main_enter_btn": {
+        "string": "搜索",
+        "comment": ""
+    },
+    "window_main_progress_label": {
+        "string": "下载文件 {0}:\n{1}/{2}({3}%)\n速度: {4}",
+        "comment": "0: Number of download, 1: Amount of downloaded data, 2: Total file size, 3: Amount of downloaded data in %, 4: Download speed"
+    },
+    "window_main_config_btn": {
+        "string": "配置",
+        "comment": ""
+    },
+    "window_main_exit_btn": {
+        "string": "退出",
+        "comment": ""
+    },
+    "window_main_queue_btn": {
+        "string": "队列",
+        "comment": ""
+    },
+    "window_config_title": {
+        "string": "配置",
+        "comment": ""
+    },
+    "window_config_dldir_label": {
+        "string": "下载目录:",
+        "comment": ""
+    },
+    "window_config_verify_label": {
+        "string": "验证文件:",
+        "comment": ""
+    },
+    "window_config_checkIfAlreadyDownloaded_label": {
+        "string": "检查文件是否已经下载:",
+        "comment": ""
+    },
+    "window_config_checkForNewRelease_label": {
+        "string": "启动时检查新版本:",
+        "comment": ""
+    },
+    "window_config_storageThreshold_label": {
+        "string": "存储阈值 (GiB):",
+        "comment": ""
+    },
+    "window_config_currentLoc_label": {
+        "string": "语言:",
+        "comment": ""
+    },
+    "window_config_renamepkgs_label": {
+        "string": "重命名 PKGs:",
+        "comment": ""
+    },
+    "window_config_renamepkgs_tooltip": {
+        "string": "重命名 PKGs 为 $GAMENAME_[$GAMEID]_$GAMEVERSION",
+        "comment": ""
+    },
+    "window_config_updatetitledb_label": {
+        "string": "启动时更新内容数据:",
+        "comment": ""
+    },
+    "window_config_useproxy_label": {
+        "string": "使用代理? (只支持 SOCKS5!)",
+        "comment": ""
+    },
+    "window_config_proxyip_label": {
+        "string": "代理 IP:",
+        "comment": ""
+    },
+    "window_config_proxyport_label": {
+        "string": "代理端口:",
+        "comment": ""
+    },
+    "window_config_proxyuser_laber": {
+        "string": "代理用户名:",
+        "comment": ""
+    },
+    "window_config_proxypass_label": {
+        "string": "代理密码",
+        "comment": ""
+    },
+    "window_config_cancel_btn": {
+        "string": "取消",
+        "comment": ""
+    },
+    "window_config_save_btn": {
+        "string": "保存",
+        "comment": ""
+    },
+    "window_select_title": {
+        "string": "选择更新内容",
+        "comment": ""
+    },
+    "window_select_text_label": {
+        "string": "游戏标题: {0}\t内容 ID: {1}",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "window_select_table_ver": {
+        "string": "版本",
+        "comment": ""
+    },
+    "window_select_table_size": {
+        "string": "文件大小",
+        "comment": ""
+    },
+    "window_select_table_sysver": {
+        "string": "PS3 软件版本",
+        "comment": ""
+    },
+    "window_select_download_btn": {
+        "string": "下载",
+        "comment": ""
+    },
+    "window_select_cancel_btn": {
+        "string": "取消",
+        "comment": ""
+    },
+    "window_select_queue_btn": {
+        "string": "添加到下载队列",
+        "comment": ""
+    },
+    "window_select_help_label": {
+        "string": "按住 Ctrl 键并点击要选择的更新补丁",
+        "comment": ""
+    },
+    "window_relNotify_title": {
+        "string": "发现新版本!",
+        "comment": ""
+    },
+    "window_relNotify_version_label": {
+        "string": "当前版本: {0}\n新版本: {1}",
+        "comment": "0: Current programm version, 1: New programm version"
+    },
+    "window_relNotify_changelog_label": {
+        "string": "更新日志:",
+        "comment": ""
+    },
+    "window_relNotify_web_btn": {
+        "string": "在浏览器中打开网站",
+        "comment": ""
+    },
+    "window_relNotify_dl_btn": {
+        "string": "下载并安装更新",
+        "comment": ""
+    },
+    "window_relNotify_close_btn": {
+        "string": "关闭",
+        "comment": ""
+    },
+    "window_queue_title": {
+        "string": "下载队列",
+        "comment": ""
+    },
+    "window_queue_table_num": {
+        "string": "序号",
+        "comment": ""
+    },
+    "window_queue_table_game": {
+        "string": "游戏标题",
+        "comment": ""
+    },
+    "window_queue_table_titleid": {
+        "string": "内容 ID",
+        "comment": ""
+    },
+    "window_queue_table_ver": {
+        "string": "版本",
+        "comment": ""
+    },
+    "window_queue_table_size": {
+        "string": "文件大小",
+        "comment": ""
+    },
+    "window_queue_download_btn": {
+        "string": "开始下载",
+        "comment": ""
+    },
+    "window_queue_close_btn": {
+        "string": "关闭",
+        "comment": ""
+    },
+    "window_queue_moveup_btn": {
+        "string": "上移",
+        "comment": ""
+    },
+    "window_queue_movedown_btn": {
+        "string": "下移",
+        "comment": ""
+    },
+    "window_queue_remove_btn": {
+        "string": "移除",
+        "comment": ""
+    },
+    "window_queue_totalsize_label": {
+        "string": "全部大小: {0}",
+        "comment": "0: Total download size of queue"
+    },
+    "window_queue_export_label": {
+        "string": "导出队列到:",
+        "comment": ""
+    },
+    "window_queue_export_btn": {
+        "string": "导出",
+        "comment": ""
+    },
+    "window_keyring_support_info_label": {
+        "string": "未找到可用的密钥链后端\n请查看主页上的密钥链安装指南\n{0}",
+        "comment": "0: Url of keyring homepage"
+    },
+    "window_keyring_support_dont_show_again_label": {
+        "string": "以后不再显示",
+        "comment": ""
+    },
+    "window_keyring_support_ok_btn": {
+        "string": "确定",
+        "comment": ""
+    },
+    "window_keyring_support_browser_btn": {
+        "string": "在浏览器中打开",
+        "comment": ""
+    },
+    "window_keyring_support_title": {
+        "string": "警告! 代理支持已禁用!",
+        "comment": ""
+    },
+	"window_msgBox_ok_btn": {
+		"string": "确定",
+		"comment": ""
+	},
+	"window_msgBox_queueExported_title": {
+		"string": "队列已导出",
+		"comment": ""
+	},
+	"window_msgBox_queueExported_label": {
+		"string": "队列已导出到 \"{0}\".",
+		"comment": "0: File name"
+	},
+    "msg_configFileLoaded": {
+        "string": "已加载配置文件!",
+        "comment": ""
+    },
+    "msg_noConfigFile": {
+        "string": "没有发现配置文件! 将使用默认配置!",
+        "comment": ""
+    },
+    "msg_configFileSaved": {
+        "string": "配置文件已保存!",
+        "comment": ""
+    },
+    "msg_loadedTitledb": {
+        "string": "内容数据已加载 \"{0}\"",
+        "comment": "0: Path to TitleDB"
+    },
+    "msg_titleIDIs": {
+        "string": "游戏标题: {0}\t 内容 ID: {1} ",
+        "comment": "0: Game name, 1: TitleID"
+    },
+    "msg_titleIDNotValid": {
+        "string": "内容 ID 无效!",
+        "comment": ""
+    },
+    "msg_metaNotAvailable": {
+        "string": "此内容 ID 的元数据文件不可用!",
+        "comment": ""
+    },
+    "msg_metaFileEmpty": {
+        "string": "此内容 ID 的元数据文件不包含任何信息!",
+        "comment": ""
+    },
+    "msg_startingDownloads": {
+        "string": "开始下载更新补丁",
+        "comment": ""
+    },
+    "msg_alreadyDownloadedNoVerify": {
+        "string": "文件 \"{0}\" 已经下载! 将会跳过! 未验证!",
+        "comment": "0: File name"
+    },
+    "msg_alreadyDownloadedVerify": {
+        "string": "文件 \"{0}\" 已经下载! 将会跳过! SHA-1 已验证!",
+        "comment": "0: File name"
+    },
+    "msg_startSingleDownload": {
+        "string": "开始下载 {0} / {1}",
+        "comment": "0: Number of download, 1: Total number of downloads in queue"
+    },
+    "msg_verifySuccess": {
+        "string": "\"{0}\" 验证成功!",
+        "comment": "0: File name"
+    },
+    "msg_verifyFailure": {
+        "string": "\"{0}\" 验证失败!\t将会被删除!",
+        "comment": "0: File name"
+    },
+    "msg_noVerify": {
+        "string": "文件 \"{0}\" 未验证!",
+        "comment": "0: File name"
+    },
+    "msg_finishedDownload": {
+        "string": "{0} 个文件下载完成!",
+        "comment": "0: Number of files downloaded"
+    },
+    "msg_notEnoughDiskSpace": {
+        "string": "没有足够的磁盘空间!",
+        "comment": ""
+    },
+    "msg_spaceBelowThreshold": {
+        "string": "可用磁盘空间低于 {0}",
+        "comment": "0: Storage threshold"
+    },
+    "msg_relCheckError": {
+        "string": "无法检查新版本!",
+        "comment": ""
+    },
+    "msg_alreadyUpToDate": {
+        "string": "已更新到最新版本!",
+        "comment": ""
+    },
+    "msg_foundNewRelease": {
+        "string": "发现新版本 \"{0}\"",
+        "comment": "0: New programm version"
+    },
+    "msg_NoReleaseArchiveForPlatformOrArch": {
+        "string": "找不到适用于您的架构或平台的发布版本. 平台: \"{0}\" 架构: \"{1}\" 已编译: \"{2}\"",
+        "comment": "0: Platform, 1: Architecture, 2: App is compiled(True|False)"
+    },
+    "msg_dldirNotWriteable": {
+        "string": "您选择的下载目录 \"{0}\" 无法写入!",
+        "comment": "0: Directory name"
+    },
+    "msg_checkProxySettings": {
+        "string": "请验证您的代理设置是否正确!",
+        "comment": ""
+    },
+    "msg_metaFileBrokenSyntax": {
+        "string": "请求的元数据文件 \"{0}\" 包含错误语法。这很可能是由于索尼准备关闭更新服务器所致。",
+        "comment": "0: TitleID"
+    },
+    "msg_sonyPS3StoreShutdownNotice": {
+        "string": "!!! 重要 !!! 索尼宣布 2021 年 7 月 21 日关闭 PS3 商店，但随后又撤销了这一决定。从宣布到撤销之间，似乎有一些游戏更新被删除了。我建议您备份已下载的游戏更新。",
+        "comment": ""
+    },
+    "msg_newTitleDbVersion": {
+        "string": "下载新版本的内容数据",
+        "comment": ""
+    }
+}
