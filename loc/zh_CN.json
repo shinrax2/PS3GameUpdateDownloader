@@ -64,11 +64,11 @@
         "comment": ""
     },
     "window_config_renamepkgs_label": {
-        "string": "重命名 PKGs:",
+        "string": "重命名 .pkg 文件:",
         "comment": ""
     },
     "window_config_renamepkgs_tooltip": {
-        "string": "重命名 PKGs 为 $GAMENAME_[$GAMEID]_$GAMEVERSION",
+        "string": "将该 .pkg 文件重命名为 $GAMENAME_[$GAMEID]_$GAMEVERSION",
         "comment": ""
     },
     "window_config_updatetitledb_label": {
@@ -76,7 +76,7 @@
         "comment": ""
     },
     "window_config_useproxy_label": {
-        "string": "使用代理? (只支持 SOCKS5!)",
+        "string": "使用代理？(只支持 SOCKS5!)",
         "comment": ""
     },
     "window_config_proxyip_label": {
@@ -220,7 +220,7 @@
         "comment": ""
     },
     "window_keyring_support_info_label": {
-        "string": "未找到可用的密钥链后端\n请查看主页上的密钥链安装指南\n{0}",
+        "string": "未找到可用的密钥链后端，\n请查看主页上的密钥链安装指南。\n{0}",
         "comment": "0: Url of keyring homepage"
     },
     "window_keyring_support_dont_show_again_label": {
@@ -252,15 +252,15 @@
 		"comment": "0: File name"
 	},
     "msg_configFileLoaded": {
-        "string": "已加载配置文件!",
+        "string": "已加载配置文件！",
         "comment": ""
     },
     "msg_noConfigFile": {
-        "string": "没有发现配置文件! 将使用默认配置!",
+        "string": "未发现配置文件，将使用默认配置！",
         "comment": ""
     },
     "msg_configFileSaved": {
-        "string": "配置文件已保存!",
+        "string": "配置文件已保存！",
         "comment": ""
     },
     "msg_loadedTitledb": {
@@ -272,15 +272,15 @@
         "comment": "0: Game name, 1: TitleID"
     },
     "msg_titleIDNotValid": {
-        "string": "内容 ID 无效!",
+        "string": "内容 ID 无效！",
         "comment": ""
     },
     "msg_metaNotAvailable": {
-        "string": "此内容 ID 的元数据文件不可用!",
+        "string": "此内容 ID 的元数据文件不可用！",
         "comment": ""
     },
     "msg_metaFileEmpty": {
-        "string": "此内容 ID 的元数据文件不包含任何信息!",
+        "string": "此内容 ID 的元数据文件不包含任何信息！",
         "comment": ""
     },
     "msg_startingDownloads": {
@@ -288,11 +288,11 @@
         "comment": ""
     },
     "msg_alreadyDownloadedNoVerify": {
-        "string": "文件 \"{0}\" 已经下载! 将会跳过! 未验证!",
+        "string": "文件 \"{0}\" 已经下载，将会跳过且不会校验该文件！",
         "comment": "0: File name"
     },
     "msg_alreadyDownloadedVerify": {
-        "string": "文件 \"{0}\" 已经下载! 将会跳过! SHA-1 已验证!",
+        "string": "文件 \"{0}\" 已经下载，将会跳过，且 SHA-1 已验证！",
         "comment": "0: File name"
     },
     "msg_startSingleDownload": {
@@ -300,23 +300,23 @@
         "comment": "0: Number of download, 1: Total number of downloads in queue"
     },
     "msg_verifySuccess": {
-        "string": "\"{0}\" 验证成功!",
+        "string": "\"{0}\" 验证成功！",
         "comment": "0: File name"
     },
     "msg_verifyFailure": {
-        "string": "\"{0}\" 验证失败!\t将会被删除!",
+        "string": "\"{0}\" 验证失败！\t将会被删除！",
         "comment": "0: File name"
     },
     "msg_noVerify": {
-        "string": "文件 \"{0}\" 未验证!",
+        "string": "文件 \"{0}\" 未验证！",
         "comment": "0: File name"
     },
     "msg_finishedDownload": {
-        "string": "{0} 个文件下载完成!",
+        "string": "{0} 个文件下载完成！",
         "comment": "0: Number of files downloaded"
     },
     "msg_notEnoughDiskSpace": {
-        "string": "没有足够的磁盘空间!",
+        "string": "没有足够的磁盘空间！",
         "comment": ""
     },
     "msg_spaceBelowThreshold": {
@@ -324,11 +324,11 @@
         "comment": "0: Storage threshold"
     },
     "msg_relCheckError": {
-        "string": "无法检查新版本!",
+        "string": "无法检查新版本！",
         "comment": ""
     },
     "msg_alreadyUpToDate": {
-        "string": "已更新到最新版本!",
+        "string": "已更新到最新版本！",
         "comment": ""
     },
     "msg_foundNewRelease": {
@@ -336,15 +336,15 @@
         "comment": "0: New programm version"
     },
     "msg_NoReleaseArchiveForPlatformOrArch": {
-        "string": "找不到适用于您的架构或平台的发布版本. 平台: \"{0}\" 架构: \"{1}\" 已编译: \"{2}\"",
+        "string": "找不到适用于您的架构或平台的发布版本。当前平台: \"{0}\" 架构: \"{1}\" 已编译: \"{2}\"",
         "comment": "0: Platform, 1: Architecture, 2: App is compiled(True|False)"
     },
     "msg_dldirNotWriteable": {
-        "string": "您选择的下载目录 \"{0}\" 无法写入!",
+        "string": "您选择的下载目录 \"{0}\" 无法写入！",
         "comment": "0: Directory name"
     },
     "msg_checkProxySettings": {
-        "string": "请验证您的代理设置是否正确!",
+        "string": "请验证您的代理设置是否正确！",
         "comment": ""
     },
     "msg_metaFileBrokenSyntax": {
