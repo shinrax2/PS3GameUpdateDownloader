@@ -1,4 +1,4 @@
-FROM amd64/python:3.12-bookworm
+FROM tobix/pywine:3.12
 
 WORKDIR ./
 VOLUME /docker_output
@@ -16,4 +16,4 @@ RUN pip install --disable-pip-version-check --no-cache-dir -r requirements.txt
 RUN pip install --disable-pip-version-check --no-cache-dir -r buildrequirements.txt
 
 COPY . .
-CMD ["python", "./build.py", "-c", "-r", "-z", "--docker"]
+CMD ["wine", "python", "./build.py", "-c", "-r", "-z", "--docker"]
