@@ -148,42 +148,6 @@ def remove_readonly(func, path, _):
     os.chmod(path, stat.S_IWRITE)
     func(path)
 
-class Upx():
-    def __init__(self, build_config="build_config.json"):
-        self.upx  = {}
-        self.build_config = build_config
-        if os.path.isfile(self.build_config):
-            with open(self.build_config, "r", encoding="utf8") as f:
-                self.upx = json.loads(f.read())
-
-    def get_upx_dir(self, arch=("win" if platform.system() == "Windows" else "linux")+("64" if platform.architecture()[0] == "64bit" else "32")):
-        try:
-            return self.upx[arch]
-        except KeyError:
-            self.ask_for_uxp_path(arch)
-            return self.upx[arch]
-    
-    def set_upx_dir(self, path, arch=("win" if platform.system() == "Windows" else "linux")+("64" if platform.architecture()[0] == "64bit" else "32")):
-        self.upx[arch] = os.path.abspath(path)
-        self.save_upx_paths()
-    
-    def ask_for_uxp_path(self, arch=("win" if platform.system() == "Windows" else "linux")+("64" if platform.architecture()[0] == "64bit" else "32")):
-        check = False
-        while check == False:
-            upx = input("Please enter the path to your UPX("+arch+" version) installation:")
-            if os.path.isdir(upx):
-                check = True
-                self.upx[arch] = os.path.abspath(upx)
-                self.save_upx_paths()
-            else:
-                print("Please enter a valid path like C:\\upx-win32\\ or /opt/upx-i386-linux/ .")
-    
-    def save_upx_paths(self):
-        if len(self.upx) > 0:
-            print("Saving UPX paths to \""+self.build_config+"\"")
-            with open(self.build_config, "w", encoding="utf8") as f:
-                f.write(json.dumps(self.upx, sort_keys=True, indent=4, ensure_ascii=False))
-
 # START from https://stackoverflow.com/questions/2677617/write-at-beginning-of-file/20805898#20805898 START
 class Prepender(object):
     def __init__(self,
@@ -224,8 +188,6 @@ parser.add_argument("-c", "--compiled", action="store_true", help="building a co
 parser.add_argument("-r", "--release", action="store_true", help="building a release version, mutually exclusive with '--debug'")
 parser.add_argument("-d", "--debug",action="store_true", help="building a debug version, mutually exclusive with '--release'")
 parser.add_argument("-z", "--zip", action="store_true", help="pack the build to a .zip file")
-parser.add_argument("-u", "--upx", action="store_true", help="use UPX to shrink executables")
-parser.add_argument("-up", "--upxpath", action="store", help="path to upx directory")
 parser.add_argument("--docker", action="store_true", help='copy build zip to "./docker_output", requires --zip')
 
 args = parser.parse_args()
@@ -269,18 +231,6 @@ if args.compiled == True and args.release == True:
     action = "compilerelease"
 if args.compiled == True and args.debug == True:
     action = "compiledebug"
-
-if platform.system() != "Windows":
-    #disable upx for non-Windows platforms since UPX leads to some corruption with linux/macos binaries
-    upx_check = False
-else: 
-    if args.compiled == True and args.upx == True:
-        # setting up UPX
-        upx_check = True
-        upx_paths = Upx()
-        if args.upxpath is not None and os.path.isdir(args.upxpath) == True:
-            upx_paths.set_upx_dir(args.upxpath)
-        upx_pathstr = ", "+upx_paths.get_upx_dir()
 
 if args.zip == True:
     zip_check = True
@@ -424,14 +374,9 @@ if action == "compilerelease":
         "--clean",
         "--onefile",
         "--windowed",
-        "--icon="+iconpath
+        "--icon="+iconpath,
+        "--noupx"
     ]
-    if upx_check == True:
-        arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
-        if platform.system() == "Windows": # fix for UPX
-            arg_main.append("--upx-exclude=vcruntime140.dll")
-    else:
-    	arg_main.append("--noupx")
     arg_main.append(mainpyifile)
     PyInstaller.__main__.run(arg_main)
     #build updater executable
@@ -440,14 +385,9 @@ if action == "compilerelease":
         "--name=PS3GUDup",
         "--clean",
         "--onefile",
-        "--windowed"
+        "--windowed",
+        "--noupx"
     ]
-    if upx_check == True:
-        arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())
-        if platform.system() == "Windows": # fix for UPX
-            arg_updater.append("--upx-exclude=vcruntime140.dll")
-    else:
-    	arg_updater.append("--noupx")
     arg_updater.append(updaterpyifile)
     PyInstaller.__main__.run(arg_updater)
     #move executables to buildir
@@ -502,7 +442,9 @@ if action == "compiledebug":
             "--name=ps3gud",
             "--clean",
             "--onefile",
-            "--icon="+iconpath
+            "--icon="+iconpath,
+            "--noupx",
+            "--console"
         ]
         if upx_check == True:
             arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
@@ -515,13 +457,10 @@ if action == "compiledebug":
         arg_updater = [
             "--name=PS3GUDup",
             "--clean",
-            "--onefile"
+            "--onefile",
+            "--noupx",
+            "--console"
         ]
-        if upx_check == True:
-            arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())
-            if platform.system() == "Windows": # fix for UPXed executables not starting
-                arg_updater.append("--upx-exclude=vcruntime140.dll")
-        arg_updater.append(updaterpyifile) 
         PyInstaller.__main__.run(arg_updater)
         #move executables to buildir
         print(f"copying executables to '{builddir}'")
