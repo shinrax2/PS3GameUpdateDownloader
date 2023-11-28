@@ -30,7 +30,7 @@ def buildheader(release, filepath , pyiver="None"):
     lines = [   "Building PS3GameUpdateDownloader",
                 "Build script arguments: "+str(sys.argv[1:]),
                 "Version: "+release["version"],
-                "Git Commit: "+release["commitid"],
+                "Git Commit: "+str(release["commitid"]),
                 "Date/Time: "+str(NOW)
             ]
     if pyiver != "None":
@@ -111,7 +111,7 @@ def copyData(builddir, locdirname, imagedirname, debug=False, source=False):
 
 def copySource(builddir):
     sourcedir = os.path.join(builddir, "src")
-    files = ["build.py", "buildrequirements.txt", "CHANGELOG", "gui.py", "LICENSE", "main_ps3gud.py", "missingstrings.py", "PS3GUD.py", "README.md", "release.debug.json", "release.debug.json", "release.json", "requirements.txt", "sony.pem", "titledb.json", "titledb.debug.json", "updater.py", "utils.py", "docker_build.sh", ".gitignore", ".gitattributes"]
+    files = ["build.py", "buildrequirements.txt", "CHANGELOG", "gui.py", "LICENSE", "main_ps3gud.py", "missingstrings.py", "PS3GUD.py", "README.md", "release.debug.json", "release.debug.json", "release.json", "requirements.txt", "sony.pem", "titledb.json", "titledb.debug.json", "updater.py", "utils.py", "docker-build.sh", ".gitignore", ".gitattributes"]
     dirs = {
         "images": {
             "ignore": []
@@ -230,7 +230,7 @@ parser.add_argument("--docker", action="store_true", help='copy build zip to "./
 
 args = parser.parse_args()
 #constants
-builddir = "dist/PS3GameUpdateDownloader"
+builddir = "./dist/PS3GameUpdateDownloader"
 buildlog = os.path.join(builddir, "build.log")
 locdirname = "loc"
 locdirbuildpath = os.path.join(builddir, locdirname)
@@ -238,7 +238,7 @@ imagedirname = "images"
 iconpath = os.path.abspath(os.path.join(imagedirname, "icon.ico"))
 NOW = datetime.datetime.now()
 ARCHIVEFORMAT = "zip"
-dockerdir = "./docker_output"
+dockerdir = os.path.abspath("./docker_output")
 mainpyifile = "main_ps3gud.py"
 updaterpyifile = "updater.py"
 #get data from release.json
@@ -430,6 +430,8 @@ if action == "compilerelease":
         arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
         if platform.system() == "Windows": # fix for UPX
             arg_main.append("--upx-exclude=vcruntime140.dll")
+    else:
+    	arg_main.append("--noupx")
     arg_main.append(mainpyifile)
     PyInstaller.__main__.run(arg_main)
     #build updater executable
@@ -438,13 +440,14 @@ if action == "compilerelease":
         "--name=PS3GUDup",
         "--clean",
         "--onefile",
-        "--windowed",
-        "--icon=NONE"
+        "--windowed"
     ]
     if upx_check == True:
         arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())
         if platform.system() == "Windows": # fix for UPX
             arg_updater.append("--upx-exclude=vcruntime140.dll")
+    else:
+    	arg_updater.append("--noupx")
     arg_updater.append(updaterpyifile)
     PyInstaller.__main__.run(arg_updater)
     #move executables to buildir
@@ -512,8 +515,7 @@ if action == "compiledebug":
         arg_updater = [
             "--name=PS3GUDup",
             "--clean",
-            "--onefile",
-            "--icon=NONE"
+            "--onefile"
         ]
         if upx_check == True:
             arg_updater.append("--upx-dir="+upx_paths.get_upx_dir())

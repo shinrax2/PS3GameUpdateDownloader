@@ -1,19 +1,13 @@
 FROM amd64/python:3.12-bookworm
 
-WORKDIR ./
-VOLUME /docker_output
+WORKDIR /code
+VOLUME /code/docker_output
 #setup requirements
-RUN apt update -y
+RUN apt update -y && apt install -y binutils
 
-#setup binutils for PyInstaller
-RUN apt install -y binutils
+COPY . /code
 
-COPY requirements.txt ./
-COPY buildrequirements.txt ./
+RUN pip install --disable-pip-version-check --no-cache-dir -U wheel pip
+RUN pip install --disable-pip-version-check --no-cache-dir -r requirements.txt -r buildrequirements.txt
 
-RUN pip install --disable-pip-version-check --no-cache-dir -U setuptools wheel pip
-RUN pip install --disable-pip-version-check --no-cache-dir -r requirements.txt
-RUN pip install --disable-pip-version-check --no-cache-dir -r buildrequirements.txt
-
-COPY . .
-CMD ["python", "./build.py", "-c", "-r", "-z", "--docker"]
+CMD ["sh", "-c", "python build.py -c -r -z --docker"]

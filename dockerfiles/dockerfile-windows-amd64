@@ -1,19 +1,13 @@
 FROM tobix/pywine:3.12
 
-WORKDIR ./
-VOLUME /docker_output
-#setup requirements
-RUN apt update -y
+ENV WINEARCH=win64
+WORKDIR /code
+VOLUME /code/docker_output
 
-#setup binutils for PyInstaller
-RUN apt install -y binutils
+COPY . /code
 
-COPY requirements.txt ./
-COPY buildrequirements.txt ./
+RUN wine python -m pip install --disable-pip-version-check --no-cache-dir -U wheel pip
+RUN wine python -m pip install --disable-pip-version-check --no-cache-dir -r requirements.txt -r buildrequirements.txt
 
-RUN pip install --disable-pip-version-check --no-cache-dir -U setuptools wheel pip
-RUN pip install --disable-pip-version-check --no-cache-dir -r requirements.txt
-RUN pip install --disable-pip-version-check --no-cache-dir -r buildrequirements.txt
 
-COPY . .
-CMD ["wine", "python", "./build.py", "-c", "-r", "-z", "--docker"]
+CMD ["sh", "-c", "wine python build.py -c -r -z --docker"]
