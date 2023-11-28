@@ -39,12 +39,6 @@ def buildheader(release, filepath , pyiver="None"):
         if platform.system() == "Linux":
             lines.append(f"LibC: {platform.libc_ver()[0]} {platform.libc_ver()[1]}")
         lines.append("PyInstaller version: "+pyiver)
-        if upx_check == True:
-            lines.append(f"UPX directory: {upx_paths.get_upx_dir()}")
-            call = os.path.join(upx_paths.get_upx_dir(), "upx"+(".exe" if platform.system() == "Windows" else ""))+" --version"
-            call = call if platform.system() == "Windows" else shlex.split(call)
-            upx_version = subprocess.Popen(call, stdout=subprocess.PIPE).communicate()[0].decode('ascii').split('\n')[0].replace("\n", "")
-            lines.append(f"UPX version: {upx_version}")
         lines.append("PyInstaller Output:")
     with Prepender(filepath) as filehandle:
         filehandle.write_lines(lines)
@@ -189,6 +183,7 @@ parser.add_argument("-r", "--release", action="store_true", help="building a rel
 parser.add_argument("-d", "--debug",action="store_true", help="building a debug version, mutually exclusive with '--release'")
 parser.add_argument("-z", "--zip", action="store_true", help="pack the build to a .zip file")
 parser.add_argument("--docker", action="store_true", help='copy build zip to "./docker_output", requires --zip')
+parser.add_argument("--githash", action="store", help="gives git commit hash to build script(mostly useful for docker builds)")
 
 args = parser.parse_args()
 #constants
@@ -211,17 +206,12 @@ release["commitid"] = None
 #check parameters
 action = ""
 zip_check = False
-upx_check = False
-upx_pathstr = ""
 docker = False
 if args.compiled == True and args.source == True:
     print("You cant pass \"-c\" and \"-s\" to the buildscript.")
     sys.exit()
 if args.debug == True and args.release == True:
     print("You cant pass \"-d\" and \"-r\" to the buildscript.")
-    sys.exit()
-if args.compiled == False and args.upx == True:
-    print("You need to build a compiled release to use UPX")
     sys.exit()
 if args.source == True and args.release == True:
     action = "sourcerelease"
@@ -260,7 +250,9 @@ if args.compiled == True and args.zip == True:
 arch = py + libc + ostype + bits
 
 #get git commit id if git is found on path
-if (shutil.which("git") is not None) == True:
+if args.githash is not None:
+    release["commitid"] = args.githash
+elif (shutil.which("git") is not None) == True:
     call = shutil.which("git") + " rev-parse --short HEAD"
     call = call if platform.system() == "Windows" else shlex.split(call)
     release["commitid"] = subprocess.Popen(call, stdout=subprocess.PIPE).communicate()[0].decode("ascii").replace("\n", "")
@@ -269,13 +261,13 @@ print("build script for PS3GameUpdateDownloader")
 if action == "":
     print("use '-h' for help")
 else:
-    print(f"build options:\nmode: {action}\narch: {arch}\ngit commit: {release['commitid']}\nupx: {upx_check} {upx_pathstr}\nzip: {zip_check}\ndocker: {docker}")
+    print(f"build options:\nmode: {action}\narch: {arch}\ngit commit: {release['commitid']}\nzip: {zip_check}\ndocker: {docker}")
 
 if action == "sourcerelease":
     #release running from source
     if os.path.exists(builddir):
         #delete old build
-        shutil.rmtree(builddir, onerror=remove_readonly)
+        shutil.rmtree(builddir, onexc=remove_readonly)
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
@@ -316,7 +308,7 @@ if action == "sourcedebug":
     buildlog = os.path.join(builddir, "build.log")
     if os.path.exists(builddir):
         #delete old build
-        shutil.rmtree(builddir, onerror=remove_readonly)
+        shutil.rmtree(builddir, onexc=remove_readonly)
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
@@ -356,7 +348,7 @@ if action == "compilerelease":
     #compiled release
     #delete old build
     if os.path.exists(builddir):
-        shutil.rmtree(builddir, onerror=remove_readonly)
+        shutil.rmtree(builddir, onexc=remove_readonly)
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
@@ -423,7 +415,7 @@ if action == "compiledebug":
     buildlog = os.path.join(builddir, "build.log")
     #delete old build
     if os.path.exists(builddir):
-        shutil.rmtree(builddir, onerror=remove_readonly)
+        shutil.rmtree(builddir, onexc=remove_readonly)
         os.makedirs(builddir)
     else:
         os.makedirs(builddir)
@@ -446,10 +438,6 @@ if action == "compiledebug":
             "--noupx",
             "--console"
         ]
-        if upx_check == True:
-            arg_main.append("--upx-dir="+upx_paths.get_upx_dir())
-            if platform.system() == "Windows": # fix for UPXed executables not starting
-                arg_main.append("--upx-exclude=vcruntime140.dll")
         arg_main.append(mainpyifile)
         PyInstaller.__main__.run(arg_main)
         #build updater executable
