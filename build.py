@@ -26,7 +26,7 @@ import stat
 #local files
 import utils
 
-def buildheader(release, filepath , pyiver="None"):
+def buildheader(release, filepath , pyiver="None", winever=None):
     lines = [   "Building PS3GameUpdateDownloader",
                 "Build script arguments: "+str(sys.argv[1:]),
                 "Version: "+release["version"],
@@ -35,10 +35,12 @@ def buildheader(release, filepath , pyiver="None"):
             ]
     if pyiver != "None":
         lines.append(f"Python version: Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}{sys.version_info.releaselevel} ({platform.python_implementation()})")
-        lines.append("Platform: "+platform.system()+" "+platform.architecture()[0])
-        if platform.system() == "Linux":
+        lines.append(f"Platform: {platform.system()} {platform.architecture()[0]}")
+        if platform.system() == "Windows" and winever is not None:
+            lines.append(f"Built on Wine Version: {winever}")
+        elif platform.system() == "Linux":
             lines.append(f"LibC: {platform.libc_ver()[0]} {platform.libc_ver()[1]}")
-        lines.append("PyInstaller version: "+pyiver)
+        lines.append(f"PyInstaller version: {pyiver}")
         lines.append("PyInstaller Output:")
     with Prepender(filepath) as filehandle:
         filehandle.write_lines(lines)
@@ -184,6 +186,7 @@ parser.add_argument("-d", "--debug",action="store_true", help="building a debug 
 parser.add_argument("-z", "--zip", action="store_true", help="pack the build to a .zip file")
 parser.add_argument("--docker", action="store_true", help='copy build zip to "./docker_output", requires --zip')
 parser.add_argument("--githash", action="store", help="gives git commit hash to build script(mostly useful for docker builds)")
+parser.add_argument("--winever", action="store", help="gives wine version to build script(mostly useful for docker builds)")
 
 args = parser.parse_args()
 #constants
@@ -198,6 +201,7 @@ ARCHIVEFORMAT = "zip"
 dockerdir = os.path.abspath("./docker_output")
 mainpyifile = "main_ps3gud.py"
 updaterpyifile = "updater.py"
+winever = None
 #get data from release.json
 with open("release.json", "r", encoding="utf8") as f:
     release = json.loads(f.read())
@@ -230,6 +234,8 @@ if args.zip == True:
         if os.path.exists(dockerdir) == False:
             os.makedirs(dockerdir)
 
+if args.winever is not None:
+    winever = args.winever
 #auto config for build
 
 suffix = ""
@@ -390,7 +396,7 @@ if action == "compilerelease":
     print(f"copying data to '{builddir}'")
     copyData(builddir, locdirname, imagedirname)
     #write header to buildlog
-    buildheader(release, buildlog, pyiver=PyInstaller.__init__.__version__)
+    buildheader(release, buildlog, pyiver=PyInstaller.__init__.__version__, winever=winever)
     #save commitid
     saveCommitId(release, builddir)
     #validate & minify json files
@@ -458,7 +464,7 @@ if action == "compiledebug":
         print(f"copying data to '{builddir}'")
         copyData(builddir, locdirname, imagedirname, debug=True)
         #write header to buildlog
-        buildheader(release, buildlog, pyiver=PyInstaller.__init__.__version__)
+        buildheader(release, buildlog, pyiver=PyInstaller.__init__.__version__, winever=winever)
         #save commitid
         saveCommitId(release, builddir)
         #validate json files
