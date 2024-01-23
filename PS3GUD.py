@@ -261,9 +261,9 @@ class PS3GUD():
             sha1 = dl["sha1"]
             size = dl["size"]
             id = dl["gameid"]
-            fdir = os.path.join(self.getConfig("dldir")+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+"["+id+"]/")
+            fdir = os.path.join(self.getConfig("dldir")+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+" ["+id+"]/")
             if self.getConfig("rename_pkgs") == True:
-                fname = os.path.join(fdir, utils.filterIllegalCharsFilename(self.getTitleNameFromId(id)+"_["+id+"]_"+dl["version"]+".pkg"))
+                fname = os.path.join(fdir, utils.filterIllegalCharsFilename(self.getTitleNameFromId(id)+" ["+id+"] "+dl["version"]+".pkg"))
             else:
                 fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
 
@@ -322,7 +322,7 @@ class PS3GUD():
         text = window["window_main_progress_label"]
         bar = window["window_main_progress_bar"]
         size = int(size)
-        chunk_size=8192
+        chunk_size=98304
         count = 0
         already_loaded = 0
         with requests.get(url, stream=True, proxies=self.proxies) as r:
