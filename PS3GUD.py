@@ -66,7 +66,7 @@ class PS3GUD():
         self.configDefaults["rename_pkgs"] = True
         self.configDefaults["update_titledb"] = True
         
-        #handle sonys weak cert for their https server
+    def setupRequests(self):
         self.https_session = requests.Session()
         self.https_session.mount('https://a0.ww.np.dl.playstation.net', SonySSLContextAdapter(bypassSSL=self.getConfig("bypass_ssl")))
         self.pemfile = "./sony.pem"
@@ -109,6 +109,8 @@ class PS3GUD():
             self.logger.log(self.loc.getKey("msg_noConfigFile"))
             self.config = self.configDefaults
             
+        self.setupRequests()
+            
     def setConfig(self, config):
         self.config = config
         self.saveConfig()
@@ -118,6 +120,7 @@ class PS3GUD():
             f.write(json.dumps(self.config, sort_keys=True, indent=4, ensure_ascii=False))
         self.logger.log(self.loc.getKey("msg_configFileSaved"))
         self.useDefaultConfig = False 
+        self.setupRequests()
         
     def setProxyCredentials(self, pwd, user):
         keyring.set_password("ps3gud", "proxy_pass", pwd)
@@ -213,7 +216,12 @@ class PS3GUD():
         updates = []
         url = urllib.parse.urljoin(urllib.parse.urljoin("https://a0.ww.np.dl.playstation.net/tpl/np/", self.titleid+"/"), self.titleid+"-ver.xml")
         try:
-            resp = self.https_session.get(url, verify=not self.getConfig("bypass_ssl"), proxies=self.proxies)
+            if self.getConfig("bypass_ssl"):
+                verify_value = False
+            else:
+                verify_value = self.pemfile
+        
+            resp = self.https_session.get(url, verify=verify_value, proxies=self.proxies)
         except requests.exceptions.ConnectionError:
             self.logger.log(f"{self.loc.getKey('msg_metaNotAvailable')} ({url})")
             if self.getConfig("use_proxy"):
