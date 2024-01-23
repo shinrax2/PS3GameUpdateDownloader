@@ -457,11 +457,11 @@ class Queue():
                 games[entry["gameid"]]
             except KeyError:
                 games[entry["gameid"]] = []
-            games[entry["gameid"]].append(entry["url"])
+            games[entry["gameid"]].append((entry["url"], entry["version"]))
         for id, data in games.items():
-            s += self.ps3.getTitleNameFromId(id)+"["+id+"]:\n\n"
-            for url in data:
-                s += "\t"+url+"\n"
+            s += f"{self.ps3.getTitleNameFromId(id)} [{id}]:\n\n"
+            for url, version in data:
+                s += f"\t{url+'#name='+urllib.parse.quote(utils.filterIllegalCharsFilename(self.ps3.getTitleNameFromId(id)+'_['+id+']_'+version+'.pkg'))}\n"
             s += "\n"
         with open(exportFile, "w", encoding="utf8") as f:
             f.write(s)
