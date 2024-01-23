@@ -71,6 +71,22 @@
         "string": "Renames PKGs to $GAMENAME_[$GAMEID]_$GAMEVERSION",
         "comment": ""
     },
+	"window_config_add_all_updates_to_queue_automatically_label": {
+        "string": "Add all updates to queue automatically:",
+        "comment": ""
+    },
+    "window_config_add_all_updates_to_queue_automatically_tooltip": {
+        "string": "Automatically add all game updates to queue without displaying the confirmation and selection window",
+        "comment": ""
+    },
+	"window_config_bypass_ssl_label": {
+        "string": "Bypass Sony SSL:",
+        "comment": ""
+    },
+    "window_config_bypass_ssl_tooltip": {
+        "string": "Do not attempt to resolve and validate SSL",
+        "comment": ""
+    },
     "window_config_updatetitledb_label": {
         "string": "Update TitleDB on startup:",
         "comment": ""
