@@ -15,7 +15,9 @@ Grab the latest release [here](https://github.com/shinrax2/PS3GameUpdateDownload
 Sony has announced that they will be closing the PS3 store on 02.07.21 and later reversed that decision. It seems that some game updates got deleted in the time between the announcement and its reversal. I recommend you backup your downloaded game updates.
 
 # JDownloader PKG Renaming
-If you want to use the queue export feature and download the updates with JDownloader import `ps3gud_jdownloader_renamepkgs.packagizer` into your packagizer settings
+If you want to use the queue export feature and download the updates with [JDownloader](https://jdownloader.org/download/index) import `ps3gud_jdownloader_renamepkgs.packagizer` into your packagizer settings and make sure to set the following rule order:
+
+![Main window](https://github.com/shinrax2/PS3GameUpdateDownloader/raw/master/screenshots/jdownloader_order.png)
 
 # Contributions
 Contributions in form of translations and bug fixes are welcome.
