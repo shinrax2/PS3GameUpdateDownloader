@@ -55,7 +55,7 @@ class PS3GUD():
         self.configDefaults["storageThresholdNew"] = 5
         self.configDefaults["currentLoc"] = "en"
         self.configDefaults["checkForNewRelease"] = True
-        self.configDefaults["bypass_ssl"] = True
+        self.configDefaults["bypass_ssl"] = False
         self.configDefaults["add_all_updates_to_queue_automatically"] = False
         self.configDefaults["use_proxy"] = False
         self.configDefaults["proxy_ip"] = ""
@@ -223,7 +223,7 @@ class PS3GUD():
         
             resp = self.https_session.get(url, verify=verify_value, proxies=self.proxies)
         except requests.exceptions.ConnectionError:
-            self.logger.log(f"{self.loc.getKey('msg_metaNotAvailable')} ({url})")
+            self.logger.log(f"{self.loc.getKey('msg_metaNotAvailable')} ({url})", "e")
             if self.getConfig("use_proxy"):
                 self.logger.log(self.loc.getKey("msg_checkProxySettings"))
             self.titleid = ""
@@ -269,9 +269,9 @@ class PS3GUD():
             sha1 = dl["sha1"]
             size = dl["size"]
             id = dl["gameid"]
-            fdir = os.path.join(self.getConfig("dldir")+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+" ["+id+"]/")
+            fdir = os.path.join(self.getConfig("dldir")+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+"_["+id+"]/")
             if self.getConfig("rename_pkgs") == True:
-                fname = os.path.join(fdir, utils.filterIllegalCharsFilename(self.getTitleNameFromId(id)+" ["+id+"] "+dl["version"]+".pkg"))
+                fname = os.path.join(fdir, utils.filterIllegalCharsFilename(self.getTitleNameFromId(id)+"_["+id+"]_"+dl["version"]+".pkg"))
             else:
                 fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
 
@@ -474,8 +474,8 @@ class Queue():
         for id, data in games.items():
             s += f"{self.ps3.getTitleNameFromId(id)} [{id}]:\n\n"
             for url, version in data:
-                filename = urllib.parse.quote(utils.filterIllegalCharsFilename(self.ps3.getTitleNameFromId(id)+' ['+id+'] '+version+'.pkg'))
-                folder = urllib.parse.quote(utils.filterIllegalCharsFilename(self.ps3.getTitleNameFromId(id)+' ['+id+']'))
+                filename = urllib.parse.quote(utils.filterIllegalCharsFilename(self.ps3.getTitleNameFromId(id)+'_['+id+']_'+version+'.pkg'))
+                folder = urllib.parse.quote(utils.filterIllegalCharsFilename(self.ps3.getTitleNameFromId(id)+'_['+id+']'))
                 s += f"\t{url+'#folder='+folder+'#name='+filename}\n"
             s += "\n"
         with open(exportFile, "w", encoding="utf8") as f:

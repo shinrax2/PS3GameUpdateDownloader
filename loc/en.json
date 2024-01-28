@@ -80,11 +80,11 @@
         "comment": ""
     },
 	"window_config_bypass_ssl_label": {
-        "string": "Bypass SSL:",
+        "string": "Bypass SSL(Insecure):",
         "comment": ""
     },
     "window_config_bypass_ssl_tooltip": {
-        "string": "Do not attempt to resolve and validate SSL when downloading",
+        "string": "Only try this if you have problems finding updates.\nDo not attempt to resolve and validate SSL when downloading.",
         "comment": ""
     },
     "window_config_updatetitledb_label": {

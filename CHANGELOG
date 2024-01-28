@@ -5,7 +5,10 @@
 future release (aka current master branch):
 +  added simplified chinese translation thanks to https://github.com/nini22P & https://github.com/FR0Z3
 +  make updater actually wait for main application to exit instead of using a timeout
-+  add dockerfile for linux amd64
++  add dockerfile for linux-amd64, linux-win32, linux-win64
++  Improved download speeds (thanks to https://github.com/rursache)
++  Improved robustness of TitleID parsing (thanks to https://github.com/rursache)
++  Added option to bypass ssl checks to help with connection issues (thanks to https://github.com/rursache)
 
 
 v012:
