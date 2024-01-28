@@ -199,6 +199,8 @@ class Gui():
             [sg.Text(self.loc.getKey("window_config_storageThreshold_label"), size=(40,1)), sg.In(self.ps3.getConfig("storageThresholdNew"), key="storageThreshold")],
             [sg.Text(self.loc.getKey("window_config_currentLoc_label"), size=(40,1)), sg.OptionMenu(locChoices, size=(8, 15), key="currentLoc", default_value=self.loc.getKey("language_name"))],
             [sg.Text(self.loc.getKey("window_config_renamepkgs_label"), size=(40,1), tooltip=self.loc.getKey("window_config_renamepkgs_tooltip")), sg.Checkbox("", default=self.ps3.getConfig("rename_pkgs"), key="rename_pkgs", tooltip=self.loc.getKey("window_config_renamepkgs_tooltip"))],
+            [sg.Text(self.loc.getKey("window_config_add_all_updates_to_queue_automatically_label"), size=(40,1), tooltip=self.loc.getKey("window_config_add_all_updates_to_queue_automatically_tooltip")), sg.Checkbox("", default=self.ps3.getConfig("add_all_updates_to_queue_automatically"), key="add_all_updates_to_queue_automatically", tooltip=self.loc.getKey("window_config_add_all_updates_to_queue_automatically_tooltip"))],
+            [sg.Text(self.loc.getKey("window_config_bypass_ssl_label"), size=(40,1), tooltip=self.loc.getKey("window_config_bypass_ssl_tooltip")), sg.Checkbox("", default=self.ps3.getConfig("bypass_ssl"), key="bypass_ssl", tooltip=self.loc.getKey("window_config_bypass_ssl_tooltip"))],
             [sg.Text(self.loc.getKey("window_config_updatetitledb_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("update_titledb"), key="update_titledb")],
             [sg.Text(self.loc.getKey("window_config_useproxy_label"), size=(40,1)), sg.Checkbox("", default=self.ps3.getConfig("use_proxy"), key="use_proxy", enable_events=True)],
             [sg.Text(self.loc.getKey("window_config_proxyip_label"), size=(40,1)), sg.In(self.ps3.getConfig("proxy_ip"), key="proxy_ip")],
@@ -243,7 +245,7 @@ class Gui():
                 for l in ll:
                     if cL == l["language_name"]:
                         cL = l["language_short"]
-                config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThresholdNew": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "use_proxy": valConfig["use_proxy"], "rename_pkgs": valConfig["rename_pkgs"], "update_titledb": valConfig["update_titledb"]}
+                config = { "dldir": valConfig["dldir"], "verify": valConfig["verify"], "checkIfAlreadyDownloaded": valConfig["checkIfAlreadyDownloaded"], "storageThresholdNew": valConfig["storageThreshold"], "currentLoc": cL , "proxy_ip": valConfig["proxy_ip"], "proxy_port": valConfig["proxy_port"], "use_proxy": valConfig["use_proxy"], "rename_pkgs": valConfig["rename_pkgs"], "update_titledb": valConfig["update_titledb"], "bypass_ssl": valConfig["bypass_ssl"], "add_all_updates_to_queue_automatically": valConfig["add_all_updates_to_queue_automatically"]}
                 self.ps3.setConfig(config)
                 if self.ps3.getConfig("use_proxy") == True:
                     self.ps3.setProxyCredentials(valConfig["proxy_pass"], valConfig["proxy_user"])
@@ -261,61 +263,69 @@ class Gui():
             updlen = 0
             self.tryDl = False
         if updlen > 0:
-            self.mainWindow.hide()
-            data = self.updatePackToTable(self.ps3.getUpdates())
-            lay2 = [
-                [sg.Text(self.loc.getKey("window_select_text_label", [self.ps3.getTitleNameFromId(), self.ps3.titleid]))],
-                [sg.Table(values=data, headings=[self.loc.getKey("window_select_table_ver"), self.loc.getKey("window_select_table_size"), self.loc.getKey("window_select_table_sysver")], key="Table", enable_events=True)],
-                [sg.Text(self.loc.getKey("window_select_help_label"), size=(45,2))],
-                [sg.Button(self.loc.getKey("window_select_download_btn"), key="OK", disabled=True),sg.Button(self.loc.getKey("window_select_queue_btn"), key="Queue", disabled=True), sg.Button(self.loc.getKey("window_select_cancel_btn"), key="Cancel")]
-            ]
-            self.selectWindow = sg.Window(self.loc.getKey("window_select_title"), lay2, icon=self.iconpath)
-            while True:
-                ev2, val2 = self.selectWindow.Read()
-                if len(val2["Table"]) > 0:
-                    self.selectWindow["OK"].Update(disabled=False)
-                    self.selectWindow["Queue"].Update(disabled=False)
-                if len(val2["Table"]) == 0:
-                    self.selectWindow["OK"].Update(disabled=True)
-                    self.selectWindow["Queue"].Update(disabled=True)
-                if ev2 in (None, "Exit"):
-                    self.selectWindow.Close()
-                    self.mainWindow.UnHide()
-                    self.tryDl = False
-                    break
-                if ev2 == "Cancel":
-                    self.selectWindow.Close()
-                    self.mainWindow.UnHide()
-                    self.tryDl = False
-                    break
-                if ev2 == "OK" and len(val2["Table"]) > 0:
-                    if len(val2["Table"]) == 1:
-                        self.ps3.DlList.addEntry(self.ps3.getUpdates()[val2["Table"][0]])
-                        self.selectWindow.Close()
-                        self.mainWindow.UnHide()
-                        self.tryDl = True
-                        break
-                    if len(val2["Table"]) > 1:
-                        for row in val2["Table"]:
-                            self.ps3.DlList.addEntry(self.ps3.getUpdates()[row])
-                        self.selectWindow.Close()
-                        self.mainWindow.UnHide()
-                        self.tryDl = True
-                        break
-                if ev2 == "Queue" and len(val2["Table"]) > 0:
-                    if len(val2["Table"]) == 1:    
-                        self.ps3.DlList.addEntry(self.ps3.getUpdates()[val2["Table"][0]])
+            updates = self.ps3.getUpdates()
+            
+            if self.ps3.getConfig("add_all_updates_to_queue_automatically"):
+                for update in updates:
+                    self.ps3.DlList.addEntry(update)
+            
+                self.ps3.logger.log(f"Added {updlen} updates to queue")
+            else:
+                self.mainWindow.hide()
+                data = self.updatePackToTable(updates)
+                lay2 = [
+                    [sg.Text(self.loc.getKey("window_select_text_label", [self.ps3.getTitleNameFromId(), self.ps3.titleid]))],
+                    [sg.Table(values=data, headings=[self.loc.getKey("window_select_table_ver"), self.loc.getKey("window_select_table_size"), self.loc.getKey("window_select_table_sysver")], key="Table", enable_events=True)],
+                    [sg.Text(self.loc.getKey("window_select_help_label"), size=(45,2))],
+                    [sg.Button(self.loc.getKey("window_select_download_btn"), key="OK", disabled=True),sg.Button(self.loc.getKey("window_select_queue_btn"), key="Queue", disabled=True), sg.Button(self.loc.getKey("window_select_cancel_btn"), key="Cancel")]
+                ]
+                self.selectWindow = sg.Window(self.loc.getKey("window_select_title"), lay2, icon=self.iconpath)
+                while True:
+                    ev2, val2 = self.selectWindow.Read()
+                    if len(val2["Table"]) > 0:
+                        self.selectWindow["OK"].Update(disabled=False)
+                        self.selectWindow["Queue"].Update(disabled=False)
+                    if len(val2["Table"]) == 0:
+                        self.selectWindow["OK"].Update(disabled=True)
+                        self.selectWindow["Queue"].Update(disabled=True)
+                    if ev2 in (None, "Exit"):
                         self.selectWindow.Close()
                         self.mainWindow.UnHide()
                         self.tryDl = False
                         break
-                    if len(val2["Table"]) > 1:
-                        for row in val2["Table"]:
-                            self.ps3.DlList.addEntry(self.ps3.getUpdates()[row])
+                    if ev2 == "Cancel":
                         self.selectWindow.Close()
                         self.mainWindow.UnHide()
                         self.tryDl = False
                         break
+                    if ev2 == "OK" and len(val2["Table"]) > 0:
+                        if len(val2["Table"]) == 1:
+                            self.ps3.DlList.addEntry(self.ps3.getUpdates()[val2["Table"][0]])
+                            self.selectWindow.Close()
+                            self.mainWindow.UnHide()
+                            self.tryDl = True
+                            break
+                        if len(val2["Table"]) > 1:
+                            for row in val2["Table"]:
+                                self.ps3.DlList.addEntry(self.ps3.getUpdates()[row])
+                            self.selectWindow.Close()
+                            self.mainWindow.UnHide()
+                            self.tryDl = True
+                            break
+                    if ev2 == "Queue" and len(val2["Table"]) > 0:
+                        if len(val2["Table"]) == 1:    
+                            self.ps3.DlList.addEntry(self.ps3.getUpdates()[val2["Table"][0]])
+                            self.selectWindow.Close()
+                            self.mainWindow.UnHide()
+                            self.tryDl = False
+                            break
+                        if len(val2["Table"]) > 1:
+                            for row in val2["Table"]:
+                                self.ps3.DlList.addEntry(self.ps3.getUpdates()[row])
+                            self.selectWindow.Close()
+                            self.mainWindow.UnHide()
+                            self.tryDl = False
+                            break
                         
 
     def queueWin(self):

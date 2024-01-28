@@ -21,7 +21,7 @@ import shutil
 import json
 import time
 import platform
-import ssl
+from urllib3.exceptions import InsecureRequestWarning
 
 #local files
 import utils
@@ -30,6 +30,8 @@ import utils
 import requests
 import requests.adapters
 import keyring
+
+requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
 class PS3GUD():
     def __init__(self, window=None):
@@ -44,10 +46,6 @@ class PS3GUD():
         self.DlList = Queue(self)
         self.titleid = ""
         self.proxies = {}
-        #handle sonys weak cert for their https server
-        self.https_session = requests.Session()
-        self.https_session.mount('https://a0.ww.np.dl.playstation.net', SonySSLContextAdapter())
-        self.pemfile = "./sony.pem"
         
         self.useDefaultConfig = True
         self.configDefaults = {}
@@ -57,6 +55,8 @@ class PS3GUD():
         self.configDefaults["storageThresholdNew"] = 5
         self.configDefaults["currentLoc"] = "en"
         self.configDefaults["checkForNewRelease"] = True
+        self.configDefaults["bypass_ssl"] = True
+        self.configDefaults["add_all_updates_to_queue_automatically"] = False
         self.configDefaults["use_proxy"] = False
         self.configDefaults["proxy_ip"] = ""
         self.configDefaults["proxy_port"] = ""
@@ -65,6 +65,11 @@ class PS3GUD():
         self.configDefaults["dont_show_again_keyring_support"] = False
         self.configDefaults["rename_pkgs"] = True
         self.configDefaults["update_titledb"] = True
+        
+    def setupRequests(self):
+        self.https_session = requests.Session()
+        self.https_session.mount('https://a0.ww.np.dl.playstation.net', SonySSLContextAdapter(bypassSSL=self.getConfig("bypass_ssl")))
+        self.pemfile = "./sony.pem"
         
     def setWindow(self, window):
         self.logger.window = window
@@ -104,6 +109,8 @@ class PS3GUD():
             self.logger.log(self.loc.getKey("msg_noConfigFile"))
             self.config = self.configDefaults
             
+        self.setupRequests()
+            
     def setConfig(self, config):
         self.config = config
         self.saveConfig()
@@ -113,6 +120,7 @@ class PS3GUD():
             f.write(json.dumps(self.config, sort_keys=True, indent=4, ensure_ascii=False))
         self.logger.log(self.loc.getKey("msg_configFileSaved"))
         self.useDefaultConfig = False 
+        self.setupRequests()
         
     def setProxyCredentials(self, pwd, user):
         keyring.set_password("ps3gud", "proxy_pass", pwd)
@@ -192,7 +200,7 @@ class PS3GUD():
     def checkForUpdates(self, titleid):    
         #check given id
         check = False
-        titleid = titleid.upper()
+        titleid = titleid.upper().replace("-", "")
         for item in self.titledb:
             if titleid == item["id"]:
                 check = True
@@ -208,9 +216,14 @@ class PS3GUD():
         updates = []
         url = urllib.parse.urljoin(urllib.parse.urljoin("https://a0.ww.np.dl.playstation.net/tpl/np/", self.titleid+"/"), self.titleid+"-ver.xml")
         try:
-            resp = self.https_session.get(url, verify=self.pemfile, proxies=self.proxies)
+            if self.getConfig("bypass_ssl"):
+                verify_value = False
+            else:
+                verify_value = self.pemfile
+        
+            resp = self.https_session.get(url, verify=verify_value, proxies=self.proxies)
         except requests.exceptions.ConnectionError:
-            self.logger.log(self.loc.getKey("msg_metaNotAvailable"), "e")
+            self.logger.log(f"{self.loc.getKey('msg_metaNotAvailable')} ({url})")
             if self.getConfig("use_proxy"):
                 self.logger.log(self.loc.getKey("msg_checkProxySettings"))
             self.titleid = ""
@@ -256,9 +269,9 @@ class PS3GUD():
             sha1 = dl["sha1"]
             size = dl["size"]
             id = dl["gameid"]
-            fdir = os.path.join(self.getConfig("dldir")+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+"["+id+"]/")
+            fdir = os.path.join(self.getConfig("dldir")+"/", utils.filterIllegalCharsFilename(self.getTitleNameFromId(id))+" ["+id+"]/")
             if self.getConfig("rename_pkgs") == True:
-                fname = os.path.join(fdir, utils.filterIllegalCharsFilename(self.getTitleNameFromId(id)+"_["+id+"]_"+dl["version"]+".pkg"))
+                fname = os.path.join(fdir, utils.filterIllegalCharsFilename(self.getTitleNameFromId(id)+" ["+id+"] "+dl["version"]+".pkg"))
             else:
                 fname = os.path.join(fdir, utils.filterIllegalCharsFilename(os.path.basename(url)))
 
@@ -317,7 +330,7 @@ class PS3GUD():
         text = window["window_main_progress_label"]
         bar = window["window_main_progress_bar"]
         size = int(size)
-        chunk_size=8192
+        chunk_size=98304
         count = 0
         already_loaded = 0
         with requests.get(url, stream=True, proxies=self.proxies) as r:
@@ -461,14 +474,24 @@ class Queue():
         for id, data in games.items():
             s += f"{self.ps3.getTitleNameFromId(id)} [{id}]:\n\n"
             for url, version in data:
-                s += f"\t{url+'#name='+urllib.parse.quote(utils.filterIllegalCharsFilename(self.ps3.getTitleNameFromId(id)+'_['+id+']_'+version+'.pkg'))}\n"
+                filename = urllib.parse.quote(utils.filterIllegalCharsFilename(self.ps3.getTitleNameFromId(id)+' ['+id+'] '+version+'.pkg'))
+                folder = urllib.parse.quote(utils.filterIllegalCharsFilename(self.ps3.getTitleNameFromId(id)+' ['+id+']'))
+                s += f"\t{url+'#folder='+folder+'#name='+filename}\n"
             s += "\n"
         with open(exportFile, "w", encoding="utf8") as f:
             f.write(s)
 
 class SonySSLContextAdapter(requests.adapters.HTTPAdapter):
+    def __init__(self, bypassSSL=False, **kwargs):
+        self.bypassSSL = bypassSSL
+        super(SonySSLContextAdapter, self).__init__(**kwargs)
+
     def init_poolmanager(self, *args, **kwargs):
         context = ssl.create_default_context()
-        context.set_ciphers('DEFAULT:@SECLEVEL=1')
+        if self.bypassSSL:
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE
+        else:
+            context.set_ciphers('DEFAULT:@SECLEVEL=1')
         kwargs['ssl_context'] = context
         return super(SonySSLContextAdapter, self).init_poolmanager(*args, **kwargs)
