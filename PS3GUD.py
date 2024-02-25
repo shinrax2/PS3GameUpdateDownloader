@@ -241,7 +241,11 @@ class PS3GUD():
             self.logger.log(self.loc.getKey("msg_metaFileBrokenSyntax", [self.titleid]), "e")
             self.titleid = ""
             return
-        if root.attrib["titleid"] == self.titleid:
+        try:
+            tid = root.attrib["titleid"]
+        except KeyError:
+            tid = ""
+        if tid == self.titleid:
             for tag in root:
                 for package in tag:
                     pack = {}
