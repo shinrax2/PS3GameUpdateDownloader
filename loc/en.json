@@ -374,5 +374,21 @@
     "msg_newTitleDbVersion": {
         "string": "Downloaded new version of TitleDB",
         "comment": ""
+    },
+    "window_main_rpcs3import_btn": {
+        "string": "Import from RPCS3",
+        "comment": ""
+    },
+    "window_rpcs3import_label": {
+        "string": "Please point to \"games.yml\" of your RPCS3 installation.",
+        "comment": ""
+    },
+    "window_rpcs3import_ok_btn": {
+        "string": "OK",
+        "comment": ""
+    },
+    "window_rpcs3import_title": {
+        "string": "Import from RPCS3",
+        "comment": ""
     }
 }

@@ -24,6 +24,7 @@ import utils
 #pip packages
 import PySimpleGUI as sg
 import keyring
+import yaml
 
 class Gui():
     def __init__(self):
@@ -92,7 +93,7 @@ class Gui():
     def mainWin(self):
         layout = [ #layout for main window
             [sg.Text(self.loc.getKey("window_main_titleid_label"), key="window_main_titleid_label", size=(50,1))],
-            [sg.Input(key="titleid"),sg.Button(self.loc.getKey("window_main_enter_btn"), key="Enter", bind_return_key=True), sg.Button(self.loc.getKey("window_main_queue_btn"), key="Queue"), sg.Button(self.loc.getKey("window_main_config_btn") ,key="Config")],
+            [sg.Input(key="titleid"),sg.Button(self.loc.getKey("window_main_enter_btn"), key="Enter", bind_return_key=True), sg.Button(self.loc.getKey("window_main_queue_btn"), key="Queue"),sg.Button(self.loc.getKey("window_main_rpcs3import_btn"), key="rpcs3import_btn"), sg.Button(self.loc.getKey("window_main_config_btn") ,key="Config")],
             [sg.Text("", size=(30, 3), key="window_main_progress_label")],
             [sg.ProgressBar(0, orientation="h", size=(52.85, 20), key="window_main_progress_bar")],
             [sg.Output(size=(80,20), key="Out")],
@@ -104,6 +105,7 @@ class Gui():
         translateMainItems["Config"] = "window_main_config_btn"
         translateMainItems["Queue"] = "window_main_queue_btn"
         translateMainItems["Exit"] = "window_main_exit_btn"
+        translateMainItems["rpcs3import_btn"] = "window_main_rpcs3import_btn"
         self.TranslationItems["mainWindow"] = translateMainItems
         self.mainWindow = sg.Window(f"{self.loc.getKey('window_main_title')} {self.rel.getVersion()} (Git: {self.rel.getCommitID()})", layout, finalize=True, icon=self.iconpath)
         self.tryDl = False
@@ -138,6 +140,10 @@ class Gui():
             if event == "Enter"  and self.tryDl == False:
                 self.ps3.checkForUpdates(value["titleid"])
                 self.selectWin()
+            if event == "rpcs3import_btn"  and self.tryDl == False:
+                self.mainWindow.hide()
+                self.RPCS3ImportWin()
+                self.mainWindow.UnHide()
             if self.tryDl == True and len(self.ps3.DlList.queue) > 0:
                 self.ps3.downloadFiles(self.mainWindow)
                 self.mainWindow["window_main_progress_label"].Update("")
@@ -256,7 +262,7 @@ class Gui():
                 self.mainWindow.UnHide()
                 break
 
-    def selectWin(self):
+    def selectWin(self, only_queue = False):
         try:
             updlen = len(self.ps3.Updates[self.ps3.titleid])
         except KeyError:
@@ -283,7 +289,8 @@ class Gui():
                 while True:
                     ev2, val2 = self.selectWindow.Read()
                     if len(val2["Table"]) > 0:
-                        self.selectWindow["OK"].Update(disabled=False)
+                        if only_queue == False:
+                            self.selectWindow["OK"].Update(disabled=False)
                         self.selectWindow["Queue"].Update(disabled=False)
                     if len(val2["Table"]) == 0:
                         self.selectWindow["OK"].Update(disabled=True)
@@ -430,3 +437,25 @@ class Gui():
                 win.Close()
                 break
         parent.UnHide()
+    
+    def RPCS3ImportWin(self):
+        layout= [
+            [sg.Text(self.loc.getKey("window_rpcs3import_label"))],
+            [sg.In("", key="rpcs3dir"), sg.FileBrowse(target="rpcs3dir", file_types=(("games.yml", "games.yml"),))],
+            [sg.Button(self.loc.getKey("window_rpcs3import_ok_btn"), key="OK")],
+        ]
+        win = sg.Window(self.loc.getKey("window_rpcs3import_title"), layout, icon=self.iconpath)
+        while True:
+            ev, val = win.read()
+            if ev == "OK":
+                if os.path.isfile(val["rpcs3dir"]) == True:
+                    with open(val["rpcs3dir"], "r") as f:
+                        data = yaml.safe_load(f)
+                    for gameid in data:
+                        self.ps3.checkForUpdates(gameid)
+                        self.selectWin(only_queue=True)
+                win.Close()
+                break
+            if ev in (None, "Exit"):
+                win.Close()
+                break

@@ -9,6 +9,7 @@ future release (aka current master branch):
 +  Improved download speeds (thanks to https://github.com/rursache)
 +  Improved robustness of TitleID parsing (thanks to https://github.com/rursache)
 +  Added option to bypass ssl checks to help with connection issues (thanks to https://github.com/rursache)
++  Added option to import TitleIDs from RPCS3's games.yml
 
 
 v012:
