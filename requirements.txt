@@ -1,5 +1,5 @@
 requests==2.31.0
-PySimpleGUI==5.0.2
+PySimpleGUI==5.0.3
 keyring==24.3.1
 requests[socks]==2.31.0
 setuptools==69.1.1
