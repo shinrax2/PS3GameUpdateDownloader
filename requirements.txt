@@ -3,5 +3,5 @@ PySimpleGUI==5.0.4
 keyring==25.2.1
 requests[socks]==2.32.3
 setuptools==70.1.1
-psutil==5.9.8
+psutil==6.0.0
 pyyaml==6.0.1
