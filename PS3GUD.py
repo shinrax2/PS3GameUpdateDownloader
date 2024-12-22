@@ -55,7 +55,7 @@ class PS3GUD():
         self.configDefaults["storageThresholdNew"] = 5
         self.configDefaults["currentLoc"] = "en"
         self.configDefaults["checkForNewRelease"] = True
-        self.configDefaults["bypass_ssl"] = False
+        self.configDefaults["bypass_ssl"] = True
         self.configDefaults["add_all_updates_to_queue_automatically"] = False
         self.configDefaults["use_proxy"] = False
         self.configDefaults["proxy_ip"] = ""
@@ -222,8 +222,9 @@ class PS3GUD():
                 verify_value = self.pemfile
         
             resp = self.https_session.get(url, verify=verify_value, proxies=self.proxies)
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError as error:
             self.logger.log(f"{self.loc.getKey('msg_metaNotAvailable')} ({url})", "e")
+            self.logger.log(f"{error}", "e")
             if self.getConfig("use_proxy"):
                 self.logger.log(self.loc.getKey("msg_checkProxySettings"))
             self.titleid = ""
