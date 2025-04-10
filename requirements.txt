@@ -1,5 +1,5 @@
 requests==2.32.3
-FreeSimpleGUI==5.1.1
+FreeSimpleGUI==5.2.0
 keyring==25.6.0
 requests[socks]==2.32.3
 setuptools==76.0.0
