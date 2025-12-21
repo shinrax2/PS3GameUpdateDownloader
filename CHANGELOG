@@ -3,6 +3,8 @@
 - bugfix
 
 future release (aka current master branch):
+
+v013:
 +  added simplified chinese translation thanks to https://github.com/nini22P & https://github.com/FR0Z3
 +  make updater actually wait for main application to exit instead of using a timeout
 +  add dockerfile for linux-amd64, linux-win32, linux-win64
