@@ -1,4 +1,4 @@
-requests==2.32.5
+requests==2.33.0
 FreeSimpleGUI==5.2.0.post1
 keyring==25.7.0
 requests[socks]==2.32.5
